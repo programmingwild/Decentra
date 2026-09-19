@@ -1,0 +1,12 @@
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started parent process [14092]
+INFO:     Started server process [25980]
+INFO:     Waiting for application startup.
+INFO:     Started server process [17512]
+2026-09-12 11:06:33,361 | INFO | decentra | Starting Decentra API (env=development, db=sqlite)
+INFO:     Waiting for application startup.
+2026-09-12 11:06:33,372 | INFO | decentra | Starting Decentra API (env=development, db=sqlite)
+2026-09-12 11:06:33,388 | INFO | decentra | Database ready
+INFO:     Application startup complete.
+2026-09-12 11:06:33,388 | INFO | decentra | Database ready
+INFO:     Application startup complete.

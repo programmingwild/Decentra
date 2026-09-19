@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  :root { color-scheme: dark; }
+  body { width: 320px; margin: 0; padding: 16px; background: #08090B; color: #F5F7FA;
+         font: 13px/1.5 Inter, system-ui, sans-serif; }
+  h1 { font-size: 14px; margin: 0 0 2px; letter-spacing: -0.01em; }
+  .sub { color: #656B75; font-size: 11px; margin-bottom: 12px; }
+  label { display: block; font-size: 11px; color: #9AA1AC; margin: 10px 0 4px; }
+  input, select { width: 100%; box-sizing: border-box; background: #15181D;
+    border: 1px solid rgba(255,255,255,.08); color: #F5F7FA; border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; }
+  input:focus, select:focus { outline: none; border-color: rgba(255,255,255,.2); }
+  .row { display: flex; gap: 8px; margin-top: 12px; }
+  button { flex: 1; border: 0; border-radius: 999px; padding: 10px; font-size: 13px;
+    font-weight: 650; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  .primary { background: #fff; color: #08090B; }
+  .danger { background: rgba(239,68,68,.15); color: #F87171;
+    border: 1px solid rgba(239,68,68,.35); }
+  .ghost { background: rgba(255,255,255,.06); color: #E9EDF2;
+    border: 1px solid rgba(255,255,255,.08); }
+  #status { margin-top: 12px; font-size: 12px; color: #9AA1AC; min-height: 18px; }
+  #status.live { color: #D4A574; }
+  #status.error { color: #F87171; }
+  #link { display: none; margin-top: 8px; font-size: 12px; }
+  #link a { color: #38BDF8; }
+  .hint { margin-top: 10px; font-size: 11px; color: #454B54; }
+</style>
+</head>
+<body>
+  <h1>Decentra capture</h1>
+  <div class="sub">Meet captions → decisions &amp; evidence</div>
+
+  <label for="apiUrl">API URL</label>
+  <input id="apiUrl" placeholder="http://localhost:8000" spellcheck="false" />
+  <label for="webUrl">Web URL</label>
+  <input id="webUrl" placeholder="http://localhost:3000" spellcheck="false" />
+
+  <div id="authBox">
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" />
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" />
+    <div class="row">
+      <button id="loginBtn" class="ghost">Sign in</button>
+    </div>
+  </div>
+
+  <div id="mainBox" style="display:none">
+    <label for="org">Organization</label>
+    <select id="org"></select>
+    <div class="row">
+      <button id="startBtn" class="primary">Start capture</button>
+      <button id="stopBtn" class="danger" disabled>Stop &amp; process</button>
+    </div>
+  </div>
+
+  <div id="status"></div>
+  <div id="link"><a id="openLink" href="#" target="_blank">Open in Decentra →</a></div>
+  <div class="hint">Capture from a meet.google.com tab with captions (CC) on.</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

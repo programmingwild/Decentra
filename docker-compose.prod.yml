@@ -1,0 +1,63 @@
+# Production overlay — consumer-ready defaults.
+# Usage:
+#   1. cp .env.example .env   (then set SECRET_KEY, POSTGRES_PASSWORD, URLs)
+#   2. docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+#
+# Differences from the dev file: no bind-mounts (image is the artifact),
+# no exposed database port, restart policies, health-gated startup,
+# multi-worker API + shared Redis rate limits.
+
+services:
+  db:
+    ports: []  # never expose Postgres to the host in production
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - prod_redis:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  api:
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+asyncpg://decentra:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/decentra
+      RATE_LIMIT_STORAGE_URI: redis://redis:6379
+      UVICORN_WORKERS: ${UVICORN_WORKERS:-2}
+    volumes:
+      - prod_storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/readyz"]
+      interval: 30s
+      timeout: 5s
+      start_period: 25s
+      retries: 3
+
+  web:
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+volumes:
+  prod_storage:
+  prod_redis:

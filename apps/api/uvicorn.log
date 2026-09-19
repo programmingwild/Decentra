@@ -1,0 +1,203 @@
+INFO:     Started server process [25016]
+INFO:     Waiting for application startup.
+2026-08-31 20:11:06,731 | INFO | decentra | Starting Decentra API — DB: sqlite+aiosqlite:///./decentra.db
+2026-08-31 20:11:06,764 | INFO | decentra | Database ready
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-08-31 20:13:25,092 | INFO | decentra | c3a4b252 GET /health 200 0.0ms
+INFO:     127.0.0.1:50504 - "GET /health HTTP/1.1" 200 OK
+2026-08-31 20:15:28,172 | INFO | decentra | 86f242a6 POST /api/v1/auth/login 200 234.6ms
+INFO:     127.0.0.1:59244 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-08-31 20:19:02,197 | INFO | decentra | b4e36e84 OPTIONS /api/v1/auth/me 200 0.0ms
+INFO:     127.0.0.1:61635 - "OPTIONS /api/v1/auth/me HTTP/1.1" 200 OK
+2026-08-31 20:19:02,211 | WARNING | decentra | HTTP 403 at /api/v1/auth/me: Not authenticated
+2026-08-31 20:19:02,211 | INFO | decentra | 556f1f55 GET /api/v1/auth/me 403 7.3ms
+INFO:     127.0.0.1:61635 - "GET /api/v1/auth/me HTTP/1.1" 403 Forbidden
+2026-08-31 20:19:23,075 | INFO | decentra | 5273bbc9 OPTIONS /api/v1/auth/login 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/auth/login HTTP/1.1" 200 OK
+2026-08-31 20:19:23,287 | INFO | decentra | 81d01846 POST /api/v1/auth/login 200 202.4ms
+INFO:     127.0.0.1:53740 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-08-31 20:19:23,294 | INFO | decentra | 2e6e1b0a OPTIONS /api/v1/auth/me 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/auth/me HTTP/1.1" 200 OK
+2026-08-31 20:19:23,294 | INFO | decentra | 750019f6 GET /api/v1/auth/me 200 0.0ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/auth/me HTTP/1.1" 200 OK
+2026-08-31 20:19:23,314 | INFO | decentra | d36c3daa OPTIONS /api/v1/organizations 200 0.3ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/organizations HTTP/1.1" 200 OK
+2026-08-31 20:19:23,325 | INFO | decentra | c31a7531 GET /api/v1/organizations 200 5.0ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/organizations HTTP/1.1" 200 OK
+2026-08-31 20:19:24,851 | INFO | decentra | f2f2d88f OPTIONS /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:19:24,859 | INFO | decentra | b1800cc0 GET /api/v1/auth/me 200 6.1ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/auth/me HTTP/1.1" 200 OK
+2026-08-31 20:19:24,860 | INFO | decentra | d1b20562 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:19:24,860 | INFO | decentra | 207776e5 GET /api/v1/auth/me 200 0.0ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/auth/me HTTP/1.1" 200 OK
+2026-08-31 20:19:24,876 | INFO | decentra | 5193d9dd GET /api/v1/organizations 200 0.0ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/organizations HTTP/1.1" 200 OK
+2026-08-31 20:19:24,876 | INFO | decentra | 0bb4b303 OPTIONS /api/v1/meetings 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/meetings?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:24,892 | INFO | decentra | fef6e92f GET /api/v1/organizations 200 16.4ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/organizations HTTP/1.1" 200 OK
+2026-08-31 20:19:24,892 | INFO | decentra | 199c58c1 OPTIONS /api/v1/decisions 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/decisions?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:24,892 | INFO | decentra | 2269c643 OPTIONS /api/v1/actions 200 0.0ms
+INFO:     127.0.0.1:50260 - "OPTIONS /api/v1/actions?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:24,899 | INFO | decentra | 02238e28 OPTIONS /api/v1/actions 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/actions?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536&owner=me HTTP/1.1" 200 OK
+2026-08-31 20:19:24,925 | INFO | decentra | 2cf661e7 GET /api/v1/decisions 200 13.5ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/decisions?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:24,942 | INFO | decentra | 7ba82f5b GET /api/v1/actions 200 16.6ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/actions?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:24,973 | INFO | decentra | 99016aed GET /api/v1/actions 200 9.7ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/actions?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536&owner=me HTTP/1.1" 200 OK
+2026-08-31 20:19:25,026 | INFO | decentra | 59203a2f GET /api/v1/meetings 200 126.6ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/meetings?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:25,043 | INFO | decentra | 176292a1 OPTIONS /api/v1/meetings/4deddba8-afaf-45d6-8cff-bc4fb94871a9/intelligence 200 0.0ms
+2026-08-31 20:19:25,043 | INFO | decentra | e046c7f8 OPTIONS /api/v1/meetings/bf21197e-6649-4720-8f31-d66bdd58a9f2/intelligence 200 0.0ms
+INFO:     127.0.0.1:50260 - "OPTIONS /api/v1/meetings/4deddba8-afaf-45d6-8cff-bc4fb94871a9/intelligence HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/meetings/bf21197e-6649-4720-8f31-d66bdd58a9f2/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,060 | INFO | decentra | f58dd540 OPTIONS /api/v1/meetings/24b32576-f722-4af5-b3c5-dad650bb2c2e/intelligence 200 0.0ms
+2026-08-31 20:19:25,060 | INFO | decentra | 80f6efca OPTIONS /api/v1/meetings/df4de7ca-62e2-4d35-a5d4-520918fe1233/intelligence 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/meetings/24b32576-f722-4af5-b3c5-dad650bb2c2e/intelligence HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50260 - "OPTIONS /api/v1/meetings/df4de7ca-62e2-4d35-a5d4-520918fe1233/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,060 | INFO | decentra | a67a806b OPTIONS /api/v1/meetings/7c9c5654-9fa2-4135-9773-9c5c0e55db9b/intelligence 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/meetings/7c9c5654-9fa2-4135-9773-9c5c0e55db9b/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,060 | INFO | decentra | 01827eaa OPTIONS /api/v1/meetings/33ff8564-5262-4d05-8cb0-52f152d13e3b/intelligence 200 0.0ms
+INFO:     127.0.0.1:50260 - "OPTIONS /api/v1/meetings/33ff8564-5262-4d05-8cb0-52f152d13e3b/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,060 | INFO | decentra | 95c74292 OPTIONS /api/v1/meetings/8ea14450-dd6f-4e58-b7b1-a818a437c0b6/intelligence 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/meetings/8ea14450-dd6f-4e58-b7b1-a818a437c0b6/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,074 | INFO | decentra | 6902d1fc OPTIONS /api/v1/meetings/d9fba8b1-e46d-425a-9e14-03366744ff57/intelligence 200 0.0ms
+INFO:     127.0.0.1:50260 - "OPTIONS /api/v1/meetings/d9fba8b1-e46d-425a-9e14-03366744ff57/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,082 | INFO | decentra | 4b079d11 OPTIONS /api/v1/meetings/d2047810-4623-4184-9d7e-fbfabf0a0923/intelligence 200 0.0ms
+INFO:     127.0.0.1:53740 - "OPTIONS /api/v1/meetings/d2047810-4623-4184-9d7e-fbfabf0a0923/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,082 | INFO | decentra | 3ce887ff OPTIONS /api/v1/meetings/4f1758f4-d796-443c-87ef-4940cc1fdee1/intelligence 200 0.0ms
+INFO:     127.0.0.1:50260 - "OPTIONS /api/v1/meetings/4f1758f4-d796-443c-87ef-4940cc1fdee1/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,135 | INFO | decentra | ad8aca27 GET /api/v1/meetings/bf21197e-6649-4720-8f31-d66bdd58a9f2/intelligence 200 45.8ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/meetings/bf21197e-6649-4720-8f31-d66bdd58a9f2/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,136 | INFO | decentra | 40822680 GET /api/v1/meetings/4deddba8-afaf-45d6-8cff-bc4fb94871a9/intelligence 200 46.8ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/meetings/4deddba8-afaf-45d6-8cff-bc4fb94871a9/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,145 | INFO | decentra | 9fbfd111 GET /api/v1/meetings/df4de7ca-62e2-4d35-a5d4-520918fe1233/intelligence 200 2.8ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/meetings/df4de7ca-62e2-4d35-a5d4-520918fe1233/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,174 | INFO | decentra | 547c2b7c GET /api/v1/meetings/24b32576-f722-4af5-b3c5-dad650bb2c2e/intelligence 200 31.8ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/meetings/24b32576-f722-4af5-b3c5-dad650bb2c2e/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,218 | INFO | decentra | d172e880 GET /api/v1/meetings/33ff8564-5262-4d05-8cb0-52f152d13e3b/intelligence 200 50.7ms
+INFO:     127.0.0.1:55917 - "GET /api/v1/meetings/33ff8564-5262-4d05-8cb0-52f152d13e3b/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,226 | INFO | decentra | 9d068cd0 GET /api/v1/meetings/8ea14450-dd6f-4e58-b7b1-a818a437c0b6/intelligence 200 43.8ms
+INFO:     127.0.0.1:53740 - "GET /api/v1/meetings/8ea14450-dd6f-4e58-b7b1-a818a437c0b6/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,230 | INFO | decentra | 499a4336 GET /api/v1/meetings/d9fba8b1-e46d-425a-9e14-03366744ff57/intelligence 200 34.5ms
+INFO:     127.0.0.1:60025 - "GET /api/v1/meetings/d9fba8b1-e46d-425a-9e14-03366744ff57/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,233 | INFO | decentra | 6df7e3f6 GET /api/v1/meetings/7c9c5654-9fa2-4135-9773-9c5c0e55db9b/intelligence 200 70.3ms
+INFO:     127.0.0.1:50260 - "GET /api/v1/meetings/7c9c5654-9fa2-4135-9773-9c5c0e55db9b/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,239 | INFO | decentra | f57862bb GET /api/v1/meetings/4f1758f4-d796-443c-87ef-4940cc1fdee1/intelligence 200 45.2ms
+INFO:     127.0.0.1:63980 - "GET /api/v1/meetings/4f1758f4-d796-443c-87ef-4940cc1fdee1/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,243 | INFO | decentra | b628b069 GET /api/v1/meetings/d2047810-4623-4184-9d7e-fbfabf0a0923/intelligence 200 47.5ms
+INFO:     127.0.0.1:64671 - "GET /api/v1/meetings/d2047810-4623-4184-9d7e-fbfabf0a0923/intelligence HTTP/1.1" 200 OK
+2026-08-31 20:19:25,243 | INFO | decentra | 19f4e3ce OPTIONS /api/v1/health/score 200 0.0ms
+INFO:     127.0.0.1:64671 - "OPTIONS /api/v1/health/score?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:25,298 | INFO | decentra | d81c9544 GET /api/v1/health/score 200 40.1ms
+INFO:     127.0.0.1:64671 - "GET /api/v1/health/score?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:34,468 | INFO | decentra | 57499a48 GET /api/v1/notifications 200 6.1ms
+INFO:     127.0.0.1:51461 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:19:34,476 | INFO | decentra | e4132b05 GET /api/v1/organizations 200 10.9ms
+INFO:     127.0.0.1:55735 - "GET /api/v1/organizations HTTP/1.1" 200 OK
+2026-08-31 20:19:34,476 | INFO | decentra | 72f50c2e GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:51461 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:19:34,491 | INFO | decentra | 9e8ca7eb GET /api/v1/organizations 200 14.9ms
+2026-08-31 20:19:34,492 | INFO | decentra | 8db4e8f6 OPTIONS /api/v1/projects 200 15.5ms
+INFO:     127.0.0.1:55735 - "GET /api/v1/organizations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51461 - "OPTIONS /api/v1/projects?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:34,498 | INFO | decentra | 81697dd9 OPTIONS /api/v1/projects 200 4.7ms
+INFO:     127.0.0.1:55735 - "OPTIONS /api/v1/projects?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:34,498 | INFO | decentra | 83e6baab GET /api/v1/projects 200 0.0ms
+INFO:     127.0.0.1:51461 - "GET /api/v1/projects?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:34,510 | INFO | decentra | d740f369 GET /api/v1/projects 200 0.0ms
+INFO:     127.0.0.1:51461 - "GET /api/v1/projects?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:34,593 | INFO | decentra | f884a19d GET /api/v1/meetings 200 82.7ms
+INFO:     127.0.0.1:55735 - "GET /api/v1/meetings?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:19:34,710 | INFO | decentra | 70cbffcf GET /api/v1/meetings 200 100.9ms
+INFO:     127.0.0.1:51461 - "GET /api/v1/meetings?org_id=8d55d955-7e20-4e74-bc06-8f25cb612536 HTTP/1.1" 200 OK
+2026-08-31 20:20:04,265 | INFO | decentra | b211f4e3 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:50440 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:20:34,272 | INFO | decentra | 4512c1a2 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:55627 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:21:04,583 | INFO | decentra | f7ff0a7f GET /api/v1/notifications 200 4.2ms
+INFO:     127.0.0.1:50082 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:21:34,266 | INFO | decentra | 2e2220ad GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:63357 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:22:04,574 | INFO | decentra | 25ec3dd8 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:59272 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:22:34,281 | INFO | decentra | 44244cbc GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:59706 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:23:06,596 | INFO | decentra | a4bd3003 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:55451 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:24:17,596 | INFO | decentra | 4ecb07d7 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:56370 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:25:17,277 | INFO | decentra | 385d4881 GET /api/v1/notifications 200 5.5ms
+INFO:     127.0.0.1:52884 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:26:17,581 | INFO | decentra | d13a6ac7 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:58764 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:27:17,278 | INFO | decentra | bd29c997 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:61434 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:28:17,589 | INFO | decentra | 51987a74 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:61736 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:28:36,270 | INFO | decentra | 73e711a8 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:56783 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:29:17,587 | INFO | decentra | 8d75b1f4 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:52073 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:30:17,270 | INFO | decentra | fc700587 OPTIONS /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:60733 - "OPTIONS /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:30:17,284 | INFO | decentra | a18cc7ba GET /api/v1/notifications 200 5.1ms
+INFO:     127.0.0.1:60733 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:31:17,598 | INFO | decentra | 044b1c39 GET /api/v1/notifications 200 3.2ms
+INFO:     127.0.0.1:58256 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:32:17,275 | INFO | decentra | ce62f897 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:63731 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:33:17,590 | INFO | decentra | 43d01a07 GET /api/v1/notifications 200 4.1ms
+INFO:     127.0.0.1:50557 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:34:17,286 | INFO | decentra | b0687566 GET /api/v1/notifications 200 3.5ms
+INFO:     127.0.0.1:60146 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:34:40,595 | INFO | decentra | 6b4dfe6e GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:64183 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:35:17,274 | INFO | decentra | 0fd36617 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:50170 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:36:17,592 | INFO | decentra | df067436 GET /api/v1/notifications 200 6.1ms
+INFO:     127.0.0.1:64789 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:37:02,280 | INFO | decentra | 4f0f2a7d GET /api/v1/notifications 200 6.4ms
+INFO:     127.0.0.1:56162 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:37:04,293 | INFO | decentra | 1d853cb9 GET /api/v1/notifications 200 5.8ms
+INFO:     127.0.0.1:56162 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:38:17,597 | INFO | decentra | 142c25bd GET /api/v1/notifications 200 9.9ms
+INFO:     127.0.0.1:62561 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:39:17,285 | INFO | decentra | 1af21735 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:51026 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:40:17,593 | INFO | decentra | 12622dd4 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:51123 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:41:17,274 | INFO | decentra | ec048ec0 OPTIONS /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:58185 - "OPTIONS /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:41:17,282 | INFO | decentra | 91fc1ca1 GET /api/v1/notifications 200 8.4ms
+INFO:     127.0.0.1:58185 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:42:17,596 | INFO | decentra | 8085648f GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:52220 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:43:17,283 | INFO | decentra | 6b169317 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:59346 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:44:17,588 | INFO | decentra | 2530ef85 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:51043 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:45:17,272 | INFO | decentra | d7f1c87f GET /api/v1/notifications 200 3.3ms
+INFO:     127.0.0.1:53529 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:46:17,603 | INFO | decentra | b0f95b8b GET /api/v1/notifications 200 8.6ms
+INFO:     127.0.0.1:50335 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:47:17,275 | INFO | decentra | 95a1696d GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:52461 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:48:17,597 | INFO | decentra | 8d0b78cb GET /api/v1/notifications 200 13.8ms
+INFO:     127.0.0.1:57827 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:49:17,281 | INFO | decentra | 95938f27 GET /api/v1/notifications 200 0.0ms
+INFO:     127.0.0.1:56819 - "GET /api/v1/notifications HTTP/1.1" 200 OK
+2026-08-31 20:50:17,596 | WARNING | decentra | HTTP 401 at /api/v1/notifications: Invalid token
+2026-08-31 20:50:17,596 | INFO | decentra | 24d8bd94 GET /api/v1/notifications 401 0.0ms
+INFO:     127.0.0.1:63207 - "GET /api/v1/notifications HTTP/1.1" 401 Unauthorized
+2026-08-31 20:50:18,425 | INFO | decentra | 8cd50742 OPTIONS /api/v1/auth/me 200 0.0ms
+INFO:     127.0.0.1:63207 - "OPTIONS /api/v1/auth/me HTTP/1.1" 200 OK
+2026-08-31 20:50:18,430 | WARNING | decentra | HTTP 403 at /api/v1/auth/me: Not authenticated
+2026-08-31 20:50:18,430 | INFO | decentra | e998c292 GET /api/v1/auth/me 403 0.0ms
+INFO:     127.0.0.1:63207 - "GET /api/v1/auth/me HTTP/1.1" 403 Forbidden

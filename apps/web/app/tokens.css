@@ -1,0 +1,68 @@
+/* — 3-Layer Design Tokens (Primitive → Semantic → Component) — */
+:root {
+  /* Primitive — raw values */
+  --primitive-black: #08090B;
+  --primitive-gray-950: #0D0F12;
+  --primitive-gray-900: #101216;
+  --primitive-gray-800: #15181D;
+  --primitive-gray-700: #1A1E24;
+  --primitive-gray-500: #9AA1AC;
+  --primitive-gray-400: #656B75;
+  --primitive-white: #F5F7FA;
+  --primitive-sky-500: #0EA5E9;
+  --primitive-sky-300: #38BDF8;
+  --primitive-sky-200: #7DD3FC;
+  --primitive-violet-400: #A78BFA;
+  --primitive-amber-400: #FBBF24;
+  --primitive-amber-500: #F59E0B;
+  --primitive-emerald-500: #10B981;
+  --primitive-emerald-300: #34D399;
+  --primitive-red-500: #EF4444;
+  --primitive-gold-400: #D4A574;
+  --primitive-gold-500: #B8956A;
+  --primitive-copper-400: #C9A86A;
+  --primitive-slate-700: #1E293B;
+  --primitive-slate-600: #334155;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --blur-sm: 12px;
+  --blur-md: 16px;
+  --blur-lg: 20px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Semantic — purpose aliases */
+  --color-bg: var(--primitive-black);
+  --color-surface: var(--primitive-gray-900);
+  --color-elevated: var(--primitive-gray-800);
+  --color-border: rgba(255,255,255,0.08);
+  --color-border-strong: rgba(255,255,255,0.12);
+  --color-text: var(--primitive-white);
+  --color-muted: var(--primitive-gray-500);
+  --color-subtle: var(--primitive-gray-400);
+  --color-accent: var(--primitive-sky-500);
+  --color-accent-fg: var(--primitive-sky-300);
+  --color-success: var(--primitive-emerald-500);
+  --color-warning: var(--primitive-amber-500);
+  --color-danger: var(--primitive-red-500);
+  --color-gold: var(--primitive-gold-400);
+  --color-copper: var(--primitive-copper-400);
+
+  /* Component — component-specific */
+  --card-bg: var(--color-surface);
+  --card-border: var(--color-border);
+  --card-radius: var(--radius-lg);
+  --btn-radius: 10px;
+  --input-bg: var(--color-elevated);
+  --input-border: var(--color-border);
+  --glass-bg: rgba(21,24,29,0.72);
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-blur: var(--blur-md);
+}

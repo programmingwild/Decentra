@@ -1,0 +1,13 @@
+{
+  "source": "core-concept-verification",
+  "segments": [
+    {"speaker": "Priya", "start": 0, "end": 9, "text": "Okay team, let's go with PostgreSQL for version one. Our team knows it well and it's proven."},
+    {"speaker": "Arun", "start": 10, "end": 18, "text": "Agreed. I'll prepare the database schema before Friday."},
+    {"speaker": "Rahul", "start": 19, "end": 27, "text": "Good. Priya, can you publish the API specification by Monday?"},
+    {"speaker": "Priya", "start": 28, "end": 33, "text": "Yes, I'll handle the API specification."},
+    {"speaker": "Karthik", "start": 34, "end": 44, "text": "One concern: the current API may not handle the expected traffic. We should look at scalability before launch."},
+    {"speaker": "Meena", "start": 45, "end": 52, "text": "Where will the application be deployed? We still need to decide on hosting."},
+    {"speaker": "Rahul", "start": 53, "end": 60, "text": "We decided to follow up on auth and deployment next Monday."},
+    {"speaker": "Priya", "start": 61, "end": 68, "text": "Which authentication provider should we use for version one?"}
+  ]
+}
