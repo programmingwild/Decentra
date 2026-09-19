@@ -23,3 +23,9 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Local-only (never push)
+*.log
+machinelink_backup_20260903_213501/
+.freebuff/
+
