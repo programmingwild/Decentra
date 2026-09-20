@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r apps/api/requirements.txt -r apps/api/requirements-test.txt
-      - run: python -m pytest apps/api/tests/ -q
+      - run: python -m pytest tests/ -q
         working-directory: apps/api
 
   web:
