@@ -1,0 +1,5 @@
+# Test-only dependencies. Kept out of requirements.txt so production
+# images stay lean. CI installs both files.
+pytest==8.3.0
+pytest-asyncio==1.4.0
+anyio==4.4.0
