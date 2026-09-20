@@ -1,4 +1,49 @@
-# Deploying Decentra to the cloud (Railway)
+# Deploying Decentra to the cloud
+
+Two paths: **Railway** (simplest, ~$5–10/mo) or **Render free-forever**
+($0, services sleep when idle — first load takes ~30 s to wake).
+
+## Path A — Render free tier + Supabase ($0 forever)
+
+Architecture: API + web as Render free Docker services, Postgres on
+Supabase free tier (no expiry — unlike Render's own free Postgres, which
+expires after 90 days). The web talks to the API through the same-origin
+proxy, so auth cookies stay first-party with zero domain setup.
+
+Known free-tier trade-offs (accepted by design):
+- Cold starts: ~30 s after idle. Open the site a few minutes before presenting.
+- Ephemeral disk: uploads vanish when the service sleeps/restarts. The seed
+  dataset is one command away (`python seed_demo.py` in the API shell);
+  re-upload anything else after a wake.
+
+### 1. Supabase Postgres (free, no expiry)
+
+1. Sign up at supabase.com → New project (any region near you).
+2. Project Settings → Database → copy the **Connection string** (URI mode).
+3. Adapt it for the API: change the scheme to `postgresql+asyncpg://` and
+   append `?ssl=require`. Example:
+   `postgresql+asyncpg://postgres:PASSWORD@db.abcd1234.supabase.co:5432/postgres?ssl=require`
+
+### 2. Deploy the blueprint
+
+1. Sign up at render.com → New → **Blueprint** → select this repo
+   (`render.yaml` at the root wires both services).
+2. When prompted, fill the `sync: false` values:
+   - API `DATABASE_URL` ← your Supabase URL from step 1
+   - API `GROQ_API_KEY` ← your Groq key
+   - Web `API_INTERNAL_URL` ←public URL of the API service (deploy order:
+     let the API finish first, copy its `.onrender.com` URL, then deploy web)
+3. After web is live, go back to the API service → set `CORS_ORIGINS` to
+   the web service's public URL → redeploy API.
+
+### 3. Seed the single demo user
+
+API service → Shell tab → `python seed_demo.py`. Expect
+`Seeded demo@decentra.ai / org demo / dataset … (288 rows)`.
+Login at the web URL as `demo@decentra.ai / demo1234` and walk the
+interview checklist below.
+
+## Path B — Railway (~15 min, paid usage)
 
 No custom domain needed. The browser only talks to the **web** service;
 Next.js proxies `/api/v1/*` to the API server-side, so auth cookies stay

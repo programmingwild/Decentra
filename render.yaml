@@ -1,0 +1,48 @@
+# Render blueprint — free-forever hosting for the Decentra demo.
+# Database lives on Supabase free tier (Render's free Postgres expires
+# after 90 days; Supabase free does not). Storage is the container disk:
+# uploads sleep with the service — re-seed or re-upload after idle wakes.
+#
+# Apply: Render dashboard -> New -> Blueprint -> select this repo.
+# Then set the manual secrets below (marked sync: false).
+services:
+  - type: web
+    name: decentra-api
+    runtime: docker
+    dockerContext: ./apps/api
+    dockerfilePath: ./apps/api/Dockerfile
+    plan: free
+    healthCheckPath: /readyz
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false  # paste Supabase URL, +asyncpg scheme, ?ssl=require (see docs/DEPLOY.md)
+      - key: SECRET_KEY
+        generateValue: true
+      - key: STORAGE_PATH
+        value: /app/storage
+      - key: CORS_ORIGINS
+        sync: false  # filled after web deploys: https://<web>.onrender.com
+      - key: AI_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPEN_REGISTRATION
+        value: false
+      - key: LOG_LEVEL
+        value: INFO
+
+  - type: web
+    name: decentra-web
+    runtime: docker
+    dockerContext: ./apps/web
+    dockerfilePath: ./apps/web/Dockerfile
+    plan: free
+    healthCheckPath: /
+    envVars:
+      # Same-origin proxy: browser talks only to web; Next forwards
+      # /api/v1/* server-side, so cookies stay first-party. No rebuild
+      # needed when the API moves — this is runtime config.
+      - key: API_INTERNAL_URL
+        sync: false  # paste the API service public URL after it deploys
