@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
@@ -6,7 +7,7 @@ import { api } from "@/lib/api";
 import { MetricCard, AreaChart } from "@/components/ui/metrics";
 import { TiltCard } from "@/components/immersive/3d/TiltCard";
 import { Reveal } from "@/components/immersive/3d/Reveal";
-import { ShaderAurora } from "@/components/immersive/3d/ShaderAurora";
+const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAurora").then((m) => m.ShaderAurora), { ssr: false });
 import { EmptyState, ErrorState, SkeletonRow } from "@/components/ui/states";
 import { SectionLabel } from "@/components/ui/primitives";
 import { BarChart3, TrendingUp, GitCompare, Database, Upload, Table2 } from "lucide-react";
@@ -98,7 +99,7 @@ export default function AnalyticsPage() {
   ], [columns, numericCols, trendSeries, corrPairs, segments, data, dsName]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main id="main" className="min-w-0 flex-1">
         <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 lg:px-8 lg:pt-12">
@@ -109,9 +110,9 @@ export default function AnalyticsPage() {
           </div>
 
           <header className="relative">
-            <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[#656B75]">Descriptive stats · trends · segments · correlations</p>
-            <h1 className="display-hero mt-2 text-[36px] text-[#F5F7FA] lg:text-[48px]">Analytics <span className="thin text-[#9AA1AC]">of {dsName || "your data"}</span></h1>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#9AA1AC]">Every column profiled, every trend traced — the statistical bedrock under your decisions.</p>
+            <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[var(--subtle)]">Descriptive stats · trends · segments · correlations</p>
+            <h1 className="display-hero mt-2 text-[36px] text-[var(--text)] lg:text-[48px]">Analytics <span className="thin text-[var(--muted)]">of {dsName || "your data"}</span></h1>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--muted)]">Every column profiled, every trend traced — the statistical bedrock under your decisions.</p>
             <section aria-label="Key metrics" className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {metrics.map((m, i) => <MetricCard key={m.label} {...m} index={i} immersive />)}
             </section>
@@ -128,7 +129,7 @@ export default function AnalyticsPage() {
                   icon={<Upload className="h-5 w-5" />}
                   title="No dataset to analyze yet"
                   body="Upload a CSV or XLSX and Decentra profiles every column — distributions, trends, segments and correlations appear here."
-                  action={<Link href="/datasets" className="btn h-[38px] bg-[#F5F7FA] px-5 text-[13px] font-[600] text-[#08090B] hover:bg-white">Upload a dataset</Link>}
+                  action={<Link href="/datasets" className="btn h-[38px] bg-[var(--text)] px-5 text-[13px] font-[600] text-[var(--bg)] hover:bg-[var(--fg)]">Upload a dataset</Link>}
                 />
               </Reveal>
             ) : (
@@ -145,14 +146,14 @@ export default function AnalyticsPage() {
                           <TiltCard max={4} className="h-full">
                             <div className="glass-strong h-full rounded-[18px] p-5">
                               <div className="flex items-center gap-2.5">
-                                <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#38BDF8]/10 text-[#38BDF8]"><BarChart3 className="h-4 w-4" /></span>
-                                <p className="truncate text-[14px] font-[650] text-[#F0F3F7]">{c}</p>
+                                <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[color-mix(in_srgb,var(--sky)_10%,transparent)] text-[var(--sky)]"><BarChart3 className="h-4 w-4" /></span>
+                                <p className="truncate text-[14px] font-[650] text-[var(--text)]">{c}</p>
                               </div>
                               <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
                                 {stats.map(([k, v]) => (
                                   <div key={k}>
-                                    <dt className="text-[10px] font-[600] uppercase tracking-[0.12em] text-[#656B75]">{k}</dt>
-                                    <dd className="mono mt-0.5 text-[14px] font-[600] tabular-nums text-[#E5E9EF]">{fmt(v)}</dd>
+                                    <dt className="text-[10px] font-[600] uppercase tracking-[0.12em] text-[var(--subtle)]">{k}</dt>
+                                    <dd className="mono mt-0.5 text-[14px] font-[600] tabular-nums text-[var(--text)]">{fmt(v)}</dd>
                                   </div>
                                 ))}
                               </dl>
@@ -172,8 +173,8 @@ export default function AnalyticsPage() {
                         <Reveal key={t.name} delay={i * 0.06}>
                           <TiltCard max={4} className="h-full">
                             <div className="glass-strong h-full rounded-[18px] p-5">
-                              <p className="text-[13px] font-[650] text-[#F0F3F7]">{t.name}</p>
-                              <p className="mono mt-1 text-[11px] text-[#656B75]">last {t.vals.length} periods · now {fmt(t.vals[t.vals.length - 1])}</p>
+                              <p className="text-[13px] font-[650] text-[var(--text)]">{t.name}</p>
+                              <p className="mono mt-1 text-[11px] text-[var(--subtle)]">last {t.vals.length} periods · now {fmt(t.vals[t.vals.length - 1])}</p>
                               <div className="mt-2"><AreaChart data={spark(t.vals)} color="#A78BFA" /></div>
                             </div>
                           </TiltCard>
@@ -191,15 +192,15 @@ export default function AnalyticsPage() {
                         {corrPairs.map((p) => (
                           <div key={`${p.a}-${p.b}`} className="glass rounded-[14px] px-4 py-3.5">
                             <div className="flex items-center justify-between gap-3 text-[12.5px]">
-                              <span className="min-w-0 truncate font-[550] text-[#E9EDF2]">{p.a} <span className="text-[#656B75]">×</span> {p.b}</span>
-                              <span className={`mono shrink-0 font-[700] tabular-nums ${p.v >= 0 ? "text-[#34D399]" : "text-[#F87171]"}`}>{p.v >= 0 ? "+" : ""}{p.v.toFixed(2)}</span>
+                              <span className="min-w-0 truncate font-[550] text-[var(--text)]">{p.a} <span className="text-[var(--subtle)]">×</span> {p.b}</span>
+                              <span className={`mono shrink-0 font-[700] tabular-nums ${p.v >= 0 ? "text-[var(--emerald)]" : "text-[var(--red)]"}`}>{p.v >= 0 ? "+" : ""}{p.v.toFixed(2)}</span>
                             </div>
-                            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                              <div className={`h-full rounded-full ${p.v >= 0 ? "bg-[#34D399]" : "bg-[#F87171]"}`} style={{ width: `${Math.min(Math.abs(p.v) * 100, 100)}%` }} />
+                            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--fg)_6%,transparent)]">
+                              <div className={`h-full rounded-full ${p.v >= 0 ? "bg-[var(--emerald)]" : "bg-[var(--red)]"}`} style={{ width: `${Math.min(Math.abs(p.v) * 100, 100)}%` }} />
                             </div>
                           </div>
                         ))}
-                        <p className="text-[11px] text-[#656B75]">Correlations do not imply causality.</p>
+                        <p className="text-[11px] text-[var(--subtle)]">Correlations do not imply causality.</p>
                       </div>
                     </section>
                   )}
@@ -211,11 +212,11 @@ export default function AnalyticsPage() {
                         {segments.map((s) => (
                           <div key={s.label} className="glass rounded-[14px] px-4 py-3.5">
                             <div className="flex items-center justify-between gap-3 text-[12.5px]">
-                              <span className="min-w-0 truncate font-[550] text-[#E9EDF2]">{s.label}</span>
-                              <span className="mono shrink-0 font-[700] tabular-nums text-[#FBBF24]">{fmt(s.value)}</span>
+                              <span className="min-w-0 truncate font-[550] text-[var(--text)]">{s.label}</span>
+                              <span className="mono shrink-0 font-[700] tabular-nums text-[var(--amber)]">{fmt(s.value)}</span>
                             </div>
-                            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                              <div className="h-full rounded-full bg-gradient-to-r from-[#D4A574] to-[#FBBF24]" style={{ width: `${Math.max((s.value / segMax) * 100, 3)}%` }} />
+                            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--fg)_6%,transparent)]">
+                              <div className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--amber)]" style={{ width: `${Math.max((s.value / segMax) * 100, 3)}%` }} />
                             </div>
                           </div>
                         ))}
@@ -225,8 +226,8 @@ export default function AnalyticsPage() {
                 </div>
 
                 <details className="glass rounded-[14px] p-4">
-                  <summary className="cursor-pointer text-[12px] font-[500] text-[#9AA1AC] hover:text-[#F5F7FA]">Analyst raw view — full statistical payload</summary>
-                  <pre className="mono mt-3 max-h-[320px] overflow-auto rounded-[10px] border border-white/[0.06] bg-[#0D0F12] p-4 text-[11.5px] text-[#9AA1AC]">{JSON.stringify(data, null, 2)}</pre>
+                  <summary className="cursor-pointer text-[12px] font-[500] text-[var(--muted)] hover:text-[var(--text)]">Analyst raw view — full statistical payload</summary>
+                  <pre className="mono mt-3 max-h-[320px] overflow-auto rounded-[10px] border border-[var(--border)] bg-[var(--bg-2)] p-4 text-[11.5px] text-[var(--muted)]">{JSON.stringify(data, null, 2)}</pre>
                 </details>
               </div>
             )}

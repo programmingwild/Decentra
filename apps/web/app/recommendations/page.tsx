@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
@@ -7,7 +8,7 @@ import { humanizeKey } from "@/lib/format";
 import { MetricCard } from "@/components/ui/metrics";
 import { TiltCard } from "@/components/immersive/3d/TiltCard";
 import { Reveal } from "@/components/immersive/3d/Reveal";
-import { ShaderAurora } from "@/components/immersive/3d/ShaderAurora";
+const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAurora").then((m) => m.ShaderAurora), { ssr: false });
 import { EmptyState, ErrorState, SkeletonRow } from "@/components/ui/states";
 import { Sparkles, Target, CheckCircle2, Upload, ArrowUpRight } from "lucide-react";
 
@@ -46,7 +47,7 @@ export default function RecommendationsPage() {
   ], [recs, high, dsName]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main id="main" className="min-w-0 flex-1">
         <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 lg:px-8 lg:pt-12">
@@ -57,9 +58,9 @@ export default function RecommendationsPage() {
           </div>
 
           <header className="relative">
-            <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[#656B75]">Prioritized attention · evidence strength</p>
-            <h1 className="display-hero mt-2 text-[36px] text-[#F5F7FA] lg:text-[48px]">Recommendations <span className="thin text-[#9AA1AC]">worth acting on</span></h1>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#9AA1AC]">Ranked by impact, each with the evidence behind it and the action ahead of it.</p>
+            <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[var(--subtle)]">Prioritized attention · evidence strength</p>
+            <h1 className="display-hero mt-2 text-[36px] text-[var(--text)] lg:text-[48px]">Recommendations <span className="thin text-[var(--muted)]">worth acting on</span></h1>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--muted)]">Ranked by impact, each with the evidence behind it and the action ahead of it.</p>
             <section aria-label="Key metrics" className="mt-8 grid gap-4 sm:grid-cols-3">
               {metrics.map((m, i) => <MetricCard key={m.label} {...m} index={i} immersive />)}
             </section>
@@ -76,27 +77,27 @@ export default function RecommendationsPage() {
                   icon={<Sparkles className="h-5 w-5" />}
                   title="No recommendations — all signals nominal"
                   body="Upload a dataset and Decentra prioritizes exactly where your attention pays off, with evidence attached to each call."
-                  action={<Link href="/datasets" className="btn h-[38px] bg-[#F5F7FA] px-5 text-[13px] font-[600] text-[#08090B] hover:bg-white">Upload a dataset</Link>}
+                  action={<Link href="/datasets" className="btn h-[38px] bg-[var(--text)] px-5 text-[13px] font-[600] text-[var(--bg)] hover:bg-[var(--fg)]">Upload a dataset</Link>}
                 />
               </Reveal>
             ) : (
               <>
-                <p className="fragment text-[11px] font-[700] uppercase tracking-[0.16em] text-[#656B75]">{recs.length} area{recs.length === 1 ? "" : "s"} deserve{recs.length === 1 ? "s" : ""} attention</p>
+                <p className="fragment text-[11px] font-[700] uppercase tracking-[0.16em] text-[var(--subtle)]">{recs.length} area{recs.length === 1 ? "" : "s"} deserve{recs.length === 1 ? "s" : ""} attention</p>
                 <div className="mt-4 space-y-4">
                   {recs.map((r: any, i: number) => {
                     const hot = String(r.priority || "").toLowerCase() === "high";
                     return (
                       <Reveal key={i} delay={Math.min(i * 0.04, 0.2)}>
                         <TiltCard max={2} scale={1.005}>
-                          <div className={`rounded-[18px] border p-5 ${hot ? "border-[#F59E0B]/25 bg-[#F59E0B]/[0.05]" : "border-white/[0.06] bg-[#101216]"}`}>
-                            <div className="flex flex-wrap items-center gap-2 text-[11px] font-[700] uppercase tracking-widest text-[#9AA1AC]">
-                              <span className="mono text-[#656B75]">0{i + 1}</span>
-                              <span className={`rounded-full border px-2 py-0.5 ${hot ? "border-[#F59E0B]/30 bg-[#F59E0B]/15 text-[#FBBF24]" : "border-white/[0.08] bg-white/[0.04] text-[#9AA1AC]"}`}>Priority: {humanizeKey(r.priority) || "Normal"}</span>
-                              {r.evidence && <span className="inline-flex items-center gap-1 text-[#34D399]"><CheckCircle2 className="h-3.5 w-3.5" /> Evidence strong</span>}
+                          <div className={`rounded-[18px] border p-5 ${hot ? "border-[color-mix(in_srgb,var(--amber-2)_25%,transparent)] bg-[color-mix(in_srgb,var(--amber-2)_5%,transparent)]" : "border-[var(--border)] bg-[var(--surface)]"}`}>
+                            <div className="flex flex-wrap items-center gap-2 text-[11px] font-[700] uppercase tracking-widest text-[var(--muted)]">
+                              <span className="mono text-[var(--subtle)]">0{i + 1}</span>
+                              <span className={`rounded-full border px-2 py-0.5 ${hot ? "border-[color-mix(in_srgb,var(--amber-2)_30%,transparent)] bg-[color-mix(in_srgb,var(--amber-2)_15%,transparent)] text-[var(--amber)]" : "border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)] text-[var(--muted)]"}`}>Priority: {humanizeKey(r.priority) || "Normal"}</span>
+                              {r.evidence && <span className="inline-flex items-center gap-1 text-[var(--emerald)]"><CheckCircle2 className="h-3.5 w-3.5" /> Evidence strong</span>}
                             </div>
-                            <p className="mt-2.5 text-[14.5px] font-[650] leading-snug tracking-[-0.01em] text-[#F5F7FA]">{r.observation}</p>
-                            <div className="mt-3.5 flex gap-2.5 rounded-[12px] border border-[#0EA5E9]/15 bg-[#0EA5E9]/10 p-3.5 text-[12.5px] leading-relaxed text-[#C7CCD4]">
-                              <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#38BDF8]" />
+                            <p className="mt-2.5 text-[14.5px] font-[650] leading-snug tracking-[-0.01em] text-[var(--text)]">{r.observation}</p>
+                            <div className="mt-3.5 flex gap-2.5 rounded-[12px] border border-[color-mix(in_srgb,var(--sky-2)_15%,transparent)] bg-[color-mix(in_srgb,var(--sky-2)_10%,transparent)] p-3.5 text-[12.5px] leading-relaxed text-[var(--text-soft)]">
+                              <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--sky)]" />
                               <span>{r.action}</span>
                             </div>
                           </div>

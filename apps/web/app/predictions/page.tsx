@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
@@ -6,7 +7,7 @@ import { api } from "@/lib/api";
 import { MetricCard, AreaChart } from "@/components/ui/metrics";
 import { TiltCard } from "@/components/immersive/3d/TiltCard";
 import { Reveal } from "@/components/immersive/3d/Reveal";
-import { ShaderAurora } from "@/components/immersive/3d/ShaderAurora";
+const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAurora").then((m) => m.ShaderAurora), { ssr: false });
 import { EmptyState, ErrorState, SkeletonRow } from "@/components/ui/states";
 import { Target, TrendingUp, Activity, Upload } from "lucide-react";
 
@@ -49,7 +50,7 @@ export default function PredictionsPage() {
   ], [fc, rows, predicted, rmse, lift]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main id="main" className="min-w-0 flex-1">
         <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 lg:px-8 lg:pt-12">
@@ -60,9 +61,9 @@ export default function PredictionsPage() {
           </div>
 
           <header className="relative">
-            <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[#656B75]">Forecasts · with honest uncertainty</p>
-            <h1 className="display-hero mt-2 text-[36px] text-[#F5F7FA] lg:text-[48px]">Predictions <span className="thin text-[#9AA1AC]">{fc?.target ? `for ${fc.target}` : "of what's next"}</span></h1>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#9AA1AC]">Every forecast ships with its error bars. Ranges are promises about uncertainty — not decoration.</p>
+            <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[var(--subtle)]">Forecasts · with honest uncertainty</p>
+            <h1 className="display-hero mt-2 text-[36px] text-[var(--text)] lg:text-[48px]">Predictions <span className="thin text-[var(--muted)]">{fc?.target ? `for ${fc.target}` : "of what's next"}</span></h1>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--muted)]">Every forecast ships with its error bars. Ranges are promises about uncertainty — not decoration.</p>
             <section aria-label="Key metrics" className="mt-8 grid gap-4 sm:grid-cols-3">
               {metrics.map((m, i) => <MetricCard key={m.label} {...m} index={i} immersive />)}
             </section>
@@ -79,7 +80,7 @@ export default function PredictionsPage() {
                   icon={<Upload className="h-5 w-5" />}
                   title={fc?.message || "No forecast yet"}
                   body="Upload a dataset with a date column and Decentra will project the next periods — with RMSE and uncertainty bands."
-                  action={<Link href="/datasets" className="btn h-[38px] bg-[#F5F7FA] px-5 text-[13px] font-[600] text-[#08090B] hover:bg-white">Upload a dataset</Link>}
+                  action={<Link href="/datasets" className="btn h-[38px] bg-[var(--text)] px-5 text-[13px] font-[600] text-[var(--bg)] hover:bg-[var(--fg)]">Upload a dataset</Link>}
                 />
               </Reveal>
             ) : (
@@ -87,13 +88,13 @@ export default function PredictionsPage() {
                 <Reveal>
                   <TiltCard max={3} className="h-full">
                     <div className="glass-strong h-full overflow-hidden rounded-[20px]">
-                      <div className="border-b border-white/[0.06] px-5 py-4">
-                        <p className="text-[14px] font-[650] text-[#F0F3F7]">Revenue Forecast · {fc.target}</p>
-                        <p className="fragment mt-1 text-[11px] text-[#656B75]">MODEL {fc.model} · RMSE {rmse?.toFixed?.(2) ?? "—"} · NEXT {fc.horizon} PERIODS</p>
+                      <div className="border-b border-[var(--border)] px-5 py-4">
+                        <p className="text-[14px] font-[650] text-[var(--text)]">Revenue Forecast · {fc.target}</p>
+                        <p className="fragment mt-1 text-[11px] text-[var(--subtle)]">MODEL {fc.model} · RMSE {rmse?.toFixed?.(2) ?? "—"} · NEXT {fc.horizon} PERIODS</p>
                       </div>
                       <table className="w-full text-[13px]">
                         <thead>
-                          <tr className="border-b border-white/[0.06] text-left text-[11px] font-[600] uppercase tracking-widest text-[#656B75]">
+                          <tr className="border-b border-[var(--border)] text-left text-[11px] font-[600] uppercase tracking-widest text-[var(--subtle)]">
                             <th className="px-5 py-2.5">Period</th>
                             <th className="py-2.5">Predicted</th>
                             <th className="py-2.5 pr-5">Range</th>
@@ -101,16 +102,16 @@ export default function PredictionsPage() {
                         </thead>
                         <tbody>
                           {rows.map((r: any, i: number) => (
-                            <tr key={r.period ?? i} className="border-t border-white/[0.06] transition first:border-0 hover:bg-white/[0.02]">
-                              <td className="px-5 py-3 font-[500] text-[#F5F7FA]">{r.period}</td>
-                              <td className="mono font-[600] tabular-nums text-[#F5F7FA]">{num(r.predicted)?.toFixed(1) ?? "—"}</td>
-                              <td className="mono py-3 pr-5 text-[12px] tabular-nums text-[#9AA1AC]">{num(r.lower)?.toFixed(0) ?? "—"} – {num(r.upper)?.toFixed(0) ?? "—"}</td>
+                            <tr key={r.period ?? i} className="border-t border-[var(--border)] transition first:border-0 hover:bg-[color-mix(in_srgb,var(--fg)_2%,transparent)]">
+                              <td className="px-5 py-3 font-[500] text-[var(--text)]">{r.period}</td>
+                              <td className="mono font-[600] tabular-nums text-[var(--text)]">{num(r.predicted)?.toFixed(1) ?? "—"}</td>
+                              <td className="mono py-3 pr-5 text-[12px] tabular-nums text-[var(--muted)]">{num(r.lower)?.toFixed(0) ?? "—"} – {num(r.upper)?.toFixed(0) ?? "—"}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                       {fc.uncertainty_note && (
-                        <div className="mx-5 mb-5 rounded-[10px] border border-[#F59E0B]/15 bg-[#F59E0B]/10 px-3 py-2.5 text-[12px] leading-relaxed text-[#F59E0B]">{fc.uncertainty_note}</div>
+                        <div className="mx-5 mb-5 rounded-[10px] border border-[color-mix(in_srgb,var(--amber-2)_15%,transparent)] bg-[color-mix(in_srgb,var(--amber-2)_10%,transparent)] px-3 py-2.5 text-[12px] leading-relaxed text-[var(--amber-2)]">{fc.uncertainty_note}</div>
                       )}
                     </div>
                   </TiltCard>
@@ -118,13 +119,13 @@ export default function PredictionsPage() {
                 <Reveal delay={0.08}>
                   <TiltCard max={4} className="h-full">
                     <div className="glass-strong h-full rounded-[20px] p-5">
-                      <p className="text-[13px] font-[650] text-[#F0F3F7]">Trajectory</p>
-                      <p className="mono mt-1 text-[11px] text-[#656B75]">{lift !== null ? `${lift >= 0 ? "▲" : "▼"} ${Math.abs(lift).toFixed(1)}% across horizon` : "Predicted path"}</p>
+                      <p className="text-[13px] font-[650] text-[var(--text)]">Trajectory</p>
+                      <p className="mono mt-1 text-[11px] text-[var(--subtle)]">{lift !== null ? `${lift >= 0 ? "▲" : "▼"} ${Math.abs(lift).toFixed(1)}% across horizon` : "Predicted path"}</p>
                       <div className="mt-3"><AreaChart data={spark(predicted)} color="#A78BFA" /></div>
-                      <div className="mt-4 space-y-2.5 border-t border-white/[0.06] pt-4 text-[12.5px]">
-                        <div className="flex justify-between"><span className="text-[#656B75]">First period</span><span className="mono font-[600] tabular-nums text-[#E5E9EF]">{first?.toFixed(1)}</span></div>
-                        <div className="flex justify-between"><span className="text-[#656B75]">Last period</span><span className="mono font-[600] tabular-nums text-[#E5E9EF]">{last?.toFixed(1)}</span></div>
-                        <div className="flex justify-between"><span className="text-[#656B75]">Model error (RMSE)</span><span className="mono font-[600] tabular-nums text-[#E5E9EF]">{rmse?.toFixed(2) ?? "—"}</span></div>
+                      <div className="mt-4 space-y-2.5 border-t border-[var(--border)] pt-4 text-[12.5px]">
+                        <div className="flex justify-between"><span className="text-[var(--subtle)]">First period</span><span className="mono font-[600] tabular-nums text-[var(--text)]">{first?.toFixed(1)}</span></div>
+                        <div className="flex justify-between"><span className="text-[var(--subtle)]">Last period</span><span className="mono font-[600] tabular-nums text-[var(--text)]">{last?.toFixed(1)}</span></div>
+                        <div className="flex justify-between"><span className="text-[var(--subtle)]">Model error (RMSE)</span><span className="mono font-[600] tabular-nums text-[var(--text)]">{rmse?.toFixed(2) ?? "—"}</span></div>
                       </div>
                     </div>
                   </TiltCard>

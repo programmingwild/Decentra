@@ -17,7 +17,7 @@ export function Hero3D() {
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-slate-50 via-white to-indigo-50/20">
+    <div className="absolute inset-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-slate-50 via-[var(--fg)] to-indigo-50/20">
       {/* Subtle grid */}
       <div className="absolute inset-0 grid-pattern opacity-[0.04]" />
 
@@ -38,7 +38,7 @@ export function Hero3D() {
           />
           {/* Mid layer - chart abstract */}
           <div
-            className="absolute left-8 right-8 top-8 bottom-8 rounded-[16px] bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
+            className="absolute left-8 right-8 top-8 bottom-8 rounded-[16px] bg-[var(--fg)]/60 backdrop-blur-xl border border-[var(--border-strong)] shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
             style={{ transform: "translateZ(0px)" }}
           >
             <div className="h-full p-5">
@@ -64,7 +64,7 @@ export function Hero3D() {
           </div>
           {/* Front layer - floating KPI */}
           <div
-            className="absolute -right-4 -top-2 rounded-[14px] bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.04)] p-3.5"
+            className="absolute -right-4 -top-2 rounded-[14px] bg-[var(--fg)]/90 backdrop-blur-2xl border border-[var(--border-strong)] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.04)] p-3.5"
             style={{ transform: "translateZ(40px)" }}
           >
             <div className="text-[11px] font-semibold tracking-widest uppercase text-slate-500">Revenue</div>
@@ -72,7 +72,7 @@ export function Hero3D() {
             <div className="text-[11px] font-medium text-amber-600 mt-1">↓ 8.3% vs prev</div>
           </div>
           <div
-            className="absolute -left-4 -bottom-2 rounded-[14px] bg-slate-900 text-white border border-slate-800 shadow-[0_12px_32px_rgba(0,0,0,0.2)] p-3.5"
+            className="absolute -left-4 -bottom-2 rounded-[14px] bg-slate-900 text-[var(--fg)] border border-slate-800 shadow-[0_12px_32px_rgba(0,0,0,0.2)] p-3.5"
             style={{ transform: "translateZ(30px)" }}
           >
             <div className="text-[11px] font-semibold tracking-widest uppercase text-slate-400">Anomalies</div>
@@ -81,14 +81,14 @@ export function Hero3D() {
           </div>
           {/* Floating orb */}
           <div
-            className="absolute right-1/3 top-1/3 h-20 w-20 rounded-full bg-gradient-to-br from-indigo-500/20 to-violet-500/20 blur-[1px] border border-white/40"
+            className="absolute right-1/3 top-1/3 h-20 w-20 rounded-full bg-gradient-to-br from-indigo-500/20 to-violet-500/20 blur-[1px] border border-[var(--border)]"
             style={{ transform: "translateZ(60px)" }}
           />
         </div>
       </div>
 
       {/* Vignette */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--fg)] via-[var(--fg)]/40 to-transparent" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-slate-900/[0.02]" />
     </div>
   );

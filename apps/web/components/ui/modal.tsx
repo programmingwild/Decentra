@@ -29,11 +29,11 @@ export function Modal({ open, onClose, title, children, width = 460 }: { open: b
         aria-modal="true"
         aria-label={title}
         style={{ maxWidth: width }}
-        className="animate-pop relative max-h-[85vh] w-full overflow-auto rounded-[16px] border border-white/[0.09] bg-[#101216] shadow-[0_32px_80px_rgba(0,0,0,0.7)]"
+        className="animate-pop relative max-h-[85vh] w-full overflow-auto rounded-[16px] border border-[var(--border)] bg-[var(--surface)] shadow-[0_32px_80px_rgba(0,0,0,0.7)]"
       >
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3.5">
-          <h2 className="text-[14px] font-[650] tracking-[-0.01em] text-[#F5F7FA]">{title}</h2>
-          <button onClick={onClose} className="rounded-[8px] p-1 text-[#656B75] transition hover:bg-white/[0.06] hover:text-white" aria-label="Close dialog">
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-3.5">
+          <h2 className="text-[14px] font-[650] tracking-[-0.01em] text-[var(--text)]">{title}</h2>
+          <button onClick={onClose} className="rounded-[8px] p-1 text-[var(--subtle)] transition hover:bg-[color-mix(in_srgb,var(--fg)_6%,transparent)] hover:text-[var(--fg)]" aria-label="Close dialog">
             <X className="h-4 w-4" />
           </button>
         </div>

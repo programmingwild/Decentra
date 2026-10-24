@@ -24,7 +24,7 @@ export function Card({
       {/* top light edge */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.22] to-transparent"
+        className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--fg)_22%,transparent)] to-transparent"
       />
       {/* hover aura */}
       <div
@@ -59,10 +59,10 @@ export function CardHeader({
   return (
     <div className="flex items-start justify-between gap-4 p-5 pb-0">
       <div className="flex gap-3">
-        {icon && <div className="h-8 w-8 rounded-[10px] border border-white/[0.1] bg-gradient-to-b from-white/[0.09] to-white/[0.03] text-[#9AA1AC] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">{icon}</div>}
+        {icon && <div className="h-8 w-8 rounded-[10px] border border-[var(--border)] bg-gradient-to-b from-[color-mix(in_srgb,var(--fg)_9%,transparent)] to-[color-mix(in_srgb,var(--fg)_3%,transparent)] text-[var(--muted)] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">{icon}</div>}
         <div>
-          <div className="font-[650] text-[13px] tracking-[-0.01em] text-[#F5F7FA] leading-none">{title}</div>
-          {subtitle && <div className="text-[12px] leading-relaxed text-[#9AA1AC] mt-1">{subtitle}</div>}
+          <div className="font-[650] text-[13px] tracking-[-0.01em] text-[var(--text)] leading-none">{title}</div>
+          {subtitle && <div className="text-[12px] leading-relaxed text-[var(--muted)] mt-1">{subtitle}</div>}
         </div>
       </div>
       {action && <div className="shrink-0">{action}</div>}

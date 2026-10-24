@@ -7,7 +7,7 @@ type Ctx = { toast: (message: string, type?: Toast["type"]) => void };
 const ToastCtx = createContext<Ctx>({ toast: () => {} });
 
 const ICONS = { success: CheckCircle2, error: AlertTriangle, info: Info };
-const COLORS = { success: "text-[#34D399]", error: "text-[#F87171]", info: "text-[#38BDF8]" };
+const COLORS = { success: "text-[var(--emerald)]", error: "text-[var(--red)]", info: "text-[var(--sky)]" };
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -30,10 +30,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => {
           const Icon = ICONS[t.type];
           return (
-            <div key={t.id} className="animate-rise pointer-events-auto flex items-start gap-2.5 rounded-[12px] border border-white/[0.09] bg-[#15181D] p-3.5 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+            <div key={t.id} className="animate-rise pointer-events-auto flex items-start gap-2.5 rounded-[12px] border border-[var(--border)] bg-[var(--elevated)] p-3.5 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
               <Icon className={`mt-px h-4 w-4 shrink-0 ${COLORS[t.type]}`} aria-hidden="true" />
-              <p className="flex-1 text-[13px] leading-snug text-[#E5E9EF]">{t.message}</p>
-              <button onClick={() => dismiss(t.id)} className="rounded p-0.5 text-[#656B75] hover:text-white" aria-label="Dismiss notification">
+              <p className="flex-1 text-[13px] leading-snug text-[var(--text)]">{t.message}</p>
+              <button onClick={() => dismiss(t.id)} className="rounded p-0.5 text-[var(--subtle)] hover:text-[var(--fg)]" aria-label="Dismiss notification">
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>

@@ -46,9 +46,9 @@ function ScrubWord({
       style={{ opacity, filter, y }}
       className={
         word.gold
-          ? "serif italic text-[#D4A574]"
+          ? "serif italic text-[var(--gold)]"
           : word.hot
-            ? "text-white"
+            ? "text-[var(--fg)]"
             : undefined
       }
     >
@@ -76,7 +76,7 @@ function EvidenceChip({
     <motion.span
       aria-hidden="true"
       style={{ opacity }}
-      className="fragment mx-1 inline-flex -translate-y-1 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#D4A574]/30 bg-[#D4A574]/10 px-3 py-1 align-middle text-[0.32em] font-[500] uppercase tracking-[0.14em] text-[#D4A574]"
+      className="fragment mx-1 inline-flex -translate-y-1 items-center gap-1.5 whitespace-nowrap rounded-full border border-[color-mix(in_srgb,var(--gold)_30%,transparent)] bg-[color-mix(in_srgb,var(--gold)_10%,transparent)] px-3 py-1 align-middle text-[0.32em] font-[500] uppercase tracking-[0.14em] text-[var(--gold)]"
     >
       ◆ 42:17 evidence
     </motion.span>
@@ -150,23 +150,23 @@ export function ManifestoScrub({
 
       {/* meta row */}
       <div className="relative mb-8 flex flex-wrap items-center justify-between gap-3">
-        <span className="fragment text-[10px] uppercase tracking-[0.2em] text-[#656B75]">
+        <span className="fragment text-[10px] uppercase tracking-[0.2em] text-[var(--subtle)]">
           {pct >= 100 ? "Read · scroll back to re-read" : `Reading · ${pct}%`}
         </span>
-        <span className="fragment inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.03] px-3.5 py-1.5 text-[10px] uppercase tracking-[0.16em] text-[#9AA1AC]">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#D4A574]" /> scroll to fill
+        <span className="fragment inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_3%,transparent)] px-3.5 py-1.5 text-[10px] uppercase tracking-[0.16em] text-[var(--muted)]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--gold)]" /> scroll to fill
         </span>
       </div>
 
       <p
         aria-label={fullText}
-        className={`${GeistSans.className} relative max-w-[20ch] text-[clamp(1.9rem,4.6vw,3.3rem)] font-[650] leading-[1.32] tracking-[-0.02em] text-[#656B75] sm:max-w-[24ch]`}
+        className={`${GeistSans.className} relative max-w-[20ch] text-[clamp(1.9rem,4.6vw,3.3rem)] font-[650] leading-[1.32] tracking-[-0.02em] text-[var(--subtle)] sm:max-w-[24ch]`}
       >
         {staticMode
           ? words.map((wd, i) => (
               <span
                 key={i}
-                className={wd.gold ? "serif italic text-[#D4A574]" : wd.hot ? "text-white" : undefined}
+                className={wd.gold ? "serif italic text-[var(--gold)]" : wd.hot ? "text-[var(--fg)]" : undefined}
               >
                 {wd.w}{" "}
               </span>
@@ -182,21 +182,21 @@ export function ManifestoScrub({
       </p>
 
       {/* progress hairline */}
-      <div className="relative mt-10 h-px w-full bg-white/[0.08]">
+      <div className="relative mt-10 h-px w-full bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]">
         <motion.div
           aria-hidden="true"
           style={{ scaleX: staticMode ? 1 : railScale }}
-          className="h-full origin-left bg-gradient-to-r from-[#D4A574] via-[#D4A574] to-[#38BDF8]"
+          className="h-full origin-left bg-gradient-to-r from-[var(--gold)] via-[var(--gold)] to-[var(--sky)]"
         />
       </div>
       <div className="relative mt-5 flex flex-wrap items-end justify-between gap-4">
-        <p className="fragment text-[10.5px] uppercase leading-loose tracking-[0.2em] text-[#454B54]">
+        <p className="fragment text-[10.5px] uppercase leading-loose tracking-[0.2em] text-[var(--faint)]">
           — the reason
           <br />
           decentra exists
         </p>
-        <p className="serif max-w-[300px] text-right text-[15px] leading-snug text-[#9AA1AC]">
-          Every commitment, <span className="italic text-[#D4A574]">pinned to the second</span> it
+        <p className="serif max-w-[300px] text-right text-[15px] leading-snug text-[var(--muted)]">
+          Every commitment, <span className="italic text-[var(--gold)]">pinned to the second</span> it
           was spoken.
         </p>
       </div>

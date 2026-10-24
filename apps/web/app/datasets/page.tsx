@@ -1,8 +1,9 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { Nav } from "@/components/nav";
 import { PageHero } from "@/components/ui/page-hero";
-import { ShaderAurora } from "@/components/immersive/3d/ShaderAurora";
+const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAurora").then((m) => m.ShaderAurora), { ssr: false });
 import { Card, CardHeader, CardBody } from "@/components/ui/card";
 import { api } from "@/lib/api";
 import { fmtDateLong } from "@/lib/format";
@@ -60,7 +61,7 @@ export default function Datasets() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main className="flex-1 min-w-0">
         <div className="relative mx-auto max-w-[1100px] space-y-6 px-5 pb-20 pt-8 lg:px-8 lg:pt-12">
@@ -77,7 +78,7 @@ export default function Datasets() {
               <div className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="org" className="text-[12px] font-[500] text-[#9AA1AC]">
+                    <label htmlFor="org" className="text-[12px] font-[500] text-[var(--muted)]">
                       Workspace
                     </label>
                       <select id="org" className="input mt-1.5" value={orgId} onChange={(e) => setOrgId(e.target.value)} aria-label="Workspace">
@@ -89,8 +90,8 @@ export default function Datasets() {
                       </select>
                   </div>
                   <div>
-                    <label htmlFor="dsname" className="text-[12px] font-[500] text-[#9AA1AC]">
-                      Dataset name <span className="text-[#656B75] font-normal">(optional)</span>
+                    <label htmlFor="dsname" className="text-[12px] font-[500] text-[var(--muted)]">
+                      Dataset name <span className="text-[var(--subtle)] font-normal">(optional)</span>
                     </label>
                     <input id="dsname" className="input mt-1.5" placeholder="e.g. Q3 Sales" value={name} onChange={(e) => setName(e.target.value)} autoComplete="off" spellCheck={false} />
                   </div>
@@ -108,27 +109,27 @@ export default function Datasets() {
                     const f = e.dataTransfer.files?.[0];
                     if (f) setFile(f);
                   }}
-                  className={`relative rounded-[14px] border-2 border-dashed p-8 text-center transition ${dragOver ? "border-[#F5F7FA] bg-white/[0.04]" : "border-white/[0.08] bg-[#15181D] hover:bg-[#1A1E24] hover:border-white/[0.12]"}`}
+                  className={`relative rounded-[14px] border-2 border-dashed p-8 text-center transition ${dragOver ? "border-[var(--text)] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)]" : "border-[var(--border)] bg-[var(--elevated)] hover:bg-[var(--hover)] hover:border-[var(--border-strong)]"}`}
                 >
                   <input id="file" type="file" accept=".csv,.xlsx,.xls" onChange={(e) => setFile(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" aria-label="Upload file" />
                   <div className="pointer-events-none flex flex-col items-center gap-3">
-                    <div className="h-10 w-10 rounded-[12px] bg-[#F5F7FA] text-[#08090B] flex items-center justify-center">
+                    <div className="h-10 w-10 rounded-[12px] bg-[var(--text)] text-[var(--bg)] flex items-center justify-center">
                       <FileSpreadsheet className="h-5 w-5" aria-hidden="true" />
                     </div>
-                    <div className="text-[13px] font-[500] text-[#F5F7FA]">{file ? file.name : "Drop your dataset here"}</div>
-                    <div className="text-[11px] font-[600] tracking-widest uppercase text-[#656B75]">CSV • XLSX • JSON</div>
-                    <div className="text-[12px] text-[#656B75]">Max 50MB • up to 200k rows</div>
+                    <div className="text-[13px] font-[500] text-[var(--text)]">{file ? file.name : "Drop your dataset here"}</div>
+                    <div className="text-[11px] font-[600] tracking-widest uppercase text-[var(--subtle)]">CSV • XLSX • JSON</div>
+                    <div className="text-[12px] text-[var(--subtle)]">Max 50MB • up to 200k rows</div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button onClick={upload} disabled={uploading} className="btn bg-[#F5F7FA] text-[#08090B] hover:bg-white h-[40px] px-5 gap-2" aria-label="Upload dataset">
+                  <button onClick={upload} disabled={uploading} className="btn bg-[var(--text)] text-[var(--bg)] hover:bg-[var(--fg)] h-[40px] px-5 gap-2" aria-label="Upload dataset">
                     {uploading ? "Uploading…" : "Browse files"} {!uploading && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
                   </button>
-                  {file && <span className="text-[13px] text-[#9AA1AC]">{(file.size / 1024).toFixed(0)} KB • {file.name}</span>}
+                  {file && <span className="text-[13px] text-[var(--muted)]">{(file.size / 1024).toFixed(0)} KB • {file.name}</span>}
                 </div>
                 {msg && (
-                  <div className={`rounded-[10px] px-3 py-2.5 text-[13px] border ${msg.startsWith("✓") ? "bg-[#10B981]/10 border-[#10B981]/20 text-[#10B981]" : "bg-[#F59E0B]/10 border-[#F59E0B]/20 text-[#F59E0B]"}`}>{msg}</div>
+                  <div className={`rounded-[10px] px-3 py-2.5 text-[13px] border ${msg.startsWith("✓") ? "bg-[color-mix(in_srgb,var(--emerald-2)_10%,transparent)] border-[color-mix(in_srgb,var(--emerald-2)_20%,transparent)] text-[var(--emerald-2)]" : "bg-[color-mix(in_srgb,var(--amber-2)_10%,transparent)] border-[color-mix(in_srgb,var(--amber-2)_20%,transparent)] text-[var(--amber-2)]"}`}>{msg}</div>
                 )}
               </div>
             </CardBody>
@@ -138,22 +139,22 @@ export default function Datasets() {
             <CardHeader icon={<Database className="h-4 w-4" aria-hidden="true" />} title="Your datasets" subtitle={`${datasets.length} total • click to inspect quality, columns, and lineage`} />
             <CardBody>
               {datasets.length === 0 ? (
-                <div className="rounded-[12px] bg-[#15181D] border border-dashed border-white/[0.08] p-8 text-center">
-                  <div className="text-[14px] font-[500] text-[#F5F7FA]">No datasets yet.</div>
-                  <div className="text-[13px] text-[#9AA1AC] mt-1">Your intelligence workspace starts here.</div>
-                  <div className="text-[12px] text-[#656B75] mt-1">Upload your first dataset and let Decentra uncover what matters.</div>
+                <div className="rounded-[12px] bg-[var(--elevated)] border border-dashed border-[var(--border)] p-8 text-center">
+                  <div className="text-[14px] font-[500] text-[var(--text)]">No datasets yet.</div>
+                  <div className="text-[13px] text-[var(--muted)] mt-1">Your intelligence workspace starts here.</div>
+                  <div className="text-[12px] text-[var(--subtle)] mt-1">Upload your first dataset and let Decentra uncover what matters.</div>
                 </div>
               ) : (
-                <div className="divide-y divide-white/[0.06] -mx-5">
+                <div className="divide-y divide-[var(--border)] -mx-5">
                   {datasets.map((d: any) => (
-                    <a key={d.id} href={`/datasets/${d.id}`} className="flex items-center justify-between px-5 py-4 hover:bg-white/[0.04] transition group">
+                    <a key={d.id} href={`/datasets/${d.id}`} className="flex items-center justify-between px-5 py-4 hover:bg-[color-mix(in_srgb,var(--fg)_4%,transparent)] transition group">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-10 w-10 rounded-[12px] bg-[#F5F7FA] text-[#08090B] flex items-center justify-center shrink-0">
+                        <div className="h-10 w-10 rounded-[12px] bg-[var(--text)] text-[var(--bg)] flex items-center justify-center shrink-0">
                           <FileSpreadsheet className="h-5 w-5" aria-hidden="true" />
                         </div>
                         <div className="min-w-0">
-                          <div className="font-[500] text-[14px] tracking-[-0.01em] truncate text-[#F5F7FA]">{d.name}</div>
-                          <div className="text-[11px] text-[#656B75] flex items-center gap-2">
+                          <div className="font-[500] text-[14px] tracking-[-0.01em] truncate text-[var(--text)]">{d.name}</div>
+                          <div className="text-[11px] text-[var(--subtle)] flex items-center gap-2">
                             <span className="uppercase tracking-wide font-[600]">{d.source_type}</span>
                             <span>•</span>
                             <span>{d.row_count?.toLocaleString()} rows</span>
@@ -165,7 +166,7 @@ export default function Datasets() {
                           </div>
                         </div>
                       </div>
-                      <span className="hidden sm:inline-flex items-center gap-1 text-[13px] font-[500] text-[#656B75] group-hover:text-[#F5F7FA]">
+                      <span className="hidden sm:inline-flex items-center gap-1 text-[13px] font-[500] text-[var(--subtle)] group-hover:text-[var(--text)]">
                         Inspect <ArrowRight className="h-4 w-4" aria-hidden="true" />
                       </span>
                     </a>

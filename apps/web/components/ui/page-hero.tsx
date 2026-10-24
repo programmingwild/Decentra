@@ -33,12 +33,12 @@ export function PageHero({
           {echo}
         </span>
       )}
-      <p className="fragment relative flex items-center gap-2.5 text-[10.5px] uppercase tracking-[0.2em] text-[#656B75]">
-        <span className="h-px w-8 shrink-0 bg-gradient-to-r from-[#D4A574] to-transparent shadow-[0_0_8px_rgba(212,165,116,0.6)]" aria-hidden="true" />
+      <p className="fragment relative flex items-center gap-2.5 text-[10.5px] uppercase tracking-[0.2em] text-[var(--subtle)]">
+        <span className="h-px w-8 shrink-0 bg-gradient-to-r from-[var(--gold)] to-transparent shadow-[0_0_8px_rgba(212,165,116,0.6)]" aria-hidden="true" />
         {kicker}
       </p>
-      <h1 className="display-hero text-3d relative mt-2 text-[36px] text-[#F5F7FA] lg:text-[48px]">{title}</h1>
-      {sub && <div className="relative mt-3 max-w-xl text-[15px] leading-relaxed text-[#9AA1AC]">{sub}</div>}
+      <h1 className="display-hero text-3d relative mt-2 text-[36px] text-[var(--text)] lg:text-[48px]">{title}</h1>
+      {sub && <div className="relative mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--muted)]">{sub}</div>}
     </>
   );
 

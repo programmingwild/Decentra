@@ -41,25 +41,25 @@ export function Preloader() {
     <AnimatePresence>
       {!gone && (
         <motion.div
-          className="fixed inset-0 z-[300] flex flex-col justify-between bg-[#08090B] px-6 py-6 sm:px-10"
+          className="fixed inset-0 z-[300] flex flex-col justify-between bg-[var(--bg)] px-6 py-6 sm:px-10"
           exit={{ y: "-100%" }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
           aria-hidden="true"
         >
           <div className="flex items-center justify-between">
-            <span className="fragment text-[10.5px] uppercase tracking-[0.24em] text-[#656B75]">Decentra</span>
-            <span className="fragment text-[10.5px] uppercase tracking-[0.24em] text-[#656B75]">Meeting intelligence</span>
+            <span className="fragment text-[10.5px] uppercase tracking-[0.24em] text-[var(--subtle)]">Decentra</span>
+            <span className="fragment text-[10.5px] uppercase tracking-[0.24em] text-[var(--subtle)]">Meeting intelligence</span>
           </div>
           <div className="flex items-end justify-between gap-6">
-            <p className="fragment max-w-[220px] text-[10.5px] uppercase leading-relaxed tracking-[0.2em] text-[#454B54]">
+            <p className="fragment max-w-[220px] text-[10.5px] uppercase leading-relaxed tracking-[0.2em] text-[var(--faint)]">
               Pinning every decision to the second it was spoken
             </p>
-            <span className="display-hero text-[72px] leading-none text-[#F5F7FA] tabular-nums sm:text-[120px]">
+            <span className="display-hero text-[72px] leading-none text-[var(--text)] tabular-nums sm:text-[120px]">
               {count}
             </span>
           </div>
-          <div className="h-px w-full bg-white/[0.08]">
-            <div className="h-full bg-gradient-to-r from-[#D4A574] to-[#38BDF8] transition-[width] duration-150" style={{ width: `${count}%` }} />
+          <div className="h-px w-full bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]">
+            <div className="h-full bg-gradient-to-r from-[var(--gold)] to-[var(--sky)] transition-[width] duration-150" style={{ width: `${count}%` }} />
           </div>
         </motion.div>
       )}

@@ -88,7 +88,7 @@ export function Scroll3DScene({ children, className = "", height = 800 }: Scroll
         {children}
       </div>
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.01] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[color-mix(in_srgb,var(--fg)_1%,transparent)] to-transparent" />
       </div>
     </div>
   );

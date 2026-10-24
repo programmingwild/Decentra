@@ -7,58 +7,85 @@ import { TransitionProvider } from "@/components/immersive/3d/TransitionProvider
 import { CursorGlow } from "@/components/immersive/3d/CursorGlow";
 import { ScrollProgress } from "@/components/immersive/3d/ScrollProgress";
 import { ImmersiveBackdrop } from "@/components/immersive/3d/ImmersiveBackdrop";
+import { ThemeProvider } from "@/components/theme-provider";
+import {
+  Inter,
+  JetBrains_Mono,
+  Instrument_Sans,
+  Newsreader,
+  Fragment_Mono,
+} from "next/font/google";
 
-export const viewport = {
-  themeColor: "#08090B",
-};
+/* Self-hosted + preloaded by Next.js: no render-blocking third-party CSS,
+   no FOUT, no extra DNS/TLS round trip to fonts.googleapis.com. */
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+});
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+const instrument = Instrument_Sans({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-instrument",
+  display: "swap",
+});
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+const fragment = Fragment_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-fragment",
+  display: "swap",
+});
 
 export const metadata = {
-  title: {
-    default: "Decentra — Meetings end. Commitments shouldn't.",
-    template: "%s · Decentra",
-  },
-  description:
-    "Decentra turns meetings into decisions, owners and actions — every commitment pinned to the second it was spoken. Evidence-first, human-in-the-loop meeting intelligence.",
-  keywords: ["meeting intelligence", "decision tracking", "action items", "transcription", "evidence", "AI assistant", "meeting notes"],
-  authors: [{ name: "Decentra" }],
-  themeColor: "#08090B",
-  colorScheme: "dark",
+  title: { default: "Decentra — Meetings end. Commitments shouldn't.", template: "%s · Decentra" },
+  description: "Decentra turns meetings into decisions, owners and actions — every commitment pinned to the second it was spoken. Evidence-first, human-in-the-loop meeting intelligence.",
   icons: { icon: "/icon.svg", apple: "/icon.svg" },
   robots: { index: true, follow: true },
-  openGraph: {
-    title: "Decentra — Meetings end. Commitments shouldn't.",
-    description: "Decisions, owners and actions from every meeting — every one pinned to the second it was spoken.",
-    type: "website",
-    siteName: "Decentra",
-  },
-  twitter: {
-    card: "summary_large_title",
-    title: "Decentra — Meetings end. Commitments shouldn't.",
-    description: "Decisions, owners and actions from every meeting — evidence-first, human-in-the-loop.",
-  },
 };
+
+const fontVars = [
+  inter.variable,
+  jetbrains.variable,
+  instrument.variable,
+  newsreader.variable,
+  fragment.variable,
+].join(" ");
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+    <html lang="en" className={fontVars} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <meta name="theme-color" content="#08090B" />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('dec:theme');var d=t||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.classList.toggle('light',d==='light');document.documentElement.classList.toggle('dark',d==='dark');document.documentElement.style.colorScheme=d;}catch(e){}})();` }} />
       </head>
-      <body className="bg-[#08090B] text-[#F5F7FA] antialiased">
+      <body className="bg-[var(--bg)] text-[var(--text)] antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-[300] rounded-[8px] bg-white px-3 py-2 text-black">
           Skip to content
         </a>
         <ImmersiveBackdrop />
-        <AuthProvider>
-          <ToastProvider>
-            <PaletteProvider>
-              <TransitionProvider>{children}</TransitionProvider>
-              <ScrollProgress />
-              <CursorGlow />
-            </PaletteProvider>
-          </ToastProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <PaletteProvider>
+                <TransitionProvider>{children}</TransitionProvider>
+                <ScrollProgress />
+                <CursorGlow />
+              </PaletteProvider>
+            </ToastProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

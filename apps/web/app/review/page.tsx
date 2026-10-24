@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { Nav } from "@/components/nav";
@@ -12,7 +13,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { MetricCard } from "@/components/ui/metrics";
 import { PageHero } from "@/components/ui/page-hero";
-import { ShaderAurora } from "@/components/immersive/3d/ShaderAurora";
+const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAurora").then((m) => m.ShaderAurora), { ssr: false });
 
 export default function ReviewQueuePage() {
   const { toast } = useToast();
@@ -50,7 +51,7 @@ export default function ReviewQueuePage() {
     try { await api(`/api/v1/review/${id}/decision`, {method:"POST", body: JSON.stringify({action})}); toast(action==="accept"?"Accepted — marked human-approved":"Rejected","success"); load(); } catch(e:any){ toast(e.message, "error"); }
   }
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main className="min-w-0 flex-1">
         <div className="relative mx-auto max-w-[900px] px-5 pb-20 pt-8 lg:px-8 lg:pt-12">
@@ -58,10 +59,10 @@ export default function ReviewQueuePage() {
           <header className="relative">
             <PageHero
               kicker="Human approval required — provenance matters"
-              title={<>Review <span className="thin text-[#9AA1AC]">Queue</span></>}
-              sub={<>{loading ? "Loading…" : `${items.length} items awaiting judgment — `}<span className="inline-flex items-center gap-1.5"><ProvenancePill value="AI_INFERRED" /><span className="text-[#656B75]">→</span><span className="text-[#9AA1AC]">human review</span><span className="text-[#656B75]">→</span><ProvenancePill value="HUMAN_APPROVED" /></span></>}
+              title={<>Review <span className="thin text-[var(--muted)]">Queue</span></>}
+              sub={<>{loading ? "Loading…" : `${items.length} items awaiting judgment — `}<span className="inline-flex items-center gap-1.5"><ProvenancePill value="AI_INFERRED" /><span className="text-[var(--subtle)]">→</span><span className="text-[var(--muted)]">human review</span><span className="text-[var(--subtle)]">→</span><ProvenancePill value="HUMAN_APPROVED" /></span></>}
             />
-            {!loading && items.length>0 && <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-white/10"><div className="h-full bg-gradient-to-r from-[#F59E0B] to-[#10B981]" style={{width: `${Math.min(100, items.length*8)}%`}} /></div>}
+            {!loading && items.length>0 && <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-[var(--fg)]/10"><div className="h-full bg-gradient-to-r from-[var(--amber-2)] to-[var(--emerald-2)]" style={{width: `${Math.min(100, items.length*8)}%`}} /></div>}
           </header>
 
           {/* Bold Metric Cards */}
@@ -74,11 +75,11 @@ export default function ReviewQueuePage() {
           )}
 
           <div className="mt-6">
-            {loading ? <div className="h-20 animate-pulse rounded-[14px] bg-white/[0.04]" /> : items.length===0 ? <EmptyState title="Nothing to review" body="Proposed decisions, risks and recommendations from meetings will appear here. Each needs Accept / Edit / Reject." /> : (
+            {loading ? <div className="h-20 animate-pulse rounded-[14px] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)]" /> : items.length===0 ? <EmptyState title="Nothing to review" body="Proposed decisions, risks and recommendations from meetings will appear here. Each needs Accept / Edit / Reject." /> : (
               <div className="stagger space-y-3">
                 {items.map((it)=> (
-                  <div key={it.id} className="reveal glass-strong sheen spotlight group relative overflow-hidden rounded-[18px] p-4 transition hover:bg-white/[0.04]">
-                    <div className="pointer-events-none absolute inset-0 rounded-[18px] bg-gradient-to-br from-transparent via-white/[0.02] to-transparent" />
+                  <div key={it.id} className="reveal glass-strong sheen spotlight group relative overflow-hidden rounded-[18px] p-4 transition hover:bg-[color-mix(in_srgb,var(--fg)_4%,transparent)]">
+                    <div className="pointer-events-none absolute inset-0 rounded-[18px] bg-gradient-to-br from-transparent via-[color-mix(in_srgb,var(--fg)_2%,transparent)] to-transparent" />
                     <div className="relative flex items-start gap-4">
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px]" style={{ background: it.item_type === "decision" ? "#FBBF2418" : it.item_type === "risk" ? "#F8717118" : "#38BDF818", color: it.item_type === "decision" ? "#FBBF24" : it.item_type === "risk" ? "#F87171" : "#38BDF8" }}>
                         {it.item_type === "decision" && <Target className="h-4 w-4" />}
@@ -86,26 +87,26 @@ export default function ReviewQueuePage() {
                         {it.item_type === "question" && <BookOpen className="h-4 w-4" />}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 text-[11px]"><span className="rounded-full bg-white/[0.06] px-1.5 py-0.5 font-[600] text-[#9AA1AC]">{humanizeKey(it.item_type) || "Item"}</span><ProvenancePill value={it.provenance || "TRANSCRIPT_DERIVED"} /></div>
-                        <p className="mt-1.5 text-[13.5px] font-[550] text-[#F5F7FA]">{it.title}</p>
-                        <Link href={`/meetings/${it.meeting_id}`} className="mt-1 inline-flex text-[11px] text-[#38BDF8] hover:text-white">Open meeting →</Link>
+                        <div className="flex items-center gap-2 text-[11px]"><span className="rounded-full bg-[color-mix(in_srgb,var(--fg)_6%,transparent)] px-1.5 py-0.5 font-[600] text-[var(--muted)]">{humanizeKey(it.item_type) || "Item"}</span><ProvenancePill value={it.provenance || "TRANSCRIPT_DERIVED"} /></div>
+                        <p className="mt-1.5 text-[13.5px] font-[550] text-[var(--text)]">{it.title}</p>
+                        <Link href={`/meetings/${it.meeting_id}`} className="mt-1 inline-flex text-[11px] text-[var(--sky)] hover:text-[var(--fg)]">Open meeting →</Link>
                       </div>
                       <div className="flex shrink-0 gap-1.5">
-                        <button onClick={()=> act(it.id,"accept")} className="flex h-8 w-8 items-center justify-center rounded-full bg-[#10B981] text-[#06281E] hover:bg-[#0EA371]"><Check className="h-4 w-4" /></button>
-                        <button onClick={()=> act(it.id,"reject")} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-[#F87171] hover:bg-white/10"><X className="h-4 w-4" /></button>
-                        <button onClick={() => { setEditItem(it); setEditTitle(it.title); }} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-[#9AA1AC] hover:bg-white/10" aria-label="Revise title"><Edit3 className="h-4 w-4" /></button>
+                        <button onClick={()=> act(it.id,"accept")} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--emerald-2)] text-[#06281E] hover:bg-[#0EA371]"><Check className="h-4 w-4" /></button>
+                        <button onClick={()=> act(it.id,"reject")} className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--red)] hover:bg-[var(--fg)]/10"><X className="h-4 w-4" /></button>
+                        <button onClick={() => { setEditItem(it); setEditTitle(it.title); }} className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--fg)]/10" aria-label="Revise title"><Edit3 className="h-4 w-4" /></button>
                       </div>
                     </div>
-                    <div className="pointer-events-none absolute inset-0 rounded-[18px] opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-transparent via-white/[0.03] to-transparent" />
+                    <div className="pointer-events-none absolute inset-0 rounded-[18px] opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--fg)_3%,transparent)] to-transparent" />
                   </div>
                 ))}
               </div>
             )}
           </div>
-          <p className="mt-6 text-[11px] text-[#656B75]">Never silently promote AI output — every acceptance changes provenance to <span className="text-[#34D399]">human-approved</span>.</p>
+          <p className="mt-6 text-[11px] text-[var(--subtle)]">Never silently promote AI output — every acceptance changes provenance to <span className="text-[var(--emerald)]">human-approved</span>.</p>
 
           <Modal open={!!editItem} onClose={() => setEditItem(null)} title="Revise proposal" width={440}>
-            <label htmlFor="rev-title" className="text-[12px] font-[500] text-[#9AA1AC]">What should it say instead?</label>
+            <label htmlFor="rev-title" className="text-[12px] font-[500] text-[var(--muted)]">What should it say instead?</label>
             <textarea id="rev-title" rows={3} value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="input mt-2 resize-none leading-relaxed" aria-label="Revised title" />
             <div className="mt-4 flex justify-end gap-2">
               <button onClick={() => setEditItem(null)} className="btn btn-subtle h-[34px] px-3 text-[13px]">Cancel</button>
@@ -121,7 +122,7 @@ export default function ReviewQueuePage() {
                     toast(e.message || "Couldn't save revision", "error");
                   }
                 }}
-                className="btn h-[34px] bg-[#F5F7FA] px-4 text-[13px] font-[600] text-[#08090B] hover:bg-white"
+                className="btn h-[34px] bg-[var(--text)] px-4 text-[13px] font-[600] text-[var(--bg)] hover:bg-[var(--fg)]"
               >
                 Save revision
               </button>

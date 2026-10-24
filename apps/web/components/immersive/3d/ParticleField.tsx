@@ -2,6 +2,7 @@
 import { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useSceneVisibility } from "./useSceneVisibility";
 
 interface ParticleFieldProps {
   count?: number;
@@ -19,6 +20,7 @@ export function ParticleField({
   physics = true,
 }: ParticleFieldProps) {
   const [mounted, setMounted] = useState(false);
+  const { ref: viewRef, visible } = useSceneVisibility<HTMLDivElement>();
 
   useEffect(() => {
     setMounted(true);
@@ -27,19 +29,25 @@ export function ParticleField({
   if (!mounted) {
     return <div className={`absolute inset-0 ${className}`} />;
   }
+  // Skip WebGL on reduced-motion or small screens.
+  if (typeof window !== "undefined" && (window.matchMedia("(prefers-reduced-motion: reduce)").matches || window.innerWidth < 768)) {
+    return <div className={`absolute inset-0 ${className}`} />;
+  }
 
   // NOTE: same as ShaderAurora — positioning lives on a plain div because
   // R3F's own wrapper div carries inline `position: relative`.
   return (
-    <div className={`absolute inset-0 pointer-events-none ${className}`}>
+    <div ref={viewRef} className={`absolute inset-0 pointer-events-none ${className}`}>
       <Canvas
         camera={{ position: [0, 0, 50], fov: 60 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
+        dpr={[1, 1.25]}
+        frameloop={visible ? "always" : "never"}
         style={{ width: "100%", height: "100%" }}
         onCreated={({ gl }) => gl.setClearColor(0x08090b, 0)}
       >
         <ParticleSystem
-          count={count}
+          count={Math.min(count, 120)}
           colors={colors}
           interactWithMouse={interactWithMouse}
           physics={physics}

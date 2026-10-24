@@ -20,7 +20,7 @@ export function CompleteToggle({ id, done, onDone }: { id: string; done: boolean
       }}
       aria-label={done ? "Mark as not started" : "Mark complete"}
       aria-pressed={done}
-      className={`mt-0.5 flex h-[19px] w-[19px] shrink-0 items-center justify-center rounded-full border transition ${done ? "border-[#10B981] bg-[#10B981]" : "border-white/[0.18] hover:border-white/[0.35]"}`}
+      className={`mt-0.5 flex h-[19px] w-[19px] shrink-0 items-center justify-center rounded-full border transition ${done ? "border-[var(--emerald-2)] bg-[var(--emerald-2)]" : "border-[var(--border-strong)] hover:border-[var(--border-strong)]"}`}
     >
       {done && <Check className="animate-pop h-3 w-3 text-[#06281E]" strokeWidth={3} aria-hidden="true" />}
     </button>
@@ -28,11 +28,11 @@ export function CompleteToggle({ id, done, onDone }: { id: string; done: boolean
 }
 
 export function DueLine({ raw, status }: { raw: string | null | undefined; status: string }) {
-  if (status === "COMPLETED") return <span className="text-[11px] uppercase tracking-wider text-[#10B981]/80">Completed</span>;
+  if (status === "COMPLETED") return <span className="text-[11px] uppercase tracking-wider text-[color-mix(in_srgb,var(--emerald-2)_80%,transparent)]">Completed</span>;
   const dl = fmtDeadline(raw);
-  if (!raw) return <span className="text-[11px] uppercase tracking-wider text-[#FBBF24]/80">No deadline confirmed</span>;
+  if (!raw) return <span className="text-[11px] uppercase tracking-wider text-[color-mix(in_srgb,var(--amber)_80%,transparent)]">No deadline confirmed</span>;
   return (
-    <span className={`text-[11px] uppercase tracking-wider ${dl.overdue ? "text-[#F87171]" : dl.today ? "text-[#FBBF24]" : "text-[#656B75]"}`}>
+    <span className={`text-[11px] uppercase tracking-wider ${dl.overdue ? "text-[var(--red)]" : dl.today ? "text-[var(--amber)]" : "text-[var(--subtle)]"}`}>
       {dl.overdue ? "Overdue · " : dl.today ? "Due today · " : "Due "}
       {dl.label || raw}
     </span>

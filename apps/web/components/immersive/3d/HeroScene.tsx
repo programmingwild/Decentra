@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
+import { useSceneVisibility } from "./useSceneVisibility";
 
 const GOLD = "#D4A574";
 const SKY = "#38BDF8";
@@ -63,11 +64,11 @@ function Core() {
   return (
     <Float speed={1.6} rotationIntensity={0.12} floatIntensity={0.7}>
       <mesh ref={glow}>
-        <sphereGeometry args={[1.28, 32, 32]} />
+        <sphereGeometry args={[1.28, 24, 24]} />
         <meshBasicMaterial color={GOLD} transparent opacity={0.07} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
       <mesh ref={mesh}>
-        <icosahedronGeometry args={[1.12, 24]} />
+        <icosahedronGeometry args={[1.12, 16]} />
         <MeshDistortMaterial
           color={GOLD}
           emissive={GOLD}
@@ -167,14 +168,15 @@ function Scene({ tier }: { tier: "high" | "low" }) {
           <Core />
           <Rings />
         </group>
-        <Starfield count={tier === "high" ? 420 : 160} color={SKY} spread={[22, 14, 14]} size={0.035} />
-        <Starfield count={tier === "high" ? 160 : 60} color={GOLD} spread={[18, 12, 12]} size={0.05} />
+        <Starfield count={tier === "high" ? 200 : 80} color={SKY} spread={[22, 14, 14]} size={0.035} />
+        <Starfield count={tier === "high" ? 80 : 40} color={GOLD} spread={[18, 12, 12]} size={0.05} />
       </Rig>
     </>
   );
 }
 
 export function HeroScene({ className = "" }: { className?: string }) {
+  const { ref: viewRef, visible } = useSceneVisibility<HTMLDivElement>();
   const [state, setState] = useState<"checking" | "webgl" | "fallback">("checking");
   const [tier, setTier] = useState<"high" | "low">("high");
 
@@ -202,20 +204,21 @@ export function HeroScene({ className = "" }: { className?: string }) {
   }
 
   return (
-    <div className={`pointer-events-none absolute inset-0 ${className}`} aria-hidden="true">
+    <div ref={viewRef} className={`pointer-events-none absolute inset-0 ${className}`} aria-hidden="true">
       <Canvas
-        dpr={tier === "low" ? 1 : [1, 1.75]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        dpr={tier === "low" ? 1 : [1, 1.5]}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
         camera={{ position: [0, 0.15, 7], fov: 50 }}
         onCreated={({ gl }) => { gl.setClearColor("#08090B", 0); }}
         style={{ background: "transparent" }}
         performance={{ min: 0.5 }}
+        frameloop={visible ? "always" : "never"}
       >
         <Scene tier={tier} />
       </Canvas>
       {/* cinematic vignette + bottom fade into page */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(8,9,11,0.55)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#08090B] to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,color-mix(in_srgb,var(--bg)_55%,transparent)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--bg)] to-transparent" />
     </div>
   );
 }

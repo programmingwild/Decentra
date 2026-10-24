@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -6,7 +7,7 @@ import { Nav } from "@/components/nav";
 import { api } from "@/lib/api";
 import { PageHero } from "@/components/ui/page-hero";
 import { Reveal } from "@/components/immersive/3d/Reveal";
-import { ShaderAurora } from "@/components/immersive/3d/ShaderAurora";
+const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAurora").then((m) => m.ShaderAurora), { ssr: false });
 import { TiltCard } from "@/components/immersive/3d/TiltCard";
 import { EmptyState, ErrorState, SkeletonRow } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
@@ -28,8 +29,8 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
         <circle cx="60" cy="60" r={r} fill="none" stroke={color} strokeWidth="9" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c - (c * score) / 100} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[32px] font-[800] tabular-nums text-[#F5F7FA]">{score}</span>
-        <span className="fragment text-[9px] uppercase tracking-[0.18em] text-[#656B75]">need score</span>
+        <span className="text-[32px] font-[800] tabular-nums text-[var(--text)]">{score}</span>
+        <span className="fragment text-[9px] uppercase tracking-[0.18em] text-[var(--subtle)]">need score</span>
       </div>
     </div>
   );
@@ -81,7 +82,7 @@ export default function VerdictPage() {
   const v = data ? VERDICT_STYLE[data.verdict] || VERDICT_STYLE.MEET : null;
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main id="main" className="min-w-0 flex-1">
         <div className="relative mx-auto max-w-[980px] px-5 pb-20 pt-8 lg:px-8 lg:pt-12">
@@ -90,7 +91,7 @@ export default function VerdictPage() {
             <div className="orb orb-amber h-[300px] w-[340px] -right-[60px] top-[40px] opacity-[0.12]" />
           </div>
 
-          <Link href={`/meetings/${id}`} className="relative inline-flex items-center gap-1.5 text-[12.5px] font-[550] text-[#656B75] transition hover:text-white">
+          <Link href={`/meetings/${id}`} className="relative inline-flex items-center gap-1.5 text-[12.5px] font-[550] text-[var(--subtle)] transition hover:text-[var(--fg)]">
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" /> Back to meeting
           </Link>
 
@@ -103,8 +104,8 @@ export default function VerdictPage() {
               <div className="space-y-8">
                 <PageHero
                   kicker="Prevention layer · should this exist"
-                  title={<>Elimination <span className="thin text-[#9AA1AC]">verdict</span></>}
-                  sub={<>For <span className="font-[600] text-[#E9EDF2]">{data.title}</span> · {data.attendee_count} people · {data.duration_min} min</>}
+                  title={<>Elimination <span className="thin text-[var(--muted)]">verdict</span></>}
+                  sub={<>For <span className="font-[600] text-[var(--text)]">{data.title}</span> · {data.attendee_count} people · {data.duration_min} min</>}
                 />
 
                 <Reveal>
@@ -115,10 +116,10 @@ export default function VerdictPage() {
                         <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-[700] tracking-widest" style={{ color: v.color, borderColor: v.border, background: v.bg }}>
                           {data.verdict === "MEET" ? <Zap className="h-3.5 w-3.5" /> : <Ban className="h-3.5 w-3.5" />} {data.verdict === "MEET" ? "MEET" : data.verdict === "ASYNC" ? "ASYNC IT" : "SKIP IT"}
                         </span>
-                        <p className="mt-3 text-[22px] font-[750] tracking-[-0.02em] text-[#F5F7FA]">{v.headline}</p>
-                        <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#9AA1AC]">{data.guidance}</p>
+                        <p className="mt-3 text-[22px] font-[750] tracking-[-0.02em] text-[var(--text)]">{v.headline}</p>
+                        <p className="mt-1.5 text-[13.5px] leading-relaxed text-[var(--muted)]">{data.guidance}</p>
                         {data.hours_saved > 0 && (
-                          <p className="mono mt-2 text-[12px] tabular-nums text-[#34D399]">−{data.hours_saved}h reclaimed if cancelled</p>
+                          <p className="mono mt-2 text-[12px] tabular-nums text-[var(--emerald)]">−{data.hours_saved}h reclaimed if cancelled</p>
                         )}
                       </div>
                     </div>
@@ -126,19 +127,19 @@ export default function VerdictPage() {
                 </Reveal>
 
                 <section aria-label="Why">
-                  <p className="fragment text-[10px] uppercase tracking-[0.18em] text-[#656B75]">Why · every reason carries its score</p>
+                  <p className="fragment text-[10px] uppercase tracking-[0.18em] text-[var(--subtle)]">Why · every reason carries its score</p>
                   <div className="mt-3 space-y-2.5">
                     {data.reasons.map((r: any, i: number) => (
                       <Reveal key={i} delay={Math.min(i * 0.04, 0.2)}>
                         <div className="glass rounded-[14px] px-4 py-3.5">
                           <div className="flex items-center justify-between gap-3">
-                            <p className="text-[13px] leading-snug text-[#DDE2E9]">{r.detail}</p>
-                            <span className={`mono shrink-0 text-[12px] font-[700] tabular-nums ${r.impact >= 0 ? "text-[#34D399]" : "text-[#F87171]"}`}>
+                            <p className="text-[13px] leading-snug text-[var(--text-soft)]">{r.detail}</p>
+                            <span className={`mono shrink-0 text-[12px] font-[700] tabular-nums ${r.impact >= 0 ? "text-[var(--emerald)]" : "text-[var(--red)]"}`}>
                               {r.impact >= 0 ? "+" : ""}{r.impact}
                             </span>
                           </div>
-                          <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/[0.06]">
-                            <div className={`h-full rounded-full ${r.impact >= 0 ? "bg-[#34D399]" : "bg-[#F87171]"}`} style={{ width: `${Math.min(Math.abs(r.impact) * 4, 100)}%` }} />
+                          <div className="mt-2 h-1 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--fg)_6%,transparent)]">
+                            <div className={`h-full rounded-full ${r.impact >= 0 ? "bg-[var(--emerald)]" : "bg-[var(--red)]"}`} style={{ width: `${Math.min(Math.abs(r.impact) * 4, 100)}%` }} />
                           </div>
                         </div>
                       </Reveal>
@@ -148,10 +149,10 @@ export default function VerdictPage() {
 
                 {data.verdict !== "MEET" && (
                   <section aria-label="Async replacement">
-                    <p className="fragment text-[10px] uppercase tracking-[0.18em] text-[#656B75]">Run this instead · copy-paste ready</p>
+                    <p className="fragment text-[10px] uppercase tracking-[0.18em] text-[var(--subtle)]">Run this instead · copy-paste ready</p>
                     <div className="glass-strong mt-3 rounded-[18px] p-5">
-                      <pre className="whitespace-pre-wrap text-[13px] leading-relaxed text-[#C7CCD4]">{data.async_draft}</pre>
-                      <button onClick={copyDraft} className="btn mt-4 h-[36px] gap-1.5 bg-[#F5F7FA] px-4 text-[12.5px] font-[600] text-[#08090B] hover:bg-white">
+                      <pre className="whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--text-soft)]">{data.async_draft}</pre>
+                      <button onClick={copyDraft} className="btn mt-4 h-[36px] gap-1.5 bg-[var(--text)] px-4 text-[12.5px] font-[600] text-[var(--bg)] hover:bg-[var(--fg)]">
                         {copied ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
                         {copied ? "Copied" : "Copy async thread"}
                       </button>
@@ -161,10 +162,10 @@ export default function VerdictPage() {
 
                 <section aria-label="Personal digest">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <p className="fragment flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-[#656B75]"><Mail className="h-3.5 w-3.5" /> 3-bullet digest</p>
+                    <p className="fragment flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-[var(--subtle)]"><Mail className="h-3.5 w-3.5" /> 3-bullet digest</p>
                     <div className="flex gap-1.5">
                       {(["lead", "owner", "default"] as const).map((r) => (
-                        <button key={r} onClick={() => switchRole(r)} className={`rounded-full border px-3 py-1.5 text-[11.5px] font-[600] capitalize transition ${role === r ? "border-white/[0.16] bg-white/[0.08] text-white" : "border-white/[0.08] text-[#9AA1AC] hover:text-white"}`}>
+                        <button key={r} onClick={() => switchRole(r)} className={`rounded-full border px-3 py-1.5 text-[11.5px] font-[600] capitalize transition ${role === r ? "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--fg)_8%,transparent)] text-[var(--fg)]" : "border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)]"}`}>
                           {r === "default" ? "Everyone" : r}
                         </button>
                       ))}
@@ -173,8 +174,8 @@ export default function VerdictPage() {
                   <div className="mt-3 space-y-2.5">
                     {(brief?.bullets || []).map((b: string, i: number) => (
                       <div key={i} className="glass flex gap-3 rounded-[14px] px-4 py-3.5">
-                        <span className="mono shrink-0 text-[12px] font-[700] text-[#D4A574]">0{i + 1}</span>
-                        <p className="text-[13.5px] leading-relaxed text-[#E9EDF2]">{b}</p>
+                        <span className="mono shrink-0 text-[12px] font-[700] text-[var(--gold)]">0{i + 1}</span>
+                        <p className="text-[13.5px] leading-relaxed text-[var(--text)]">{b}</p>
                       </div>
                     ))}
                     {(!brief || !brief.bullets?.length) && (

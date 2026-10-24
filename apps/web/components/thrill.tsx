@@ -24,11 +24,11 @@ export function Magnetic({ children, strength = 0.22 }: { children: React.ReactN
 export function Marquee({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
   const doubled = [...items, ...items];
   return (
-    <div className="marquee border-y border-white/[0.06] bg-[#0D0F12]/50 py-2 backdrop-blur">
+    <div className="marquee border-y border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-2)_50%,transparent)] py-2 backdrop-blur">
       <div className="marquee-track gap-8" style={reverse ? { animationDirection: "reverse" } : undefined}>
         {doubled.map((t, i) => (
-          <span key={i} className="fragment inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[#9AA1AC]">
-            <span className="h-1 w-1 rounded-full bg-[#0EA5E9]" /> {t}
+          <span key={i} className="fragment inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[var(--muted)]">
+            <span className="h-1 w-1 rounded-full bg-[var(--sky-2)]" /> {t}
           </span>
         ))}
       </div>

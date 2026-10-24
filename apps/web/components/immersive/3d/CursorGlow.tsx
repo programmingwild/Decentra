@@ -29,7 +29,7 @@ export function CursorGlow() {
       />
       {/* dot */}
       <motion.div
-        className="absolute h-[7px] w-[7px] rounded-full bg-[#D4A574] shadow-[0_0_12px_rgba(212,165,116,0.9)]"
+        className="absolute h-[7px] w-[7px] rounded-full bg-[var(--gold)] shadow-[0_0_12px_rgba(212,165,116,0.9)]"
         style={{ x, y, translateX: "-50%", translateY: "-50%" }}
       />
     </div>

@@ -60,7 +60,7 @@ export function Manifesto({
         <span
           key={i}
           aria-hidden="true"
-          className={wd.gold ? "text-[#D4A574]" : wd.hot ? "text-white" : undefined}
+          className={wd.gold ? "text-[var(--gold)]" : wd.hot ? "text-[var(--fg)]" : undefined}
         >
           {wd.w}{" "}
         </span>

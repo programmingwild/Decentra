@@ -63,7 +63,7 @@ export function AnimatedNumber({ value, delay = 0, className = "" }: { value: nu
   }, [spring]);
 
   return (
-    <span ref={ref} className={`text-[40px] font-[800] tabular-nums text-[#F5F7FA] ${className}`}>
+    <span ref={ref} className={`text-[40px] font-[800] tabular-nums text-[var(--text)] ${className}`}>
       {display.toLocaleString()}
     </span>
   );
@@ -90,13 +90,13 @@ export function MetricCard({ label, value, change, tone, icon: Icon, sparkline, 
       initial={{ opacity: 0, y: 28, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className={`preserve-3d relative group glass-strong rounded-[24px] p-6 transition-colors duration-300 overflow-hidden border border-white/[0.06] h-full ${immersive ? "min-h-[168px]" : ""}`}
+      className={`preserve-3d relative group glass-strong rounded-[24px] p-6 transition-colors duration-300 overflow-hidden border border-[var(--border)] h-full ${immersive ? "min-h-[168px]" : ""}`}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-gradient-to-br from-transparent via-white/[0.03] to-transparent" />
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-gradient-to-br from-transparent via-[color-mix(in_srgb,var(--fg)_3%,transparent)] to-transparent" />
       <div className="pointer-events-none absolute -top-12 -right-12 h-32 w-32 opacity-[0.10] blur-2xl transition-all duration-500 group-hover:opacity-[0.25] [transform:translateZ(10px)]" style={{ background: color }} />
       <div className="relative flex min-w-0 items-start justify-between gap-3 [transform:translateZ(24px)]">
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-[600] uppercase tracking-[0.12em] text-[#9AA1AC]">{label}</p>
+          <p className="text-[11px] font-[600] uppercase tracking-[0.12em] text-[var(--muted)]">{label}</p>
           <div className="mt-3 flex min-w-0 items-end gap-3">
             <AnimatedNumber value={numValue} delay={index * 0.1} />
             <div className="[transform:translateZ(48px)]">
@@ -105,7 +105,7 @@ export function MetricCard({ label, value, change, tone, icon: Icon, sparkline, 
               </div>
             </div>
           </div>
-          <p className="mt-2.5 text-[12px] text-[#656B75]">
+          <p className="mt-2.5 text-[12px] text-[var(--subtle)]">
             <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full transition-transform group-hover:scale-150" style={{ background: color }} />
             {change}
           </p>
@@ -114,7 +114,7 @@ export function MetricCard({ label, value, change, tone, icon: Icon, sparkline, 
           <AreaChart data={sparkline} color={color} />
         </div>
       </div>
-      <div className="pointer-events-none absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--fg)_4%,transparent)] to-transparent" />
     </motion.div>
     </TiltCard>
   );

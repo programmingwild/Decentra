@@ -5,9 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
-        mono: ["JetBrains Mono", "Geist Mono", "monospace"],
-        display: ["Instrument Sans", "Inter", "sans-serif"],
+        sans: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["var(--font-jetbrains)", "Geist Mono", "monospace"],
+        display: ["var(--font-instrument)", "var(--font-inter)", "sans-serif"],
       },
       colors: {
         decentra: {

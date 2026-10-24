@@ -44,7 +44,7 @@ function useClock() {
 function Clock({ orgName }: { orgName: string }) {
   const clock = useClock();
   return (
-    <span className="fragment hidden text-[10.5px] tabular-nums tracking-[0.14em] text-[#656B75] sm:inline">
+    <span className="fragment hidden text-[10.5px] tabular-nums tracking-[0.14em] text-[var(--subtle)] sm:inline">
       {orgName || "workspace"} · {clock} local
     </span>
   );
@@ -57,13 +57,13 @@ function StatBlock({ label, value, sub, tone, index }: { label: string; value: n
         className="preserve-3d glass-depth animate-rise relative h-full overflow-hidden rounded-[18px] p-5"
         style={{ animationDelay: `${index * 0.07}s` }}
       >
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.2] to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--fg)_2%,transparent)] to-transparent" />
         <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-20 blur-2xl [transform:translateZ(8px)]" style={{ background: tone }} />
-        <p className="fragment text-[9.5px] uppercase tracking-[0.22em] text-[#656B75]">{label}</p>
-        <p className="display-hero text-3d mt-2 text-[44px] leading-none text-[#F5F7FA] [transform:translateZ(28px)]">
+        <p className="fragment text-[9.5px] uppercase tracking-[0.22em] text-[var(--subtle)]">{label}</p>
+        <p className="display-hero text-3d mt-2 text-[44px] leading-none text-[var(--text)] [transform:translateZ(28px)]">
           {value}
         </p>
-        <p className="mt-2 flex items-center gap-1.5 text-[11.5px] text-[#9AA1AC]">
+        <p className="mt-2 flex items-center gap-1.5 text-[11.5px] text-[var(--muted)]">
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: tone, boxShadow: `0 0 8px ${tone}` }} />
           {sub}
         </p>
@@ -186,15 +186,15 @@ export default function Deck() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#08090B] lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] lg:flex-row">
       <Nav />
       <main id="main" className="min-w-0 flex-1">
         <div className="stage-3d relative mx-auto max-w-[1280px] px-5 pb-20 pt-6 lg:px-8 lg:pt-8">
           {/* ── command bar ── */}
           <Reveal>
             <div className="glass-depth flex flex-wrap items-center gap-3 rounded-[18px] px-5 py-3.5">
-              <span className="flex h-2 w-2 animate-pulse rounded-full bg-[#34D399]" aria-hidden="true" />
-              <span className="fragment text-[10.5px] uppercase tracking-[0.22em] text-[#E9EDF2]">
+              <span className="flex h-2 w-2 animate-pulse rounded-full bg-[var(--emerald)]" aria-hidden="true" />
+              <span className="fragment text-[10.5px] uppercase tracking-[0.22em] text-[var(--text)]">
                 Command deck
               </span>
               <Clock orgName={orgName} />
@@ -211,7 +211,7 @@ export default function Deck() {
               )}
               <Link
                 href="/overview"
-                className="fragment inline-flex items-center gap-1 rounded-full border border-white/[0.1] bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-[#9AA1AC] transition hover:border-white/[0.2] hover:text-white"
+                className="fragment inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_3%,transparent)] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-[var(--muted)] transition hover:border-[var(--border)] hover:text-[var(--fg)]"
               >
                 Overview <ChevronRight className="h-3 w-3" aria-hidden="true" />
               </Link>
@@ -220,7 +220,7 @@ export default function Deck() {
 
           {/* ── holographic stats ── */}
           {!loading && error && (
-            <div className="mt-5 rounded-[16px] border border-[#EF4444]/20 bg-[#EF4444]/[0.06] px-5 py-4 text-[13px] leading-relaxed text-[#FCA5A5]" role="alert">
+            <div className="mt-5 rounded-[16px] border border-[color-mix(in_srgb,var(--red-2)_20%,transparent)] bg-[color-mix(in_srgb,var(--red-2)_6%,transparent)] px-5 py-4 text-[13px] leading-relaxed text-[var(--red)]" role="alert">
               Deck offline — {error} Check that the Decentra server is running, then reload.
             </div>
           )}
@@ -236,17 +236,17 @@ export default function Deck() {
             {/* ── dispatch queue ── */}
             <Reveal>
               <section aria-label="Dispatch queue" className="glass-depth relative h-full overflow-hidden rounded-[20px] p-2">
-                <div aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#FBBF24]/50 to-transparent" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--amber)_50%,transparent)] to-transparent" />
                 <header className="flex items-center justify-between px-4 pb-1 pt-4">
-                  <p className="fragment text-[10px] uppercase tracking-[0.22em] text-[#656B75]">Dispatch · needs a human</p>
-                  <Link href="/review" className="fragment inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] text-[#38BDF8] hover:text-white">
+                  <p className="fragment text-[10px] uppercase tracking-[0.22em] text-[var(--subtle)]">Dispatch · needs a human</p>
+                  <Link href="/review" className="fragment inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] text-[var(--sky)] hover:text-[var(--fg)]">
                     Review <ChevronRight className="h-3 w-3" aria-hidden="true" />
                   </Link>
                 </header>
                 <div className="space-y-2 p-2">
                   {queue.length === 0 && (
-                    <p className="flex items-center gap-2 px-4 py-6 text-[13px] text-[#656B75]">
-                      <CheckCircle2 className="h-4 w-4 text-[#34D399]" aria-hidden="true" />
+                    <p className="flex items-center gap-2 px-4 py-6 text-[13px] text-[var(--subtle)]">
+                      <CheckCircle2 className="h-4 w-4 text-[var(--emerald)]" aria-hidden="true" />
                       {loading ? "Scanning workspace…" : "Nothing pending. The deck is quiet."}
                     </p>
                   )}
@@ -254,7 +254,7 @@ export default function Deck() {
                     <Link
                       key={`${q.title}-${i}`}
                       href={q.href}
-                      className="group flex items-center gap-3.5 rounded-[14px] border border-white/[0.05] bg-white/[0.015] px-4 py-3.5 transition hover:border-white/[0.12] hover:bg-white/[0.04]"
+                      className="group flex items-center gap-3.5 rounded-[14px] border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_1.5%,transparent)] px-4 py-3.5 transition hover:border-[var(--border-strong)] hover:bg-[color-mix(in_srgb,var(--fg)_4%,transparent)]"
                     >
                       <span
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border"
@@ -263,10 +263,10 @@ export default function Deck() {
                         <q.icon className="h-4 w-4" aria-hidden="true" />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13.5px] font-[600] text-[#E9EDF2]">{q.title}</span>
-                        <span className="fragment mt-0.5 block text-[10px] uppercase tracking-[0.14em] text-[#656B75]">{q.meta}</span>
+                        <span className="block truncate text-[13.5px] font-[600] text-[var(--text)]">{q.title}</span>
+                        <span className="fragment mt-0.5 block text-[10px] uppercase tracking-[0.14em] text-[var(--subtle)]">{q.meta}</span>
                       </span>
-                      <ChevronRight className="h-4 w-4 shrink-0 text-[#454B54] transition group-hover:translate-x-0.5 group-hover:text-white" aria-hidden="true" />
+                      <ChevronRight className="h-4 w-4 shrink-0 text-[var(--faint)] transition group-hover:translate-x-0.5 group-hover:text-[var(--fg)]" aria-hidden="true" />
                     </Link>
                   ))}
                 </div>
@@ -276,19 +276,19 @@ export default function Deck() {
             {/* ── live activity stream ── */}
             <Reveal delay={0.08}>
               <section aria-label="Activity stream" className="glass-depth relative h-full overflow-hidden rounded-[20px] p-2">
-                <div aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#38BDF8]/50 to-transparent" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--sky)_50%,transparent)] to-transparent" />
                 <header className="flex items-center justify-between px-4 pb-1 pt-4">
-                  <p className="fragment flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#656B75]">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#38BDF8]" aria-hidden="true" />
+                  <p className="fragment flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[var(--subtle)]">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--sky)]" aria-hidden="true" />
                     Activity stream
                   </p>
-                  <Link href="/timeline" className="fragment inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] text-[#38BDF8] hover:text-white">
+                  <Link href="/timeline" className="fragment inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] text-[var(--sky)] hover:text-[var(--fg)]">
                     Timeline <ChevronRight className="h-3 w-3" aria-hidden="true" />
                   </Link>
                 </header>
                 <ol className="rail space-y-0 p-2 pl-4">
                   {feed.length === 0 && (
-                    <li className="py-6 pl-5 text-[13px] text-[#656B75]">
+                    <li className="py-6 pl-5 text-[13px] text-[var(--subtle)]">
                       {loading ? "Tuning frequencies…" : "No signals yet — process a meeting."}
                     </li>
                   )}
@@ -296,12 +296,12 @@ export default function Deck() {
                     <li key={f.id} className="relative py-2.5 pl-5">
                       <span
                         aria-hidden="true"
-                        className="absolute left-[1px] top-[14px] h-2 w-2 rounded-full border-2 border-[#08090B]"
+                        className="absolute left-[1px] top-[14px] h-2 w-2 rounded-full border-2 border-[var(--bg)]"
                         style={{ background: f.tone, boxShadow: `0 0 10px ${f.tone}` }}
                       />
                       <Link href={f.href} className="group block">
-                        <p className="truncate text-[13px] font-[550] text-[#E9EDF2] group-hover:text-white">{f.title}</p>
-                        <p className="fragment mt-0.5 text-[10px] uppercase tracking-[0.14em] text-[#656B75]">
+                        <p className="truncate text-[13px] font-[550] text-[var(--text)] group-hover:text-[var(--fg)]">{f.title}</p>
+                        <p className="fragment mt-0.5 text-[10px] uppercase tracking-[0.14em] text-[var(--subtle)]">
                           {f.kind} · <span style={{ color: f.tone }}>{f.meta}</span>
                         </p>
                       </Link>
@@ -332,11 +332,11 @@ export default function Deck() {
                     <a.icon className="h-5 w-5" aria-hidden="true" />
                   </span>
                   <span className="min-w-0">
-                    <span className="flex items-center gap-1.5 text-[14px] font-[650] text-[#F5F7FA]">
+                    <span className="flex items-center gap-1.5 text-[14px] font-[650] text-[var(--text)]">
                       {a.label}
-                      <ArrowRight className="h-3.5 w-3.5 text-[#656B75] transition group-hover:translate-x-0.5 group-hover:text-white" aria-hidden="true" />
+                      <ArrowRight className="h-3.5 w-3.5 text-[var(--subtle)] transition group-hover:translate-x-0.5 group-hover:text-[var(--fg)]" aria-hidden="true" />
                     </span>
-                    <span className="block truncate text-[12px] text-[#656B75]">{a.sub}</span>
+                    <span className="block truncate text-[12px] text-[var(--subtle)]">{a.sub}</span>
                   </span>
                 </Link>
               ))}

@@ -40,7 +40,7 @@ export function ThreeCard({
   if (!mounted) {
     return (
       <div className={`relative overflow-hidden rounded-[24px] ${className}`} style={{ minHeight: 220 }}>
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--fg)_3%,transparent)] to-transparent" />
         <div className="relative z-10 h-full">{children}</div>
       </div>
     );
@@ -70,7 +70,7 @@ export function ThreeCard({
       {/* HTML content floats above the WebGLAura card */}
       <div className="relative z-10 h-full">{children}</div>
       <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[24px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-white/[0.01]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--fg)_2%,transparent)] via-transparent to-[color-mix(in_srgb,var(--fg)_1%,transparent)]" />
       </div>
     </div>
   );

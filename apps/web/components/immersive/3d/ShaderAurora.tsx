@@ -2,6 +2,7 @@
 import { useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useSceneVisibility } from "./useSceneVisibility";
 
 interface ShaderAuroraProps {
   className?: string;
@@ -19,7 +20,8 @@ export function ShaderAurora({
   mouseInfluence = 0.5
 }: ShaderAuroraProps) {
   const [mounted, setMounted] = useState(false);
-  
+  const { ref: viewRef, visible } = useSceneVisibility<HTMLDivElement>();
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -27,15 +29,26 @@ export function ShaderAurora({
   if (!mounted) {
     return <div className={`absolute inset-0 ${className}`} />;
   }
+  // Skip WebGL on reduced-motion or small screens — fall back to CSS orbs.
+  if (typeof window !== "undefined" && (window.matchMedia("(prefers-reduced-motion: reduce)").matches || window.innerWidth < 768)) {
+    return (
+      <div className={`absolute inset-0 pointer-events-none ${className}`}>
+        <div className="orb orb-sky h-[560px] w-[640px] right-[6%] top-[8%] opacity-[0.18]" />
+        <div className="orb orb-violet h-[440px] w-[480px] right-[22%] top-[44%] opacity-[0.12]" />
+      </div>
+    );
+  }
 
   // NOTE: the positioning layer must be a plain div. R3F renders its own
   // wrapper div with inline `position: relative`, which would defeat an
   // `absolute` class placed directly on <Canvas> and blow out page scroll.
   return (
-    <div className={`absolute inset-0 pointer-events-none ${className}`}>
+    <div ref={viewRef} className={`absolute inset-0 pointer-events-none ${className}`}>
       <Canvas
         camera={{ position: [0, 0, 1], fov: 80 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
+        dpr={[1, 1.25]}
+        frameloop={visible ? "always" : "never"}
         style={{ width: "100%", height: "100%" }}
         onCreated={({ gl }) => { gl.setClearColor(0x08090b, 0); }}
       >

@@ -136,8 +136,8 @@ export function PaletteProvider({ children }: { children: React.ReactNode }) {
         <div className="fixed inset-0 z-[180]">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[3px]" onClick={() => setOpen(false)} aria-hidden="true" />
           <div role="dialog" aria-modal="true" aria-label="Command palette" className="glass-strong animate-pop relative mx-auto mt-[11vh] w-[min(600px,calc(100vw-32px))] overflow-hidden rounded-[20px] shadow-[0_32px_90px_rgba(0,0,0,0.75)]">
-            <div className="flex items-center gap-3 border-b border-white/[0.06] px-4">
-              <Search className="h-4 w-4 shrink-0 text-[#656B75]" aria-hidden="true" />
+            <div className="flex items-center gap-3 border-b border-[var(--border)] px-4">
+              <Search className="h-4 w-4 shrink-0 text-[var(--subtle)]" aria-hidden="true" />
               <input
                 ref={inputRef}
                 value={query}
@@ -145,13 +145,13 @@ export function PaletteProvider({ children }: { children: React.ReactNode }) {
                 onKeyDown={onKeyDown}
                 placeholder="Search meetings, decisions, actions…"
                 aria-label="Search"
-                className="h-[52px] w-full bg-transparent text-[14.5px] text-[#F5F7FA] outline-none placeholder:text-[#656B75]"
+                className="h-[52px] w-full bg-transparent text-[14.5px] text-[var(--text)] outline-none placeholder:text-[var(--subtle)]"
               />
-              <span className="mono text-[10px] text-[#656B75]">ESC</span>
+              <span className="mono text-[10px] text-[var(--subtle)]">ESC</span>
             </div>
             <div ref={listRef} role="listbox" aria-label="Results" className="max-h-[380px] overflow-auto p-2">
               {items.length === 0 && (
-                <div className="px-3 py-10 text-center text-[13px] text-[#656B75]">No matches for “{query}”</div>
+                <div className="px-3 py-10 text-center text-[13px] text-[var(--subtle)]">No matches for “{query}”</div>
               )}
               {items.map((item, idx) => {
                 const showGroup = item.group !== lastGroup;
@@ -159,28 +159,28 @@ export function PaletteProvider({ children }: { children: React.ReactNode }) {
                 const Icon = item.icon;
                 return (
                   <div key={item.id}>
-                    {showGroup && <div className="px-3 pb-1 pt-3 text-[10px] font-[700] uppercase tracking-[0.14em] text-[#656B75]">{item.group}</div>}
+                    {showGroup && <div className="px-3 pb-1 pt-3 text-[10px] font-[700] uppercase tracking-[0.14em] text-[var(--subtle)]">{item.group}</div>}
                     <button
                       data-idx={idx}
                       role="option"
                       aria-selected={idx === sel}
                       onMouseEnter={() => setSel(idx)}
                       onClick={() => choose(item)}
-                      className={`flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left transition ${idx === sel ? "bg-white/[0.07]" : ""}`}
+                      className={`flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left transition ${idx === sel ? "bg-[color-mix(in_srgb,var(--fg)_7%,transparent)]" : ""}`}
                     >
-                      <Icon className={`h-4 w-4 shrink-0 ${idx === sel ? "text-[#38BDF8]" : "text-[#656B75]"}`} aria-hidden="true" />
-                      <span className={`flex-1 truncate text-[13.5px] ${idx === sel ? "text-[#F5F7FA]" : "text-[#C7CCD4]"}`}>{item.label}</span>
-                      {item.hint && <span className="rounded-full border border-white/[0.07] px-2 py-0.5 text-[10px] font-[600] uppercase tracking-wider text-[#9AA1AC]">{item.hint}</span>}
-                      {idx === sel ? <CornerDownLeft className="h-3.5 w-3.5 text-[#656B75]" aria-hidden="true" /> : <ArrowUpDown className="h-3 w-3 text-white/[0.12]" aria-hidden="true" />}
+                      <Icon className={`h-4 w-4 shrink-0 ${idx === sel ? "text-[var(--sky)]" : "text-[var(--subtle)]"}`} aria-hidden="true" />
+                      <span className={`flex-1 truncate text-[13.5px] ${idx === sel ? "text-[var(--text)]" : "text-[var(--text-soft)]"}`}>{item.label}</span>
+                      {item.hint && <span className="rounded-full border border-[var(--border)] px-2 py-0.5 text-[10px] font-[600] uppercase tracking-wider text-[var(--muted)]">{item.hint}</span>}
+                      {idx === sel ? <CornerDownLeft className="h-3.5 w-3.5 text-[var(--subtle)]" aria-hidden="true" /> : <ArrowUpDown className="h-3 w-3 text-[color-mix(in_srgb,var(--fg)_12%,transparent)]" aria-hidden="true" />}
                     </button>
                   </div>
                 );
               })}
             </div>
-            <div className="flex items-center gap-4 border-t border-white/[0.06] px-4 py-2.5 text-[10.5px] text-[#656B75]">
-              <span className="flex items-center gap-1.5"><kbd className="rounded border border-white/[0.09] bg-white/[0.04] px-1 font-mono">↑↓</kbd> navigate</span>
-              <span className="flex items-center gap-1.5"><kbd className="rounded border border-white/[0.09] bg-white/[0.04] px-1 font-mono">↵</kbd> open</span>
-              <span className="ml-auto flex items-center gap-1.5"><kbd className="rounded border border-white/[0.09] bg-white/[0.04] px-1 font-mono">⌘K</kbd> toggle</span>
+            <div className="flex items-center gap-4 border-t border-[var(--border)] px-4 py-2.5 text-[10.5px] text-[var(--subtle)]">
+              <span className="flex items-center gap-1.5"><kbd className="rounded border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)] px-1 font-mono">↑↓</kbd> navigate</span>
+              <span className="flex items-center gap-1.5"><kbd className="rounded border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)] px-1 font-mono">↵</kbd> open</span>
+              <span className="ml-auto flex items-center gap-1.5"><kbd className="rounded border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)] px-1 font-mono">⌘K</kbd> toggle</span>
             </div>
           </div>
         </div>

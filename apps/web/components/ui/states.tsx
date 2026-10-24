@@ -38,12 +38,12 @@ export function SpinnerDots({ className = "" }: { className?: string }) {
 
 export function EmptyState({ icon, title, body, action }: { icon?: React.ReactNode; title: string; body?: string; action?: React.ReactNode }) {
   return (
-    <div className="reveal group relative flex flex-col items-center justify-center overflow-hidden rounded-[20px] border border-white/[0.04] bg-white/[0.015] px-6 py-14 text-center">
-      <div className="pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-[#D4A574]/50 to-transparent" aria-hidden="true" />
+    <div className="reveal group relative flex flex-col items-center justify-center overflow-hidden rounded-[20px] border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_1.5%,transparent)] px-6 py-14 text-center">
+      <div className="pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--gold)_50%,transparent)] to-transparent" aria-hidden="true" />
       <div className="pointer-events-none absolute -top-10 left-1/2 h-32 w-64 -translate-x-1/2 orb orb-violet opacity-[0.08]" />
-      {icon && <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-[14px] border border-white/[0.08] bg-white/[0.04] text-[#D4A574] shadow-[0_4px_12px_rgba(0,0,0,0.2)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">{icon}</div>}
-      <div className="relative text-[14.5px] font-[650] tracking-[-0.01em] text-[#E9EDF2]">{title}</div>
-      {body && <p className="relative mt-1.5 max-w-[360px] text-[13px] leading-relaxed text-[#9AA1AC]">{body}</p>}
+      {icon && <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-[14px] border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_4%,transparent)] text-[var(--gold)] shadow-[0_4px_12px_rgba(0,0,0,0.2)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">{icon}</div>}
+      <div className="relative text-[14.5px] font-[650] tracking-[-0.01em] text-[var(--text)]">{title}</div>
+      {body && <p className="relative mt-1.5 max-w-[360px] text-[13px] leading-relaxed text-[var(--muted)]">{body}</p>}
       {action && <div className="relative mt-5">{action}</div>}
     </div>
   );
@@ -51,12 +51,12 @@ export function EmptyState({ icon, title, body, action }: { icon?: React.ReactNo
 
 export function ErrorState({ title, reason, hint, actionLabel, onAction }: { title: string; reason?: string; hint?: string; actionLabel?: string; onAction?: () => void }) {
   return (
-    <div role="alert" className="rounded-[14px] border border-[#EF4444]/20 bg-[#EF4444]/[0.06] p-5">
-      <div className="text-[13.5px] font-[650] tracking-[-0.01em] text-[#FCA5A5]">{title}</div>
-      {reason && <p className="mt-1 text-[13px] leading-relaxed text-[#9AA1AC]">{reason}</p>}
-      {hint && <p className="mt-1 text-[12px] text-[#656B75]">{hint}</p>}
+    <div role="alert" className="rounded-[14px] border border-[color-mix(in_srgb,var(--red-2)_20%,transparent)] bg-[color-mix(in_srgb,var(--red-2)_6%,transparent)] p-5">
+      <div className="text-[13.5px] font-[650] tracking-[-0.01em] text-[var(--red)]">{title}</div>
+      {reason && <p className="mt-1 text-[13px] leading-relaxed text-[var(--muted)]">{reason}</p>}
+      {hint && <p className="mt-1 text-[12px] text-[var(--subtle)]">{hint}</p>}
       {actionLabel && onAction && (
-        <button onClick={onAction} className="btn mt-4 h-[32px] border border-[#EF4444]/30 bg-[#EF4444]/15 px-3.5 text-[12.5px] font-[600] text-[#FCA5A5] hover:bg-[#EF4444]/25">
+        <button onClick={onAction} className="btn mt-4 h-[32px] border border-[color-mix(in_srgb,var(--red-2)_30%,transparent)] bg-[color-mix(in_srgb,var(--red-2)_15%,transparent)] px-3.5 text-[12.5px] font-[600] text-[var(--red)] hover:bg-[color-mix(in_srgb,var(--red-2)_25%,transparent)]">
           {actionLabel}
         </button>
       )}

@@ -10,7 +10,7 @@ def forecast_series(df: pd.DataFrame, date_col: str = None, target_col: str = No
             if pd.api.types.is_datetime64_any_dtype(df[c]):
                 date_col = c
                 break
-            if df[c].dtype == object:
+            if df[c].dtype == object or pd.api.types.is_string_dtype(df[c]):
                 try:
                     parsed = pd.to_datetime(df[c], errors="coerce")
                     if parsed.notna().mean() > 0.8:

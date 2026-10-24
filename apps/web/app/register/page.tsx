@@ -29,31 +29,31 @@ export default function Register() {
     <AuthShell
       title="Create account"
       sub="Start your decision workspace"
-      footer={<>Have an account? <Link href="/login" className="font-[600] text-[#F5F7FA] underline decoration-white/20 underline-offset-4">Sign in</Link></>}
+      footer={<>Have an account? <Link href="/login" className="font-[600] text-[var(--text)] underline decoration-[var(--subtle)] underline-offset-4">Sign in</Link></>}
     >
       <form onSubmit={submit} className="space-y-5">
         <div className="space-y-3">
           <div>
-            <label htmlFor="name" className="text-[12px] font-[500] text-[#9AA1AC]">
+            <label htmlFor="name" className="text-[12px] font-[500] text-[var(--muted)]">
               Full name
             </label>
             <input id="name" className="input mt-1.5" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ada Lovelace" autoComplete="name" />
           </div>
           <div>
-            <label htmlFor="email" className="text-[12px] font-[500] text-[#9AA1AC]">
+            <label htmlFor="email" className="text-[12px] font-[500] text-[var(--muted)]">
               Work email
             </label>
             <input id="email" className="input mt-1.5" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="ada@company.com" autoComplete="email" spellCheck={false} />
           </div>
           <div>
-            <label htmlFor="password" className="text-[12px] font-[500] text-[#9AA1AC]">
+            <label htmlFor="password" className="text-[12px] font-[500] text-[var(--muted)]">
               Password
             </label>
             <input id="password" className="input mt-1.5" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
           </div>
         </div>
-        {err && <div className="rounded-[10px] bg-[#EF4444]/10 border border-[#EF4444]/20 text-[13px] text-[#EF4444] px-3 py-2.5 break-all">{err}</div>}
-        <button className="btn bg-[#F5F7FA] text-[#08090B] hover:bg-white w-full h-[42px] gap-2" type="submit" disabled={loading}>
+        {err && <div className="rounded-[10px] bg-[color-mix(in_srgb,var(--red-2)_10%,transparent)] border border-[color-mix(in_srgb,var(--red-2)_20%,transparent)] text-[13px] text-[var(--red-2)] px-3 py-2.5 break-all">{err}</div>}
+        <button className="btn bg-[var(--text)] text-[var(--bg)] hover:bg-[var(--fg)] w-full h-[42px] gap-2" type="submit" disabled={loading}>
           {loading ? "Creating…" : "Create account"} <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </form>
