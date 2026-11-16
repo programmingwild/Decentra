@@ -17,9 +17,9 @@ export function AreaChart({ data, color }: { data: Array<{ x: number; y: number 
   const maxY = Math.max(...data.map((d) => d.y), 1);
   const minY = Math.min(...data.map((d) => d.y));
   const points = data
-    .map((d, i) => `${(i / (data.length - 1)) * 100}%,${100 - ((d.y - minY) / (maxY - minY || 1)) * 100}%`)
+    .map((d, i) => `${(i / (data.length - 1)) * 100},${60 - ((d.y - minY) / (maxY - minY || 1)) * 60}`)
     .join(" ");
-  const areaPoints = `0,100 ${points} 100,100`;
+  const areaPoints = `0,60 ${points} 100,60`;
   // Deterministic per instance. NEVER Math.random() here — server and client
   // must render the identical id or React throws a hydration mismatch.
   // (useId colons are stripped: they break url(#...) references.)

@@ -5,7 +5,8 @@ from sqlalchemy.orm import relationship
 from app.database.base import Base
 
 def utcnow():
-    return datetime.now(timezone.utc)
+    # Naive UTC to match SQLAlchemy's default DateTime (TIMESTAMP WITHOUT TIME ZONE).
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 def gen_id():
     return str(uuid.uuid4())

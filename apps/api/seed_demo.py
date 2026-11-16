@@ -34,7 +34,11 @@ from app.services.quality import generate_quality_report  # noqa: E402
 
 DEMO_EMAIL = "demo@decentra.ai"
 DEMO_PASSWORD = "demo1234"
-CSV_PATH = pathlib.Path(__file__).resolve().parent.parent.parent / "samples" / "sales_demo.csv"
+_candidates = [
+    pathlib.Path(__file__).resolve().parent.parent.parent / "samples" / "sales_demo.csv",
+    pathlib.Path(__file__).resolve().parent / "samples" / "sales_demo.csv",
+]
+CSV_PATH = next((p for p in _candidates if p.exists()), _candidates[0])
 
 
 async def main() -> None:

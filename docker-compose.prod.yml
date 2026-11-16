@@ -11,6 +11,10 @@ services:
   db:
     ports: []  # never expose Postgres to the host in production
     restart: unless-stopped
+    environment:
+      POSTGRES_USER: decentra
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: decentra
 
   redis:
     image: redis:7-alpine
@@ -48,6 +52,8 @@ services:
 
   web:
     restart: unless-stopped
+    environment:
+      API_INTERNAL_URL: http://api:8000
     depends_on:
       api:
         condition: service_healthy

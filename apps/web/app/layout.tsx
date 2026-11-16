@@ -1,4 +1,4 @@
-import "./globals.css";
+﻿import "./globals.css";
 import "./tokens.css";
 import { AuthProvider } from "@/lib/auth";
 import { ToastProvider } from "@/components/ui/toast";
@@ -8,50 +8,55 @@ import { CursorGlow } from "@/components/immersive/3d/CursorGlow";
 import { ScrollProgress } from "@/components/immersive/3d/ScrollProgress";
 import { ImmersiveBackdrop } from "@/components/immersive/3d/ImmersiveBackdrop";
 import { ThemeProvider } from "@/components/theme-provider";
-import {
-  Inter,
-  JetBrains_Mono,
-  Instrument_Sans,
-  Newsreader,
-  Fragment_Mono,
-} from "next/font/google";
+import localFont from "next/font/local";
 
-/* Self-hosted + preloaded by Next.js: no render-blocking third-party CSS,
-   no FOUT, no extra DNS/TLS round trip to fonts.googleapis.com. */
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+/* Self-hosted fonts: deterministic builds, no render-blocking third-party
+   CSS, no runtime dependency on network access from the build machine. */
+const inter = localFont({
+  src: [
+    { path: "../public/fonts/Inter-400.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/Inter-500.ttf", weight: "500", style: "normal" },
+    { path: "../public/fonts/Inter-600.ttf", weight: "600", style: "normal" },
+    { path: "../public/fonts/Inter-700.ttf", weight: "700", style: "normal" },
+    { path: "../public/fonts/Inter-800.ttf", weight: "800", style: "normal" },
+  ],
   variable: "--font-inter",
   display: "swap",
 });
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const jetbrains = localFont({
+  src: [
+    { path: "../public/fonts/JetBrainsMono-400.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/JetBrainsMono-500.ttf", weight: "500", style: "normal" },
+  ],
   variable: "--font-jetbrains",
   display: "swap",
 });
-const instrument = Instrument_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const instrument = localFont({
+  src: [
+    { path: "../public/fonts/InstrumentSans-500.ttf", weight: "500", style: "normal" },
+    { path: "../public/fonts/InstrumentSans-600.ttf", weight: "600", style: "normal" },
+    { path: "../public/fonts/InstrumentSans-700.ttf", weight: "700", style: "normal" },
+  ],
   variable: "--font-instrument",
   display: "swap",
 });
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const newsreader = localFont({
+  src: [
+    { path: "../public/fonts/Newsreader-400.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/Newsreader-500.ttf", weight: "500", style: "normal" },
+  ],
   variable: "--font-newsreader",
   display: "swap",
 });
-const fragment = Fragment_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
+const fragment = localFont({
+  src: "../public/fonts/FragmentMono-400.ttf",
   variable: "--font-fragment",
   display: "swap",
 });
 
 export const metadata = {
-  title: { default: "Decentra — Meetings end. Commitments shouldn't.", template: "%s · Decentra" },
-  description: "Decentra turns meetings into decisions, owners and actions — every commitment pinned to the second it was spoken. Evidence-first, human-in-the-loop meeting intelligence.",
+  title: { default: "Decentra â€” Meetings end. Commitments shouldn't.", template: "%s Â· Decentra" },
+  description: "Decentra turns meetings into decisions, owners and actions â€” every commitment pinned to the second it was spoken. Evidence-first, human-in-the-loop meeting intelligence.",
   icons: { icon: "/icon.svg", apple: "/icon.svg" },
   robots: { index: true, follow: true },
 };
@@ -90,3 +95,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
