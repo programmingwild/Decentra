@@ -32,11 +32,13 @@ services:
     build:
       context: ./apps/web
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+        # Same-origin proxy mode: the browser hits the web origin only, and
+        # the Next.js proxy forwards /api/v1/* server-side to API_INTERNAL_URL.
+        NEXT_PUBLIC_API_URL: ""
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      NEXT_PUBLIC_API_URL: ""
     depends_on:
       - api
 
