@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
     groq_api_key: str = ""
     groq_model: str = "openai/gpt-oss-120b"  # Groq retired llama-3.3-70b-versatile on 2026-08-16
-    ai_provider: str = "local"  # local | openai | groq
+    ai_provider: str = "groq"  # groq | openai | local (groq preferred: free + fast)
     tavily_api_key: str = ""
     privacy_mode: str = "BALANCED"  # MAXIMUM/BALANCED/RESEARCH
     storage_path: str = "./storage"

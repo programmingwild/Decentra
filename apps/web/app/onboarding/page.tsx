@@ -105,7 +105,7 @@ export default function Onboarding() {
               </p>
               <ul className="mt-3 space-y-2 text-[12.5px] text-[var(--muted)]">
                 <li className="flex items-start gap-2"><FileJson className="h-4 w-4 shrink-0 text-[var(--gold)] mt-0.5" /> <span><span className="font-[600] text-[var(--text)]">Upload a .json transcript</span> — works with no API key. Format: <code className="font-mono text-[11px] text-[var(--sky-3)]">{`{"segments":[{"speaker":"Priya","start":0,"end":9,"text":"…"}`}</code></span></li>
-                <li className="flex items-start gap-2"><UploadCloud className="h-4 w-4 shrink-0 text-[var(--sky)] mt-0.5" /> <span><span className="font-[600] text-[var(--text)]">Upload audio/video</span> — needs <code className="font-mono text-[11px] text-[var(--sky-3)]">OPENAI_API_KEY</code> on the server for Whisper transcription.</span></li>
+                <li className="flex items-start gap-2"><UploadCloud className="h-4 w-4 shrink-0 text-[var(--sky)] mt-0.5" /> <span><span className="font-[600] text-[var(--text)]">Upload audio/video</span> — needs <code className="font-mono text-[11px] text-[var(--sky-3)]">GROQ_API_KEY</code> (or <code className="font-mono text-[11px] text-[var(--sky-3)]">OPENAI_API_KEY</code>) on the server for Whisper transcription.</span></li>
               </ul>
             </div>
             {meetingId && (

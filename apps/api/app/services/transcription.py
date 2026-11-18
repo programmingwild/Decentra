@@ -59,8 +59,6 @@ async def _try_whisper(meeting_id: str, db: AsyncSession):
     """Best-effort Whisper via OpenAI if configured. Returns segments or None."""
     from app.config.settings import get_settings
     settings = get_settings()
-    if not settings.openai_api_key:
-        return None
     try:
         r = await db.execute(select(Recording).where(Recording.meeting_id == meeting_id))
         rec = r.scalar_one_or_none()
@@ -74,12 +72,20 @@ async def _try_whisper(meeting_id: str, db: AsyncSession):
         if p.stat().st_size > 25 * 1024 * 1024:
             log.info("Skipping Whisper: file >25MB")
             return None
+        # Prefer Groq Whisper (free-ish, fast); fall back to OpenAI Whisper.
         from openai import AsyncOpenAI
-        client = AsyncOpenAI(api_key=settings.openai_api_key)
+        if settings.groq_api_key:
+            client = AsyncOpenAI(api_key=settings.groq_api_key, base_url="https://api.groq.com/openai/v1", timeout=settings.llm_timeout_seconds)
+            model = "whisper-large-v3-turbo"
+        elif settings.openai_api_key:
+            client = AsyncOpenAI(api_key=settings.openai_api_key, timeout=settings.llm_timeout_seconds)
+            model = "whisper-1"
+        else:
+            return None
         # openai whisper expects file; use verbose_json for segments
         with p.open("rb") as f:
             tr = await client.audio.transcriptions.create(
-                model="whisper-1",
+                model=model,
                 file=f,
                 response_format="verbose_json",
                 timestamp_granularities=["segment"],
@@ -136,7 +142,7 @@ async def create_transcript(meeting_id: str, db: AsyncSession, force: bool = Fal
     if segments is None:
         raise ValueError(
             "No transcript available: upload a .json/.txt transcript or "
-            "configure OPENAI_API_KEY for audio transcription"
+            "configure GROQ_API_KEY (or OPENAI_API_KEY) for audio transcription"
         )
 
     # validate segments

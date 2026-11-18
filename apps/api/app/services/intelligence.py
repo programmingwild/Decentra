@@ -10,12 +10,14 @@ async def _llm_extract(meeting_id: str, segments, db: AsyncSession):
     """Best-effort LLM extraction. Returns True if used, else False."""
     from app.config.settings import get_settings
     settings = get_settings()
-    if not settings.openai_api_key or settings.ai_provider != "openai":
+    from app.ai.provider import build_chat_client
+    client_model = build_chat_client(settings)
+    if client_model[0] is None:
         return False
     try:
         from openai import AsyncOpenAI
         import json
-        client = AsyncOpenAI(api_key=settings.openai_api_key)
+        client, model = client_model
         transcript_text = "\n".join([f"[{s.speaker_label} {s.start_ms//1000}s]: {s.text}" for s in segments])
         if not transcript_text.strip():
             return False
@@ -30,7 +32,7 @@ async def _llm_extract(meeting_id: str, segments, db: AsyncSession):
         seg_ids = [s.id for s in segments]
         user = f"Segments (id -> text):\n" + "\n".join([f"{s.id}: {s.text}" for s in segments]) + f"\n\nTranscript:\n{transcript_text}\n\nValid segment IDs: {seg_ids}"
         resp = await client.chat.completions.create(
-            model=settings.openai_model,
+            model=model,
             messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
             response_format={"type": "json_object"},
             temperature=0.15,

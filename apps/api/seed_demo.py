@@ -47,18 +47,31 @@ async def main() -> None:
 
     async with async_session() as db:
         existing = (await db.execute(select(User).where(User.email == DEMO_EMAIL))).scalar_one_or_none()
-        if existing:
-            print(f"Demo user {DEMO_EMAIL} already exists — nothing to do.")
-            return
-
-        user = User(email=DEMO_EMAIL, password_hash=hash_password(DEMO_PASSWORD), full_name="Demo User")
-        db.add(user)
-        await db.flush()
-        org = Organization(name="Demo Workspace", slug="demo", created_by=user.id)
-        db.add(org)
-        await db.flush()
-        db.add(OrganizationMember(org_id=org.id, user_id=user.id, role="ADMIN"))
-        await db.commit()
+        user = existing
+        if user is None:
+            user = User(email=DEMO_EMAIL, password_hash=hash_password(DEMO_PASSWORD), full_name="Demo User")
+            db.add(user)
+            await db.flush()
+            org = Organization(name="Demo Workspace", slug="demo", created_by=user.id)
+            db.add(org)
+            await db.flush()
+            db.add(OrganizationMember(org_id=org.id, user_id=user.id, role="ADMIN"))
+            await db.commit()
+        else:
+            # already have a user: only seed a dataset if missing
+            org_row = (await db.execute(select(Organization).where(Organization.slug == "demo"))).scalar_one_or_none()
+            org = org_row
+            if org is None:
+                # orphaned demo user without an org: recreate the workspace
+                org = Organization(name="Demo Workspace", slug="demo", created_by=user.id)
+                db.add(org)
+                await db.flush()
+                db.add(OrganizationMember(org_id=org.id, user_id=user.id, role="ADMIN"))
+                await db.commit()
+            existing_ds = (await db.execute(select(Dataset).where(Dataset.org_id == org.id))).scalar_one_or_none()
+            if existing_ds is not None:
+                print(f"Demo user {DEMO_EMAIL} already exists — dataset present, nothing to do.")
+                return
 
         raw = CSV_PATH.read_bytes()
         dataset, df = await process_upload(raw, CSV_PATH.name, org.id, user.id,

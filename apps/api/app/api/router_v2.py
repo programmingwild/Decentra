@@ -173,7 +173,7 @@ async def assistant_query(request: Request, dataset_id: str, body: dict, db: Asy
     # persist messages
     user_msg = Message(conversation_id=conv.id, role="user", content=question)
     db.add(user_msg)
-    assistant_msg = Message(conversation_id=conv.id, role="assistant", content=result.get("answer",""), structured_response=result, evidence_refs=evidence.get("evidence_list", []), latency_ms=latency, provider=settings.ai_provider, model=getattr(settings, "openai_model", ""))
+    assistant_msg = Message(conversation_id=conv.id, role="assistant", content=result.get("answer",""), structured_response=result, evidence_refs=evidence.get("evidence_list", []), latency_ms=latency, provider=provider_name, model=model_name)
     db.add(assistant_msg)
     await db.commit()
     full = {**result, "conversation_id": conv.id, "intent": intent, "evidence": evidence.get("evidence_list", []), "latency_ms": latency}
