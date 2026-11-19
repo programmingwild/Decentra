@@ -33,7 +33,7 @@ services:
     env_file: .env
     environment:
       APP_ENV: production
-      DATABASE_URL: postgresql+asyncpg://decentra:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/decentra
+      DATABASE_URL: ${DATABASE_URL}
       RATE_LIMIT_STORAGE_URI: redis://redis:6379
       UVICORN_WORKERS: ${UVICORN_WORKERS:-2}
     volumes:
