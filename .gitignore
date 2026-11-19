@@ -33,3 +33,6 @@ apps/api/decentra.db-shm
 apps/api/decentra.db-wal
 apps/api/decentra.db
 *.tsbuildinfo
+demo.mp4
+demo-final.mp4
+narration.wav

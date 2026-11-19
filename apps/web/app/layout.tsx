@@ -55,8 +55,8 @@ const fragment = localFont({
 });
 
 export const metadata = {
-  title: { default: "Decentra â€” Meetings end. Commitments shouldn't.", template: "%s Â· Decentra" },
-  description: "Decentra turns meetings into decisions, owners and actions â€” every commitment pinned to the second it was spoken. Evidence-first, human-in-the-loop meeting intelligence.",
+  title: { default: "Decentra", template: "%s · Decentra" },
+  description: "Decentra turns meetings into decisions, owners and actions - every commitment pinned to the second it was spoken. Evidence-first, human-in-the-loop meeting intelligence.",
   icons: { icon: "/icon.svg", apple: "/icon.svg" },
   robots: { index: true, follow: true },
 };
