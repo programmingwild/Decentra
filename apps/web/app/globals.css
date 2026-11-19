@@ -25,32 +25,32 @@
   --fg: #FFFFFF;
   --border: rgba(255,255,255,0.08);
   --border-strong: rgba(255,255,255,0.13);
-  --text: #F5F7FA;
-  --text-soft: #C7CCD4;
-  --muted: #9AA1AC;
-  --subtle: #656B75;
-  --faint: #454B54;
-  --accent: #0EA5E9;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --gold: #D4A574;
-  --copper: #C9A86A;
-  --amber: #FBBF24;
-  --amber-2: #F59E0B;
-  --sky: #38BDF8;
-  --sky-2: #0EA5E9;
-  --sky-3: #7DD3FC;
-  --violet: #A78BFA;
-  --violet-2: #8B5CF6;
-  --emerald: #34D399;
-  --emerald-2: #10B981;
-  --red: #F87171;
-  --red-2: #EF4444;
+  --text: var(--text);
+  --text-soft: var(--text-soft);
+  --muted: var(--muted);
+  --subtle: var(--subtle);
+  --faint: var(--faint);
+  --accent: var(--sky-2);
+  --success: var(--emerald-2);
+  --warning: var(--amber-2);
+  --danger: var(--red-2);
+  --gold: var(--gold);
+  --copper: var(--copper);
+  --amber: var(--amber);
+  --amber-2: var(--amber-2);
+  --sky: var(--sky);
+  --sky-2: var(--sky-2);
+  --sky-3: var(--sky-3);
+  --violet: var(--violet);
+  --violet-2: var(--violet-2);
+  --emerald: var(--emerald);
+  --emerald-2: var(--emerald-2);
+  --red: var(--red);
+  --red-2: var(--red-2);
   color-scheme: dark;
 }
 html.light {
-  --bg: #F5F7FA;
+  --bg: var(--text);
   --bg-2: #ECEFF4;
   --surface: #FFFFFF;
   --elevated: #F1F3F7;
@@ -61,8 +61,8 @@ html.light {
   --text: #0F172A;
   --text-soft: #334155;
   --muted: #475569;
-  --subtle: #64748B;
-  --faint: #94A3B8;
+  --subtle: #5B6779;
+  --faint: #5F7188;
   --accent: #0369A1;
   --success: #047857;
   --warning: #B45309;
@@ -73,7 +73,7 @@ html.light {
   --amber-2: #D97706;
   --sky: #0369A1;
   --sky-2: #0284C7;
-  --sky-3: #0EA5E9;
+  --sky-3: var(--sky-2);
   --violet: #6D28D9;
   --violet-2: #7C3AED;
   --emerald: #047857;
@@ -91,6 +91,15 @@ body { background: var(--bg); color: var(--text); }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
+
+/* Light theme: soften ambient effects that look muddy on light surfaces. */
+html.light .orb { opacity: 0.10; }
+html.light .grain { opacity: 0.02; }
+html.light .grain-fixed { opacity: 0.025; }
+html.light .glass { border-color: color-mix(in srgb, var(--fg) 10%, transparent); }
+html.light .glass-strong { border-color: color-mix(in srgb, var(--fg) 14%, transparent); }
+html.light ::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.18); }
+html.light ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.28); }
 
 /* Surfaces */
 .surface { background: var(--surface); border: 1px solid var(--border); }
@@ -153,9 +162,9 @@ body { background: var(--bg); color: var(--text); }
 
 /* Mesh gradient orbs */
 .orb { position: absolute; border-radius: 9999px; filter: blur(64px); opacity: 0.28; pointer-events: none; }
-.orb-sky { background: radial-gradient(circle, #0EA5E9 0%, transparent 70%); }
-.orb-violet { background: radial-gradient(circle, #A78BFA 0%, transparent 70%); }
-.orb-amber { background: radial-gradient(circle, #F59E0B 0%, transparent 70%); }
+.orb-sky { background: radial-gradient(circle, var(--sky-2) 0%, transparent 70%); }
+.orb-violet { background: radial-gradient(circle, var(--violet) 0%, transparent 70%); }
+.orb-amber { background: radial-gradient(circle, var(--amber-2) 0%, transparent 70%); }
 
 /* Bold editorial headline */
 .display-hero { font-family: var(--font-instrument), var(--font-inter), sans-serif; font-weight: 800; letter-spacing: -0.05em; line-height: 0.85; }
@@ -277,7 +286,7 @@ body { background: var(--bg); color: var(--text); }
 .count-in { animation: countIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
 
 /* Typewriter caret — blinking gold block */
-.type-caret { display: inline-block; width: 3px; height: 1em; background: #D4A574; vertical-align: -0.12em; margin-left: 3px; box-shadow: 0 0 12px rgba(212,165,116,0.8); animation: blink 1.05s steps(2, start) infinite; }
+.type-caret { display: inline-block; width: 3px; height: 1em; background: var(--gold); vertical-align: -0.12em; margin-left: 3px; box-shadow: 0 0 12px rgba(212,165,116,0.8); animation: blink 1.05s steps(2, start) infinite; }
 
 /* ── Immersive depth system ──────────────────────────────
    GPU-cheap 3D: perspective stages + translateZ layers + glows.

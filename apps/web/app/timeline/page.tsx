@@ -64,7 +64,7 @@ export default function TimelinePage() {
         <div className="mx-auto max-w-[980px] px-5 py-8 lg:px-8">
           {health && (
             <div className="glass flex flex-wrap items-center gap-4 rounded-[16px] p-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border-2" style={{ borderColor: health.level === "high" ? "#10B981" : health.level === "medium" ? "#F59E0B" : "#EF4444", color: health.level === "high" ? "#10B981" : health.level === "medium" ? "#F59E0B" : "#EF4444" }}>
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border-2" style={{ borderColor: health.level === "high" ? "var(--emerald-2)" : health.level === "medium" ? "var(--amber-2)" : "var(--red-2)", color: health.level === "high" ? "var(--emerald-2)" : health.level === "medium" ? "var(--amber-2)" : "var(--red-2)" }}>
                 <span className="text-[16px] font-[800]">{health.health}</span>
               </div>
               <div>

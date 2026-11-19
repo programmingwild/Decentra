@@ -141,6 +141,6 @@ export function Confidence({ value }: { value: number | null | undefined }) {
 
 export function SeverityDot({ severity }: { severity: string | null | undefined }) {
   const s = (severity || "").toLowerCase();
-  const color = s.includes("high") ? "#F87171" : s.includes("medium") ? "#FBBF24" : s.includes("low") ? "#656B75" : "#9AA1AC";
+  const color = s.includes("high") ? "var(--red)" : s.includes("medium") ? "var(--amber)" : s.includes("low") ? "var(--subtle)" : "var(--muted)";
   return <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: color }} aria-label={`${severity || "unknown"} severity`} />;
 }

@@ -121,7 +121,7 @@ export default function PredictionsPage() {
                     <div className="glass-strong h-full rounded-[20px] p-5">
                       <p className="text-[13px] font-[650] text-[var(--text)]">Trajectory</p>
                       <p className="mono mt-1 text-[11px] text-[var(--subtle)]">{lift !== null ? `${lift >= 0 ? "▲" : "▼"} ${Math.abs(lift).toFixed(1)}% across horizon` : "Predicted path"}</p>
-                      <div className="mt-3"><AreaChart data={spark(predicted)} color="#A78BFA" /></div>
+                      <div className="mt-3"><AreaChart data={spark(predicted)} color="var(--violet)" /></div>
                       <div className="mt-4 space-y-2.5 border-t border-[var(--border)] pt-4 text-[12.5px]">
                         <div className="flex justify-between"><span className="text-[var(--subtle)]">First period</span><span className="mono font-[600] tabular-nums text-[var(--text)]">{first?.toFixed(1)}</span></div>
                         <div className="flex justify-between"><span className="text-[var(--subtle)]">Last period</span><span className="mono font-[600] tabular-nums text-[var(--text)]">{last?.toFixed(1)}</span></div>

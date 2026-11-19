@@ -5,9 +5,9 @@ import { Float, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useSceneVisibility } from "./useSceneVisibility";
 
-const GOLD = "#D4A574";
-const SKY = "#38BDF8";
-const VIOLET = "#A78BFA";
+const GOLD = "var(--gold)";
+const SKY = "var(--sky)";
+const VIOLET = "var(--violet)";
 
 function isReducedMotion() {
   if (typeof window === "undefined") return true;

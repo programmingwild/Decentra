@@ -67,8 +67,8 @@ function Scene({ tier }: { tier: "high" | "low" }) {
       <>
         <ambientLight intensity={0.9} />
         <directionalLight position={[4, 6, 4]} intensity={0.7} />
-        <Orb position={[0.6, 0.35, -2]} color="#0EA5E9" scale={1.55} speed={0.9} distort={0.32} opacity={0.34} />
-        <Helix color="#0EA5E9" position={[0.6, 0.35, -2]} scale={0.6} speed={0.6} opacity={0.12} />
+        <Orb position={[0.6, 0.35, -2]} color="var(--sky-2)" scale={1.55} speed={0.9} distort={0.32} opacity={0.34} />
+        <Helix color="var(--sky-2)" position={[0.6, 0.35, -2]} scale={0.6} speed={0.6} opacity={0.12} />
       </>
     );
   }
@@ -76,11 +76,11 @@ function Scene({ tier }: { tier: "high" | "low" }) {
     <>
       <ambientLight intensity={0.7} />
       <directionalLight position={[5, 8, 5]} intensity={0.65} />
-      <Orb position={[-1.9, 0.9, -2.2]} color="#0EA5E9" scale={1.9} speed={0.85} distort={0.36} opacity={0.38} />
-      <Orb position={[1.7, -0.7, -1.8]} color="#A78BFA" scale={1.55} speed={1.05} distort={0.30} opacity={0.34} />
-      <Orb position={[0.15, 0.55, -3.2]} color="#F59E0B" scale={1.15} speed={0.75} distort={0.26} opacity={0.12} />
-      <Helix color="#0EA5E9" position={[-1.9, 0.9, -2.2]} scale={0.55} speed={0.55} opacity={0.14} />
-      <Helix color="#A78BFA" position={[1.7, -0.7, -1.8]} scale={0.45} speed={0.7} opacity={0.1} />
+      <Orb position={[-1.9, 0.9, -2.2]} color="var(--sky-2)" scale={1.9} speed={0.85} distort={0.36} opacity={0.38} />
+      <Orb position={[1.7, -0.7, -1.8]} color="var(--violet)" scale={1.55} speed={1.05} distort={0.30} opacity={0.34} />
+      <Orb position={[0.15, 0.55, -3.2]} color="var(--amber-2)" scale={1.15} speed={0.75} distort={0.26} opacity={0.12} />
+      <Helix color="var(--sky-2)" position={[-1.9, 0.9, -2.2]} scale={0.55} speed={0.55} opacity={0.14} />
+      <Helix color="var(--violet)" position={[1.7, -0.7, -1.8]} scale={0.45} speed={0.7} opacity={0.1} />
     </>
   );
 }

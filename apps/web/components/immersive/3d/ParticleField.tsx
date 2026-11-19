@@ -14,7 +14,7 @@ interface ParticleFieldProps {
 
 export function ParticleField({
   count = 200,
-  colors = ["#38BDF8", "#A78BFA", "#F59E0B", "#D4A574", "#10B981"],
+  colors = ["var(--sky)", "var(--violet)", "var(--amber-2)", "var(--gold)", "var(--emerald-2)"],
   className = "",
   interactWithMouse = true,
   physics = true,

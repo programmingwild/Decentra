@@ -16,9 +16,9 @@ import { Timer, Flame, PiggyBank, Scissors, ArrowUpRight, Upload } from "lucide-
 const spark = (vals: number[]) => vals.map((y, x) => ({ x, y }));
 
 const VERDICT_STYLE: Record<string, { color: string; bg: string; border: string; label: string }> = {
-  MEET: { color: "#34D399", bg: "rgba(16,185,129,0.10)", border: "rgba(16,185,129,0.25)", label: "MEET" },
-  ASYNC: { color: "#FBBF24", bg: "rgba(245,158,11,0.10)", border: "rgba(245,158,11,0.25)", label: "ASYNC IT" },
-  SKIP: { color: "#F87171", bg: "rgba(239,68,68,0.10)", border: "rgba(239,68,68,0.25)", label: "SKIP IT" },
+  MEET: { color: "var(--emerald)", bg: "rgba(16,185,129,0.10)", border: "rgba(16,185,129,0.25)", label: "MEET" },
+  ASYNC: { color: "var(--amber)", bg: "rgba(245,158,11,0.10)", border: "rgba(245,158,11,0.25)", label: "ASYNC IT" },
+  SKIP: { color: "var(--red)", bg: "rgba(239,68,68,0.10)", border: "rgba(239,68,68,0.25)", label: "SKIP IT" },
 };
 
 export default function RoiPage() {

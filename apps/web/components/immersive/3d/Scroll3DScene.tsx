@@ -76,8 +76,8 @@ export function Scroll3DScene({ children, className = "", height = 800 }: Scroll
           >
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 10, 5]} intensity={0.8} />
-            <directionalLight position={[-5, -5, 3]} intensity={0.3} color="#38BDF8" />
-            <directionalLight position={[5, -5, 3]} intensity={0.3} color="#A78BFA" />
+            <directionalLight position={[-5, -5, 3]} intensity={0.3} color="var(--sky)" />
+            <directionalLight position={[5, -5, 3]} intensity={0.3} color="var(--violet)" />
             <FitCamera />
             <ScrollAwareOrbs progress={progressRef.current} />
           </Canvas>
@@ -117,7 +117,7 @@ function ScrollAwareOrbs({ progress }: { progress: number }) {  const { mouse } 
     <>
       <ScrollOrb 
         position={[-2.5, 1.5 * progress - 1, -3]} 
-        color="#38BDF8" 
+        color="var(--sky)" 
         scale={1.8 + progress * 0.5}
         speed={0.8}
         time={timeRef.current}
@@ -125,7 +125,7 @@ function ScrollAwareOrbs({ progress }: { progress: number }) {  const { mouse } 
       />
       <ScrollOrb 
         position={[2, -1 * progress + 0.5, -2.5]} 
-        color="#A78BFA" 
+        color="var(--violet)" 
         scale={1.4 + progress * 0.3}
         speed={1.1}
         time={timeRef.current}
@@ -133,7 +133,7 @@ function ScrollAwareOrbs({ progress }: { progress: number }) {  const { mouse } 
       />
       <ScrollOrb 
         position={[0, 0.5 * progress, -4]} 
-        color="#F59E0B" 
+        color="var(--amber-2)" 
         scale={1 + progress * 0.2}
         speed={0.6}
         time={timeRef.current}
@@ -141,7 +141,7 @@ function ScrollAwareOrbs({ progress }: { progress: number }) {  const { mouse } 
       />
       <ScrollOrb 
         position={[-1.5, -2 * progress, -2]} 
-        color="#D4A574" 
+        color="var(--gold)" 
         scale={0.8 + progress * 0.15}
         speed={0.9}
         time={timeRef.current}

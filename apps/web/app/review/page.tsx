@@ -81,7 +81,7 @@ export default function ReviewQueuePage() {
                   <div key={it.id} className="reveal glass-strong sheen spotlight group relative overflow-hidden rounded-[18px] p-4 transition hover:bg-[color-mix(in_srgb,var(--fg)_4%,transparent)]">
                     <div className="pointer-events-none absolute inset-0 rounded-[18px] bg-gradient-to-br from-transparent via-[color-mix(in_srgb,var(--fg)_2%,transparent)] to-transparent" />
                     <div className="relative flex items-start gap-4">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px]" style={{ background: it.item_type === "decision" ? "#FBBF2418" : it.item_type === "risk" ? "#F8717118" : "#38BDF818", color: it.item_type === "decision" ? "#FBBF24" : it.item_type === "risk" ? "#F87171" : "#38BDF8" }}>
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px]" style={{ background: it.item_type === "decision" ? "var(--amber)18" : it.item_type === "risk" ? "var(--red)18" : "var(--sky)18", color: it.item_type === "decision" ? "var(--amber)" : it.item_type === "risk" ? "var(--red)" : "var(--sky)" }}>
                         {it.item_type === "decision" && <Target className="h-4 w-4" />}
                         {it.item_type === "risk" && <AlertTriangle className="h-4 w-4" />}
                         {it.item_type === "question" && <BookOpen className="h-4 w-4" />}

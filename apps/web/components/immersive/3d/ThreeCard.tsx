@@ -23,7 +23,7 @@ export function ThreeCard({
   hoverDepth = 0.25,
   onClick,
   disabled = false,
-  accent = "#D4A574",
+  accent = "var(--gold)",
 }: ThreeCardProps) {
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);

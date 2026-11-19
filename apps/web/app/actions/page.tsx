@@ -78,10 +78,10 @@ export default function ActionCenter() {
     completed: filtered.filter((a) => a.status === "COMPLETED"),
   };
   const order: Bucket[] = [
-    { key: "overdue", label: "Overdue", tone: "#F87171" },
-    { key: "today", label: "Today", tone: "#FBBF24" },
-    { key: "upcoming", label: "Upcoming", tone: "#38BDF8" },
-    { key: "unscheduled", label: "Needs scheduling", hint: "deadline never confirmed", tone: "#9AA1AC" },
+    { key: "overdue", label: "Overdue", tone: "var(--red)" },
+    { key: "today", label: "Today", tone: "var(--amber)" },
+    { key: "upcoming", label: "Upcoming", tone: "var(--sky)" },
+    { key: "unscheduled", label: "Needs scheduling", hint: "deadline never confirmed", tone: "var(--muted)" },
     { key: "completed", label: "Completed" },
   ];
   const openCount = filtered.filter((a) => a.status !== "COMPLETED").length;
@@ -246,7 +246,7 @@ function ActionRow({ a, pop, onToggle, onOwner, onDeadline }: { a: any; pop: boo
   const done = a.status === "COMPLETED";
   return (
     <li className="group flex items-start gap-3 py-3.5 pr-1 transition">
-      <span aria-hidden="true" className="absolute -left-7 top-[21px] h-[7px] w-[7px] rounded-full border-2 border-[var(--bg)]" style={{ background: done ? "#10B981" : a.dl.overdue ? "#EF4444" : a.dl.today ? "#F59E0B" : "#38BDF8" }} />
+      <span aria-hidden="true" className="absolute -left-7 top-[21px] h-[7px] w-[7px] rounded-full border-2 border-[var(--bg)]" style={{ background: done ? "var(--emerald-2)" : a.dl.overdue ? "var(--red-2)" : a.dl.today ? "var(--amber-2)" : "var(--sky)" }} />
       <button
         onClick={onToggle}
         disabled={done}

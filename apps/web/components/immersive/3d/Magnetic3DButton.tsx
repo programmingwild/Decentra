@@ -28,9 +28,9 @@ const SIZE = {
 };
 
 const VARIANTS = {
-  primary: { bg: "#D4A574", glow: "#D4A574", border: "rgba(212,165,116,0.25)" },
-  secondary: { bg: "rgba(56,189,248,0.06)", glow: "#38BDF8", border: "rgba(56,189,248,0.35)" },
-  glass: { bg: "rgba(255,255,255,0.03)", glow: "#A78BFA", border: "rgba(255,255,255,0.12)" },
+  primary: { bg: "var(--gold)", glow: "var(--gold)", border: "rgba(212,165,116,0.25)" },
+  secondary: { bg: "rgba(56,189,248,0.06)", glow: "var(--sky)", border: "rgba(56,189,248,0.35)" },
+  glass: { bg: "rgba(255,255,255,0.03)", glow: "var(--violet)", border: "rgba(255,255,255,0.12)" },
 };
 
 export function Magnetic3DButton({
@@ -75,7 +75,7 @@ export function Magnetic3DButton({
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           className="relative inline-flex items-center justify-center rounded-[16px]"
-          style={{ padding: pad, background: v.bg, border: `1px solid ${v.border}`, color: variant === "primary" ? "#08090B" : "#F5F7FA" }}
+          style={{ padding: pad, background: v.bg, border: `1px solid ${v.border}`, color: variant === "primary" ? "#08090B" : "var(--text)" }}
         >
           {text}
         </motion.button>
@@ -129,7 +129,7 @@ export function Magnetic3DButton({
             className="relative inline-flex w-full items-center justify-center rounded-[16px]"
             style={{
               padding: pad,
-              color: variant === "primary" ? "#08090B" : "#F5F7FA",
+              color: variant === "primary" ? "#08090B" : "var(--text)",
               textShadow: variant !== "primary" ? "0 1px 12px rgba(0,0,0,0.6)" : "none",
             }}
           >

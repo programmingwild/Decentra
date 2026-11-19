@@ -113,7 +113,7 @@ export function greeting(): string {
 }
 
 const SPEAKER_HUES = [
-  { bg: "rgba(14,165,233,0.16)", fg: "#7DD3FC" },
+  { bg: "rgba(14,165,233,0.16)", fg: "var(--sky-3)" },
   { bg: "rgba(139,92,246,0.16)", fg: "#C4B5FD" },
   { bg: "rgba(16,185,129,0.16)", fg: "#6EE7B7" },
   { bg: "rgba(245,158,11,0.16)", fg: "#FCD34D" },

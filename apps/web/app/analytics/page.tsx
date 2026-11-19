@@ -175,7 +175,7 @@ export default function AnalyticsPage() {
                             <div className="glass-strong h-full rounded-[18px] p-5">
                               <p className="text-[13px] font-[650] text-[var(--text)]">{t.name}</p>
                               <p className="mono mt-1 text-[11px] text-[var(--subtle)]">last {t.vals.length} periods · now {fmt(t.vals[t.vals.length - 1])}</p>
-                              <div className="mt-2"><AreaChart data={spark(t.vals)} color="#A78BFA" /></div>
+                              <div className="mt-2"><AreaChart data={spark(t.vals)} color="var(--violet)" /></div>
                             </div>
                           </TiltCard>
                         </Reveal>

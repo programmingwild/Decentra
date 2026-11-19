@@ -212,7 +212,7 @@ export default function MeetingsPage() {
   );
 }
 
-const statusColor: Record<string, string> = { ready: "#34D399", processing: "#38BDF8", draft: "#656B75", failed: "#F87171" };
+const statusColor: Record<string, string> = { ready: "var(--emerald)", processing: "var(--sky)", draft: "var(--subtle)", failed: "var(--red)" };
 
 function MeetingCard({ m }: { m: any }) {
   const color = statusColor[m.status] || statusColor.draft;

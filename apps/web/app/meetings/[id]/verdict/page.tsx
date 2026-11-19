@@ -14,9 +14,9 @@ import { useToast } from "@/components/ui/toast";
 import { ArrowLeft, Copy, Check, Ban, Zap, Mail } from "lucide-react";
 
 const VERDICT_STYLE: Record<string, { color: string; bg: string; border: string; headline: string }> = {
-  MEET: { color: "#34D399", bg: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.25)", headline: "Hold this meeting." },
-  ASYNC: { color: "#FBBF24", bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.25)", headline: "Don't meet. Run it async." },
-  SKIP: { color: "#F87171", bg: "rgba(239,68,68,0.08)", border: "rgba(239,68,68,0.25)", headline: "Cancel it." },
+  MEET: { color: "var(--emerald)", bg: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.25)", headline: "Hold this meeting." },
+  ASYNC: { color: "var(--amber)", bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.25)", headline: "Don't meet. Run it async." },
+  SKIP: { color: "var(--red)", bg: "rgba(239,68,68,0.08)", border: "rgba(239,68,68,0.25)", headline: "Cancel it." },
 };
 
 function ScoreRing({ score, color }: { score: number; color: string }) {

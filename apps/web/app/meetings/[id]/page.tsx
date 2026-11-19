@@ -718,10 +718,10 @@ function SpinnerMini() {
 function MarkerChip({ type, item, onClick }: { type: string; item: any; onClick: () => void }) {
   const cfg =
     type === "decision"
-      ? { dot: item.status === "CONFIRMED" ? "#34D399" : item.status === "REJECTED" ? "#656B75" : "#FBBF24", label: "Decision" }
+      ? { dot: item.status === "CONFIRMED" ? "var(--emerald)" : item.status === "REJECTED" ? "var(--subtle)" : "var(--amber)", label: "Decision" }
       : type === "action"
-      ? { dot: "#38BDF8", label: "Action" }
-      : { dot: "#A78BFA", label: "Question" };
+      ? { dot: "var(--sky)", label: "Action" }
+      : { dot: "var(--violet)", label: "Question" };
   return (
     <button onClick={(e) => { e.stopPropagation(); onClick(); }} className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_3%,transparent)] px-2 py-0.5 text-[10px] font-[600] tracking-wide text-[var(--muted)] transition hover:border-[var(--border-strong)] hover:text-[var(--text)]" aria-label={`View evidence for ${cfg.label.toLowerCase()}`}>
       <span aria-hidden="true" className="text-[9px]" style={{ color: cfg.dot }}>{type === "decision" ? "◆" : type === "action" ? "●" : "?"}</span>

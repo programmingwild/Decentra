@@ -20,7 +20,7 @@ export function ImmersiveBackdrop() {
       <div className="orb orb-violet float-3d-slow float-3d-delay right-[-120px] top-[38%] h-[380px] w-[380px] opacity-[0.09]" />
       <div className="orb orb-amber float-3d left-[30%] top-[72%] h-[300px] w-[340px] opacity-[0.07]" />
       {/* vignette pulls focus to content */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(4,5,6,0.5)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,color-mix(in_srgb,var(--bg)_55%,transparent)_100%)]" />
     </div>
   );
 }

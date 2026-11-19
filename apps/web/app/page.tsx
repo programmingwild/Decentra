@@ -31,10 +31,10 @@ import { useAuth } from "@/lib/auth";
 
 /* ── live transcript ticker ─────────────────────────────── */
 const TICKER = [
-  { ts: "42:17", who: "RAHUL", text: "Let's go with PostgreSQL for version one.", color: "#7DD3FC" },
-  { ts: "42:29", who: "PRIYA", text: "Agreed — I'll own the API spec.", color: "#9AA1AC" },
-  { ts: "46:12", who: "ARUN", text: "Schema lands before Friday, committed.", color: "#A78BFA" },
-  { ts: "47:03", who: "DECENTRA", text: "◆ Decision detected · 92% · needs review", color: "#FBBF24" },
+  { ts: "42:17", who: "RAHUL", text: "Let's go with PostgreSQL for version one.", color: "var(--sky-3)" },
+  { ts: "42:29", who: "PRIYA", text: "Agreed — I'll own the API spec.", color: "var(--muted)" },
+  { ts: "46:12", who: "ARUN", text: "Schema lands before Friday, committed.", color: "var(--violet)" },
+  { ts: "47:03", who: "DECENTRA", text: "◆ Decision detected · 92% · needs review", color: "var(--amber)" },
 ];
 
 function Ticker() {
@@ -79,11 +79,11 @@ function Kicker({ n, label, center = false }: { n: string; label: string; center
 /* ── pipeline: sticky-stacking 3D cards ──────────────────── */
 const STEPS = [
   {
-    id: "record", n: "01", title: "Record", tag: "SPEAKER-AWARE", icon: Waves, accent: "#38BDF8",
+    id: "record", n: "01", title: "Record", tag: "SPEAKER-AWARE", icon: Waves, accent: "var(--sky)",
     body: "Every voice captured with timestamps. Not a summary — the source, second by second.",
     visual: (
       <div className="space-y-3">
-        {[["42:17", "RAHUL", "Okay, let's go with PostgreSQL for version one.", "#7DD3FC"], ["42:29", "PRIYA", "Agreed. I'll handle the API spec.", "#9AA1AC"], ["46:12", "ARUN", "I'll prepare the schema before Friday.", "#A78BFA"]].map(([ts, sp, txt, col]) => (
+        {[["42:17", "RAHUL", "Okay, let's go with PostgreSQL for version one.", "var(--sky-3)"], ["42:29", "PRIYA", "Agreed. I'll handle the API spec.", "var(--muted)"], ["46:12", "ARUN", "I'll prepare the schema before Friday.", "var(--violet)"]].map(([ts, sp, txt, col]) => (
           <div key={ts} className="flex gap-3.5 rounded-[12px] border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_2%,transparent)] px-4 py-3">
             <span className="fragment shrink-0 text-[11.5px] tabular-nums text-[var(--subtle)]">{ts}</span>
             <div className="min-w-0"><div className="text-[9.5px] font-[700] uppercase tracking-[0.12em]" style={{ color: col as string }}>{sp}</div><p className="serif mt-1 text-[13.5px] leading-snug text-[var(--text)]">&ldquo;{txt}&rdquo;</p></div>
@@ -94,7 +94,7 @@ const STEPS = [
     ),
   },
   {
-    id: "understand", n: "02", title: "Understand", tag: "EVIDENCE-LINKED", icon: Scan, accent: "#FBBF24",
+    id: "understand", n: "02", title: "Understand", tag: "EVIDENCE-LINKED", icon: Scan, accent: "var(--amber)",
     body: "Decisions, risks and open questions extracted — each one pinned to the exact moment it was spoken.",
     visual: (
       <div className="glass-accent rounded-[18px] p-5">
@@ -106,7 +106,7 @@ const STEPS = [
     ),
   },
   {
-    id: "decide", n: "03", title: "Decide", tag: "HUMAN-IN-THE-LOOP", icon: ShieldCheck, accent: "#A78BFA",
+    id: "decide", n: "03", title: "Decide", tag: "HUMAN-IN-THE-LOOP", icon: ShieldCheck, accent: "var(--violet)",
     body: "Detected is not true. You confirm, revise or reject — your judgment is the final gate.",
     visual: (
       <div className="space-y-3">
@@ -116,7 +116,7 @@ const STEPS = [
     ),
   },
   {
-    id: "execute", n: "04", title: "Execute", tag: "OWNER + DEADLINE", icon: Users, accent: "#34D399",
+    id: "execute", n: "04", title: "Execute", tag: "OWNER + DEADLINE", icon: Users, accent: "var(--emerald)",
     body: "Owners, deadlines and follow-ups that survive the meeting — tracked where work happens.",
     visual: (
       <div className="space-y-3">
@@ -444,7 +444,7 @@ export default function Home() {
         </Reveal>
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {NUMBERS.map((s, i) => {
-            const tone = TONE_COLORS[s.tone] || "#D4A574";
+            const tone = TONE_COLORS[s.tone] || "var(--gold)";
             return (
               <Reveal key={s.label} delay={Math.min(i * 0.07, 0.21)}>
                 <TiltCard max={7} glare={`${tone}22`} className="h-full">
@@ -480,7 +480,7 @@ export default function Home() {
       <section id="begin" className="relative scroll-mt-24 overflow-hidden px-6 pb-28 pt-10">
         <div
           className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[820px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.13] blur-[100px]"
-          style={{ background: "radial-gradient(ellipse, #D4A574 0%, #A78BFA 55%, transparent 75%)" }}
+          style={{ background: "radial-gradient(ellipse, var(--gold) 0%, var(--violet) 55%, transparent 75%)" }}
           aria-hidden="true"
         />
         {/* floating evidence chips — desktop depth dressing */}

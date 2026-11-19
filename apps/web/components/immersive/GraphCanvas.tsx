@@ -15,7 +15,7 @@ function Nodes({ count = 5 }: { count: number }) {
         const x = Math.cos(angle) * r;
         const z = Math.sin(angle) * r;
         const y = (Math.sin(i) * 0.4);
-        const col = i % 2 === 0 ? "#0EA5E9" : "#A78BFA";
+        const col = i % 2 === 0 ? "var(--sky-2)" : "var(--violet)";
         return (
           <Float key={i} speed={1.1 + i * 0.1} rotationIntensity={0.15} floatIntensity={0.6}>
             <mesh position={[x, y, z]}>
@@ -27,7 +27,7 @@ function Nodes({ count = 5 }: { count: number }) {
       })}
       <mesh>
         <sphereGeometry args={[0.28, 20, 20]} />
-        <meshStandardMaterial color="#F5F7FA" emissive="#F5F7FA" emissiveIntensity={0.12} />
+        <meshStandardMaterial color="var(--text)" emissive="var(--text)" emissiveIntensity={0.12} />
       </mesh>
     </group>
   );

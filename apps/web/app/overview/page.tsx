@@ -91,9 +91,9 @@ export default function Overview() {
   const meetingMap = useMemo(() => new Map(meetings.map((m) => [m.id, m])), [meetings]);
 
   const attention: Array<{ icon: any; tone: string; count: number; label: string; href: string }> = [];
-  if (detected.length) attention.push({ icon: Sparkles, tone: "#FBBF24", count: detected.length, label: detected.length === 1 ? "decision awaiting your review" : "decisions awaiting your review", href: "/decisions?f=DETECTED" });
-  if (overdue.length) attention.push({ icon: TriangleAlert, tone: "#F87171", count: overdue.length, label: overdue.length === 1 ? "overdue action" : "overdue actions", href: "/actions" });
-  if (unassigned.length) attention.push({ icon: UserX, tone: "#38BDF8", count: unassigned.length, label: unassigned.length === 1 ? "action without an owner" : "actions without an owner", href: "/actions" });
+  if (detected.length) attention.push({ icon: Sparkles, tone: "var(--amber)", count: detected.length, label: detected.length === 1 ? "decision awaiting your review" : "decisions awaiting your review", href: "/decisions?f=DETECTED" });
+  if (overdue.length) attention.push({ icon: TriangleAlert, tone: "var(--red)", count: overdue.length, label: overdue.length === 1 ? "overdue action" : "overdue actions", href: "/actions" });
+  if (unassigned.length) attention.push({ icon: UserX, tone: "var(--sky)", count: unassigned.length, label: unassigned.length === 1 ? "action without an owner" : "actions without an owner", href: "/actions" });
 
   const sentenceParts: string[] = [];
   if (detected.length) sentenceParts.push(`${detected.length} decision${detected.length === 1 ? "" : "s"} to review`);
@@ -203,7 +203,7 @@ export default function Overview() {
             {health && (
               <div className="reveal mt-6 flex flex-wrap items-center gap-3">
                 <div className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] font-[600] ${health.level==="high"?"gold-border gold-glow bg-[color-mix(in_srgb,var(--gold)_10%,transparent)] text-[var(--gold)]":health.level==="medium"?"border-[color-mix(in_srgb,var(--amber-2)_20%,transparent)] bg-[color-mix(in_srgb,var(--amber-2)_10%,transparent)] text-[var(--amber)]":"border-[color-mix(in_srgb,var(--red-2)_20%,transparent)] bg-[color-mix(in_srgb,var(--red-2)_10%,transparent)] text-[var(--red)]"}`}>
-                  <span className="h-2 w-2 rounded-full" style={{background: health.level==="high"?"#D4A574":health.level==="medium"?"#F59E0B":"#EF4444"}} /> Health {health.health} · {health.level}
+                  <span className="h-2 w-2 rounded-full" style={{background: health.level==="high"?"var(--gold)":health.level==="medium"?"var(--amber-2)":"var(--red-2)"}} /> Health {health.health} · {health.level}
                 </div>
                 <span className="text-[11px] text-[var(--subtle)]">{health.metrics.confirmed_rate}% decisions confirmed · {health.metrics.completed_rate}% actions done</span>
                 <Link href="/timeline" className="ml-auto hidden text-[11px] font-[600] text-[var(--sky)] hover:text-[var(--fg)] sm:inline-flex">View timeline →</Link>
@@ -365,7 +365,7 @@ export default function Overview() {
                           const m = meetingMap.get(d.meeting_id);
                           return (
                             <div key={d.id} className="relative">
-                              <span className="absolute -left-7 top-1 h-[9px] w-[9px] rounded-full border-2 border-[var(--bg)] transition-all duration-300 group-hover:scale-125" style={{ background: d.status === "CONFIRMED" ? "#10B981" : d.status === "REJECTED" ? "#656B75" : "#FBBF24", boxShadow: d.status === "CONFIRMED" ? "0 0 10px rgba(16,185,129,0.5)" : d.status === "REJECTED" ? "none" : "0 0 10px rgba(251,191,36,0.55)" }} aria-hidden="true" />
+                              <span className="absolute -left-7 top-1 h-[9px] w-[9px] rounded-full border-2 border-[var(--bg)] transition-all duration-300 group-hover:scale-125" style={{ background: d.status === "CONFIRMED" ? "var(--emerald-2)" : d.status === "REJECTED" ? "var(--subtle)" : "var(--amber)", boxShadow: d.status === "CONFIRMED" ? "0 0 10px rgba(16,185,129,0.5)" : d.status === "REJECTED" ? "none" : "0 0 10px rgba(251,191,36,0.55)" }} aria-hidden="true" />
                               <Link href={`/meetings/${d.meeting_id}?item=${d.id}`} className="group block">
                                 <div className="flex flex-wrap items-center gap-2">
                                   <span className={`truncate text-[13.5px] font-[550] text-[var(--text)] group-hover:text-[var(--fg)] ${d.status === "REJECTED" ? "text-[var(--subtle)] line-through" : ""}`}>{d.title}</span>
@@ -422,7 +422,7 @@ export default function Overview() {
 }
 
 function StatusDot({ status }: { status: string }) {
-  const map: Record<string, [string, string]> = { ready: ["#10B981", "Processed"], processing: ["#0EA5E9", "Processing"], draft: ["#656B75", "Draft"], failed: ["#EF4444", "Failed"], recording: ["#EF4444", "Recording"] };
+  const map: Record<string, [string, string]> = { ready: ["var(--emerald-2)", "Processed"], processing: ["var(--sky-2)", "Processing"], draft: ["var(--subtle)", "Draft"], failed: ["var(--red-2)", "Failed"], recording: ["var(--red-2)", "Recording"] };
   const [c, label] = map[status] || map.draft;
   return (
     <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--border)] bg-[color-mix(in_srgb,var(--fg)_2%,transparent)] px-2 py-1 text-[9.5px] font-[700] uppercase tracking-[0.08em]" style={{ color: c }}>

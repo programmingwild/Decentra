@@ -28,7 +28,7 @@ function Helix({ count, scroll }: { count: number; scroll: number }) {
         const y = (t - 0.5) * height;
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
-        const hue = i % 3 === 0 ? "#0EA5E9" : i % 3 === 1 ? "#A78BFA" : "#10B981";
+        const hue = i % 3 === 0 ? "var(--sky-2)" : i % 3 === 1 ? "var(--violet)" : "var(--emerald-2)";
         return (
           <Float key={i} speed={1.2 + i * 0.05} rotationIntensity={0.12} floatIntensity={0.5}>
             <mesh position={[x, y, z]}>
@@ -59,7 +59,7 @@ export function HelixScene({ count, scroll }: { count: number; scroll: number })
       >
         <ambientLight intensity={0.9} />
         <directionalLight position={[4, 6, 4]} intensity={0.8} />
-        <pointLight position={[-4, -2, 4]} intensity={0.6} color="#38BDF8" />
+        <pointLight position={[-4, -2, 4]} intensity={0.6} color="var(--sky)" />
         <Helix count={count} scroll={scroll} />
         <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.25} />
       </Canvas>

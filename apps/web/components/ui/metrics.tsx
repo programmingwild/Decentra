@@ -4,12 +4,12 @@ import { motion, useSpring, useMotionValue, useInView } from "framer-motion";
 import { TiltCard } from "@/components/immersive/3d/TiltCard";
 
 export const TONE_COLORS: Record<string, string> = {
-  sky: "#38BDF8",
-  violet: "#A78BFA",
-  amber: "#FBBF24",
-  emerald: "#34D399",
-  red: "#F87171",
-  gold: "#D4A574",
+  sky: "var(--sky)",
+  violet: "var(--violet)",
+  amber: "var(--amber)",
+  emerald: "var(--emerald)",
+  red: "var(--red)",
+  gold: "var(--gold)",
 };
 
 export function AreaChart({ data, color }: { data: Array<{ x: number; y: number }>; color: string }) {
@@ -81,7 +81,7 @@ export interface MetricCardProps {
 }
 
 export function MetricCard({ label, value, change, tone, icon: Icon, sparkline, index = 0, immersive = false }: MetricCardProps) {
-  const color = TONE_COLORS[tone] || "#38BDF8";
+  const color = TONE_COLORS[tone] || "var(--sky)";
   const numValue = typeof value === "string" ? parseInt(value.replace(/[^0-9]/g, "")) || 0 : value;
 
   return (

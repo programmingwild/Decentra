@@ -155,34 +155,34 @@ export default function Deck() {
     const dAll: FeedItem[] = decisions.map((d: any) => ({
       id: `d-${d.id}`, kind: "decision" as const, title: d.title,
       meta: `${d.status} · ${Math.round((d.confidence ?? 0) * 100)}%`,
-      tone: d.status === "DETECTED" ? "#FBBF24" : "#34D399",
+      tone: d.status === "DETECTED" ? "var(--amber)" : "var(--emerald)",
       href: "/decisions", at: d.created_at || d.confirmed_at || "",
     })).sort(byDate);
     const aAll: FeedItem[] = actions.map((a: any) => ({
       id: `a-${a.id}`, kind: "action" as const, title: a.task,
       meta: `${a.owner_name || "unassigned"} · ${a.status}`,
-      tone: a.status === "COMPLETED" ? "#34D399" : "#38BDF8",
+      tone: a.status === "COMPLETED" ? "var(--emerald)" : "var(--sky)",
       href: "/actions", at: a.created_at || "",
     })).sort(byDate);
     const mAll: FeedItem[] = meetings.map((m: any) => ({
       id: `m-${m.id}`, kind: "meeting" as const, title: m.title,
-      meta: m.status, tone: "#A78BFA", href: `/meetings/${m.id}`,
+      meta: m.status, tone: "var(--violet)", href: `/meetings/${m.id}`,
       at: m.created_at || m.date || "",
     })).sort(byDate);
     return [...dAll, ...aAll, ...mAll].sort(byDate).slice(0, 9);
   }, [decisions, actions, meetings]);
 
   const queue = [
-    ...detected.slice(0, 3).map((d: any) => ({ icon: Sparkles, tone: "#FBBF24", title: d.title, meta: "Decision awaiting review", href: "/decisions?f=DETECTED" })),
-    ...overdue.slice(0, 3).map((a: any) => ({ icon: TriangleAlert, tone: "#F87171", title: a.task, meta: `${a.owner_name || "Nobody"} · overdue`, href: "/actions" })),
-    ...unassigned.slice(0, 2).map((a: any) => ({ icon: UserX, tone: "#38BDF8", title: a.task, meta: "No owner", href: "/actions" })),
+    ...detected.slice(0, 3).map((d: any) => ({ icon: Sparkles, tone: "var(--amber)", title: d.title, meta: "Decision awaiting review", href: "/decisions?f=DETECTED" })),
+    ...overdue.slice(0, 3).map((a: any) => ({ icon: TriangleAlert, tone: "var(--red)", title: a.task, meta: `${a.owner_name || "Nobody"} · overdue`, href: "/actions" })),
+    ...unassigned.slice(0, 2).map((a: any) => ({ icon: UserX, tone: "var(--sky)", title: a.task, meta: "No owner", href: "/actions" })),
   ].slice(0, 5);
 
   const stats = [
-    { label: "Meetings tracked", value: meetings.length, sub: `${decisions.length} decisions extracted`, tone: "#38BDF8" },
-    { label: "Review queue", value: detected.length, sub: detected.length ? "Needs human verdict" : "All clear", tone: "#FBBF24" },
-    { label: "Actions closed", value: done, sub: `${overdue.length} overdue right now`, tone: "#34D399" },
-    { label: "Open questions", value: questions.length, sub: "Awaiting answers", tone: "#A78BFA" },
+    { label: "Meetings tracked", value: meetings.length, sub: `${decisions.length} decisions extracted`, tone: "var(--sky)" },
+    { label: "Review queue", value: detected.length, sub: detected.length ? "Needs human verdict" : "All clear", tone: "var(--amber)" },
+    { label: "Actions closed", value: done, sub: `${overdue.length} overdue right now`, tone: "var(--emerald)" },
+    { label: "Open questions", value: questions.length, sub: "Awaiting answers", tone: "var(--violet)" },
   ];
 
   return (
@@ -202,7 +202,7 @@ export default function Deck() {
                 <span
                   className="fragment ml-auto inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]"
                   style={{
-                    color: health.level === "high" ? "#D4A574" : health.level === "medium" ? "#FBBF24" : "#F87171",
+                    color: health.level === "high" ? "var(--gold)" : health.level === "medium" ? "var(--amber)" : "var(--red)",
                     borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)",
                   }}
                 >
@@ -316,9 +316,9 @@ export default function Deck() {
           <Reveal delay={0.12}>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               {[
-                { href: "/meetings?new=1", icon: Plus, label: "New meeting", sub: "Record · understand · decide", tone: "#38BDF8" },
-                { href: "/assistant", icon: Terminal, label: "Ask Decentra", sub: "Grounded answers, live", tone: "#A78BFA" },
-                { href: "/meetings", icon: Video, label: "Open meetings", sub: "Replays + evidence", tone: "#D4A574" },
+                { href: "/meetings?new=1", icon: Plus, label: "New meeting", sub: "Record · understand · decide", tone: "var(--sky)" },
+                { href: "/assistant", icon: Terminal, label: "Ask Decentra", sub: "Grounded answers, live", tone: "var(--violet)" },
+                { href: "/meetings", icon: Video, label: "Open meetings", sub: "Replays + evidence", tone: "var(--gold)" },
               ].map((a) => (
                 <Link
                   key={a.href}

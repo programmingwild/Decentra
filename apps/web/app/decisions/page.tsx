@@ -15,10 +15,10 @@ const ShaderAurora = dynamic(() => import("@/components/immersive/3d/ShaderAuror
 
 const FILTERS = [
   { key: "", label: "All" },
-  { key: "DETECTED", label: "Detected", tone: "#FBBF24" },
-  { key: "CONFIRMED", label: "Confirmed", tone: "#34D399" },
-  { key: "REVISED", label: "Revised", tone: "#38BDF8" },
-  { key: "SUPERSEDED", label: "Superseded", tone: "#A78BFA" },
+  { key: "DETECTED", label: "Detected", tone: "var(--amber)" },
+  { key: "CONFIRMED", label: "Confirmed", tone: "var(--emerald)" },
+  { key: "REVISED", label: "Revised", tone: "var(--sky)" },
+  { key: "SUPERSEDED", label: "Superseded", tone: "var(--violet)" },
 ];
 
 export default function DecisionCenter() {
@@ -88,11 +88,11 @@ export default function DecisionCenter() {
   }, [visible]);
 
   const colMeta: Record<string, { label: string; tone: string; desc: string }> = {
-    DETECTED: { label: "Detected", tone: "#FBBF24", desc: "Awaiting your review" },
-    CONFIRMED: { label: "Confirmed", tone: "#34D399", desc: "Organizational memory" },
-    REVISED: { label: "Revised", tone: "#38BDF8", desc: "Human-in-the-loop edits" },
-    REJECTED: { label: "Rejected", tone: "#656B75", desc: "Not adopted" },
-    SUPERSEDED: { label: "Superseded", tone: "#A78BFA", desc: "Replaced by newer" },
+    DETECTED: { label: "Detected", tone: "var(--amber)", desc: "Awaiting your review" },
+    CONFIRMED: { label: "Confirmed", tone: "var(--emerald)", desc: "Organizational memory" },
+    REVISED: { label: "Revised", tone: "var(--sky)", desc: "Human-in-the-loop edits" },
+    REJECTED: { label: "Rejected", tone: "var(--subtle)", desc: "Not adopted" },
+    SUPERSEDED: { label: "Superseded", tone: "var(--violet)", desc: "Replaced by newer" },
   };
 
   return (
@@ -173,7 +173,7 @@ export default function DecisionCenter() {
                   <h2 className="pt-6 pb-3 text-[11px] font-[700] uppercase tracking-[0.16em] text-[var(--subtle)] first:pt-1">{label}</h2>
                   <ul>
                     {items.map((d) => {
-                      const dotColor = d.status === "CONFIRMED" ? "#10B981" : d.status === "REVISED" ? "#0EA5E9" : d.status === "SUPERSEDED" ? "#8B5CF6" : d.status === "REJECTED" ? "#656B75" : "#F59E0B";
+                      const dotColor = d.status === "CONFIRMED" ? "var(--emerald-2)" : d.status === "REVISED" ? "var(--sky-2)" : d.status === "SUPERSEDED" ? "var(--violet-2)" : d.status === "REJECTED" ? "var(--subtle)" : "var(--amber-2)";
                       return (
                         <li key={d.id} className="group relative py-3.5">
                           <span aria-hidden="true" className="absolute -left-7 top-[19px] h-[9px] w-[9px] rounded-full border-2 border-[var(--bg)]" style={{ background: dotColor }} />
