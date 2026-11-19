@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import uuid as uuidlib
-from jose import jwt, JWTError, ExpiredSignatureError
+import jwt
+from jwt import ExpiredSignatureError, InvalidTokenError
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -106,7 +107,7 @@ def decode_token(token: str) -> dict:
     except ExpiredSignatureError as e:
         # Distinct message lets clients silently refresh instead of logging out.
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired") from e
-    except JWTError as e:
+    except InvalidTokenError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from e
 
 async def get_current_user(creds: HTTPAuthorizationCredentials | None = Depends(bearer), db: AsyncSession = Depends(get_db)) -> User:
