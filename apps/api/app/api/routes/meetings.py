@@ -50,7 +50,7 @@ def _is_overdue(a):
     if not a.deadline or a.status in ("COMPLETED", "CANCELLED"):
         return False
     from datetime import datetime, timezone
-    now = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     dl = a.deadline
     if dl.tzinfo is None:
         dl = dl.replace(tzinfo=timezone.utc)
@@ -73,7 +73,7 @@ async def _maybe_notify(db, user, meeting, action, notif_type):
         # dedupe: don't create duplicate unread notification for same action+type in last hour
         from datetime import datetime, timezone, timedelta
         from sqlalchemy import and_
-        recent = await db.execute(select(Notification).where(Notification.user_id == target_id, Notification.resource_id == action.id, Notification.type == notif_type, Notification.created_at > datetime.now(timezone.utc) - timedelta(hours=1)))
+        recent = await db.execute(select(Notification).where(Notification.user_id == target_id, Notification.resource_id == action.id, Notification.type == notif_type, Notification.created_at > datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(hours=1)))
         if recent.scalars().first():
             return
         db.add(Notification(user_id=target_id, type=notif_type, resource_type="action", resource_id=action.id))
@@ -442,7 +442,7 @@ async def update_decision(decision_id: str, body: dict, db: AsyncSession = Depen
         d.status = st
         if st in ("CONFIRMED", "REVISED"):
             from datetime import datetime, timezone
-            d.confirmed_at = datetime.now(timezone.utc)
+            d.confirmed_at = datetime.now(timezone.utc).replace(tzinfo=None)
         # auto-supersede duplicates: when confirming, supersede other DETECTED with same title prefix.
         # Each supersede is audited — silent status flips are a provenance hole.
         if st in ("CONFIRMED", "REVISED"):
@@ -569,7 +569,7 @@ async def update_action(action_id: str, body: dict, db: AsyncSession = Depends(g
             raise HTTPException(status_code=400, detail="Task too long (max 500)")
         a.task = task
     from datetime import datetime, timezone
-    a.updated_at = datetime.now(timezone.utc)
+    a.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
     # notifications
     try:
         if old_owner != a.owner_name and a.owner_name:
@@ -579,7 +579,7 @@ async def update_action(action_id: str, body: dict, db: AsyncSession = Depends(g
                 await _maybe_notify(db, user, m, a, "overdue")
             else:
                 # due soon check (within 2 days)
-                now = datetime.now(timezone.utc)
+                now = datetime.now(timezone.utc).replace(tzinfo=None)
                 dl = a.deadline
                 if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
                 if 0 <= (dl - now).days <= 2 and a.status not in ("COMPLETED","CANCELLED"):
@@ -634,7 +634,7 @@ async def mark_notification_read(notif_id: str, db: AsyncSession = Depends(get_d
     if not n or n.user_id != user.id:
         raise HTTPException(status_code=404, detail="Notification not found")
     from datetime import datetime, timezone
-    n.read_at = datetime.now(timezone.utc)
+    n.read_at = datetime.now(timezone.utc).replace(tzinfo=None)
     await db.commit()
     return {"id": n.id, "read_at": n.read_at}
 
@@ -879,7 +879,7 @@ async def review_decision(item_id: str, body: dict, db: AsyncSession = Depends(g
                 if d.status != "CONFIRMED":
                     d.status = "CONFIRMED"
                     from datetime import datetime, timezone
-                    d.confirmed_at = datetime.now(timezone.utc)
+                    d.confirmed_at = datetime.now(timezone.utc).replace(tzinfo=None)
                     # update DNA provenance
                     r = await db.execute(select(DecisionDNA).where(DecisionDNA.decision_id == d.id))
                     dna = r.scalar_one_or_none()
@@ -906,9 +906,9 @@ async def review_decision(item_id: str, body: dict, db: AsyncSession = Depends(g
                 if d.status != "REVISED":
                     d.status = "REVISED"
                     from datetime import datetime, timezone
-                    d.confirmed_at = datetime.now(timezone.utc)
+                    d.confirmed_at = datetime.now(timezone.utc).replace(tzinfo=None)
     from datetime import datetime, timezone
-    it.reviewed_at = datetime.now(timezone.utc)
+    it.reviewed_at = datetime.now(timezone.utc).replace(tzinfo=None)
     it.reviewer_id = user.id
     try:
         db.add(AuditLog(org_id=it.org_id, actor_user_id=user.id, action=f"review.{action}", resource_type=it.item_type, resource_id=it.item_id, meta={"review_id": it.id}))
@@ -1074,7 +1074,7 @@ async def health_score(org_id: str, db: AsyncSession = Depends(get_db), user: Us
     overdue = 0
     unassigned = 0
     from datetime import datetime, timezone
-    now = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     for m in meetings:
         r1 = await db.execute(select(Decision).where(Decision.meeting_id == m.id))
         decs = r1.scalars().all()
