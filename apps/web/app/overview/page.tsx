@@ -111,6 +111,7 @@ export default function Overview() {
   if (!sentenceParts.length && actions.length) sentenceParts.push("everything on track");
 
   // Bold metric cards data
+  const healthRate = health?.metrics?.confirmed_rate ?? 0;
   const metrics = useMemo(() => [
     { 
       label: "Decisions", 
@@ -142,21 +143,21 @@ export default function Overview() {
     { 
       label: "Health", 
       value: health?.health || 0, 
-      change: health ? `${health.metrics.confirmed_rate}% confirmed` : "No data", 
-      tone: health?.level === "high" ? "gold" : health?.level === "medium" ? "amber" : "red", 
+      change: health?.metrics ? `${healthRate}% confirmed` : "No data",
+      tone: health?.level === "high" ? "gold" : health?.level === "medium" ? "amber" : "red",
       icon: TrendingUp,
       href: "/timeline",
-      sparkline: health ? [
-        { x: 0, y: health.metrics.confirmed_rate * 0.6 },
-        { x: 1, y: health.metrics.confirmed_rate * 0.7 },
-        { x: 2, y: health.metrics.confirmed_rate * 0.8 },
-        { x: 3, y: health.metrics.confirmed_rate * 0.9 },
-        { x: 4, y: health.metrics.confirmed_rate },
-        { x: 5, y: health.metrics.confirmed_rate * 1.05 },
-        { x: 6, y: health.metrics.confirmed_rate }
+      sparkline: health?.metrics ? [
+        { x: 0, y: healthRate * 0.6 },
+        { x: 1, y: healthRate * 0.7 },
+        { x: 2, y: healthRate * 0.8 },
+        { x: 3, y: healthRate * 0.9 },
+        { x: 4, y: healthRate },
+        { x: 5, y: healthRate * 1.05 },
+        { x: 6, y: healthRate }
       ] : Array.from({ length: 7 }, (_, i) => ({ x: i, y: 0 }))
     },
-  ], [decisions, detected, actions, overdue, meetings, health]);
+  ], [decisions, detected, actions, overdue, meetings, health, healthRate]);
 
   const recentMeetings = meetings.slice(0, 5);
   const recentDecisions = decisions.slice(0, 6);
@@ -215,7 +216,7 @@ export default function Overview() {
                 <div className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] font-[600] ${health.level==="high"?"gold-border gold-glow bg-[color-mix(in_srgb,var(--gold)_10%,transparent)] text-[var(--gold)]":health.level==="medium"?"border-[color-mix(in_srgb,var(--amber-2)_20%,transparent)] bg-[color-mix(in_srgb,var(--amber-2)_10%,transparent)] text-[var(--amber)]":"border-[color-mix(in_srgb,var(--red-2)_20%,transparent)] bg-[color-mix(in_srgb,var(--red-2)_10%,transparent)] text-[var(--red)]"}`}>
                   <span className="h-2 w-2 rounded-full" style={{background: health.level==="high"?"var(--gold)":health.level==="medium"?"var(--amber-2)":"var(--red-2)"}} /> Health {health.health} · {health.level}
                 </div>
-                <span className="text-[11px] text-[var(--subtle)]">{health.metrics.confirmed_rate}% decisions confirmed · {health.metrics.completed_rate}% actions done</span>
+                <span className="text-[11px] text-[var(--subtle)]">{health?.metrics ? `${healthRate}% decisions confirmed · ${health.metrics.completed_rate}% actions done` : "No health data yet"}</span>
                 <Link href="/timeline" className="ml-auto hidden text-[11px] font-[600] text-[var(--sky)] hover:text-[var(--fg)] sm:inline-flex">View timeline →</Link>
                 <Link href="/deck" className="hidden items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--gold)_25%,transparent)] bg-[color-mix(in_srgb,var(--gold)_7%,transparent)] px-3 py-1 text-[11px] font-[600] text-[var(--gold)] transition hover:border-[color-mix(in_srgb,var(--gold)_45%,transparent)] hover:text-[var(--fg)] sm:inline-flex">Command deck →</Link>
               </div>

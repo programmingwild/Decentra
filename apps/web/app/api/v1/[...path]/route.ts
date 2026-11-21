@@ -25,7 +25,7 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   const { path } = await ctx.params;
   // /api/v1/health maps to the API's real /health (used by the background
   // keep-warm ping); everything else keeps the /api/v1 prefix.
-  const url = path[0] === "health"
+  const url = path.length === 1 && path[0] === "health"
     ? `${TARGET()}/health${req.nextUrl.search}`
     : `${TARGET()}/api/v1/${path.join("/")}${req.nextUrl.search}`;
 
