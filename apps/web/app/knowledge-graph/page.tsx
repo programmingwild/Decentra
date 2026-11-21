@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { getMeAndOrgs } from "@/lib/auth";
 import { Nav } from "@/components/nav";
 import { SectionLabel } from "@/components/ui/primitives";
+import { ErrorState, SkeletonLines } from "@/components/ui/states";
 import { GitBranch, Video, CheckCircle2, ClipboardList, HelpCircle, Sparkles, Network, Target, TrendingUp, Zap, Brain, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -15,22 +17,29 @@ export default function KnowledgeGraphPage() {
   const [meetings, setMeetings] = useState<any[]>([]);
   const [decisions, setDecisions] = useState<any[]>([]);
   const [actions, setActions] = useState<any[]>([]);
-  useEffect(() => {
-    (async () => {
-      try {
-        const orgs = await api("/api/v1/organizations");
-        if (!orgs?.[0]) return;
-        const oid = orgs[0].id;
-        const [ms, ds, as] = await Promise.all([
-          api(`/api/v1/meetings?org_id=${oid}`).catch(()=>[]),
-          api(`/api/v1/decisions?org_id=${oid}`).catch(()=>[]),
-          api(`/api/v1/actions?org_id=${oid}`).catch(()=>[]),
-        ]);
-        setMeetings(ms||[]); setDecisions(ds||[]); setActions(as||[]);
-      } catch {}
-    })();
-  }, []);
-  const meetingMap = new Map(meetings.map((m)=>[m.id,m]));
+  const [error, setError] = useState<{ title: string; reason: string } | null>(null);
+  const [ready, setReady] = useState(false);
+
+  async function loadAll() {
+    setError(null);
+    try {
+      // Shared burst with the AuthProvider/overview page: GET /me + GET /organizations.
+      const [, orgs] = await getMeAndOrgs();
+      const oid = orgs?.[0]?.id;
+      if (!oid) { setReady(true); return; }
+      const [ms, ds, as] = await Promise.all([
+        api(`/api/v1/meetings?org_id=${oid}`).catch(()=>[]),
+        api(`/api/v1/decisions?org_id=${oid}`).catch(()=>[]),
+        api(`/api/v1/actions?org_id=${oid}`).catch(()=>[]),
+      ]);
+      setMeetings(ms||[]); setDecisions(ds||[]); setActions(as||[]);
+    } catch (e: any) {
+      setError({ title: "We couldn't load your knowledge graph", reason: e?.message?.slice(0, 160) || "Check that the Decentra server is running." });
+    } finally {
+      setReady(true);
+    }
+  }
+  useEffect(() => { loadAll(); }, []);
 
   // Bold metric cards for knowledge graph
   const graphMetrics = useMemo(() => [
@@ -61,6 +70,9 @@ export default function KnowledgeGraphPage() {
           </section>
 
           <div className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            {error && <ErrorState {...error} actionLabel="Retry" onAction={loadAll} />}
+            {!error && !ready && <SkeletonLines n={4} className="max-w-md" />}
+            {!error && ready && (<>
             <section className="space-y-3">
               <SectionLabel>Graph</SectionLabel>
               <div className="glass-strong rounded-[18px] p-5">
@@ -102,6 +114,7 @@ export default function KnowledgeGraphPage() {
                 <p className="mt-1 text-[12px] leading-relaxed text-[var(--muted)]">Decisions persist across future meetings. Query: "Why did we make this decision? What evidence supported it? Which decisions depend on this one?"</p>
               </div>
             </section>
+            </>)}
           </div>
         </div>
       </main>
