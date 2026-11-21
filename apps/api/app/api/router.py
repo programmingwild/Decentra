@@ -60,7 +60,10 @@ async def register(request: Request, response: Response, body: UserCreate, db: A
     user = User(email=body.email, password_hash=hash_password(body.password), full_name=body.full_name)
     db.add(user)
     await db.commit()
-    await db.refresh(user)
+    # No refresh here: concurrent registrations against the shared-connection
+    # StaticPool (used by the test suite) can race the follow-up SELECT —
+    # id/created_at are set client-side from column defaults at flush, and
+    # nothing downstream reads other server-side values.
     return await _issue_tokens(user.id, response, db)
 
 @router.post("/auth/login", response_model=TokenResponse)
