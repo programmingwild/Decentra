@@ -88,14 +88,15 @@ async function tryRefresh(): Promise<boolean> {
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 type ApiOpts = RequestInit & {
-  /** ms before aborting. Default 30s; pass a larger value for uploads/AI. */
+  /** ms before aborting. Default 60s — Render free tier wakes sleeping
+   *  services on the first request after ~5 min idle, which can exceed 30s. */
   timeoutMs?: number;
   /** GET-only retries on 429/502/503/504 with backoff. Default true. */
   retry?: boolean;
 };
 
 export async function api(path: string, opts: ApiOpts = {}): Promise<any> {
-  const { timeoutMs = 30000, retry = true, ...init } = opts;
+  const { timeoutMs = 60000, retry = true, ...init } = opts;
   const method = (init.method || "GET").toUpperCase();
   const headers: any = { ...(init.headers || {}), ...authHeader() };
   if (!(init.body instanceof FormData)) headers["Content-Type"] = headers["Content-Type"] || "application/json";
@@ -109,22 +110,37 @@ export async function api(path: string, opts: ApiOpts = {}): Promise<any> {
       res = await fetch(`${API}${path}`, { ...init, headers, signal: ctrl.signal, credentials: "include" });
     } catch (e: any) {
       clearTimeout(timer);
-      if (e?.name === "AbortError") throw new ApiError(408, `Request timed out after ${timeoutMs}ms`);
+      if (e?.name === "AbortError") {
+        const timeoutErr = new ApiError(408, `Request timed out after ${timeoutMs}ms`);
+        // Timeouts are transient, not credential problems: retry once even on
+        // auth endpoints — a timed-out login means the request just didn't
+        // finish in the budget (e.g. Render waking a sleeping service).
+        if (retry && attempt < 2) {
+          await sleep(400 + Math.random() * 400);
+          return doFetch(attempt + 1);
+        }
+        throw timeoutErr;
+      }
       throw new ApiError(0, "Network unreachable — check your connection");
     }
     clearTimeout(timer);
 
-    // Retry on transient failures (429/5xx) — all methods; Render cold starts
-    // make a first POST (~login) occasionally blip, and the messaging is the
-    // same. Skip auth endpoints so bad credentials surface once instead of
-    // looping. Backoff + jitter so a 429 never re-triggers within the same
-    // second and so we play nice with both Render and the API rate limits.
+    // Retry on transient failures (408 timeout + 429/5xx) — all methods; Render
+    // cold starts make the first request after ~5 min idle exceed the timeout
+    // budget, and the API's free-tier queueing returns 429/503s. Skip auth
+    // endpoints for status retries so bad credentials surface once instead of
+    // looping — timeouts still retry above, since they're not auth failures.
+    // Backoff + jitter so we play nice with Render and the API rate limits.
     const isAuthEndpoint =
       path.includes("/auth/login") ||
       path.includes("/auth/register") ||
       path.includes("/auth/refresh") ||
       path.includes("/auth/logout");
-    if (retry && !isAuthEndpoint && attempt < 2 && [429, 502, 503, 504].includes(res.status)) {
+    if (
+      retry &&
+      attempt < 2 &&
+      (res.status === 408 || (!isAuthEndpoint && [429, 502, 503, 504].includes(res.status)))
+    ) {
       const base = 400 * (attempt + 1);
       await sleep(base + Math.random() * base);
       return doFetch(attempt + 1);
