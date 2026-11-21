@@ -103,11 +103,11 @@ async def test_upload_cap_enforced_before_full_buffer():
 async def test_login_rate_limited(client):
     await _register(client, email="ratelimit@decentra.ai")
     statuses = []
-    for _ in range(12):
+    for _ in range(40):
         r = await client.post("/api/v1/auth/login",
                               json={"email": "ratelimit@decentra.ai", "password": "strongpass1"})
         statuses.append(r.status_code)
-    assert 429 in statuses  # 10/minute bucket must trip
+    assert 429 in statuses  # 30/minute bucket must trip at some point within 40 attempts
 
 
 @pytest.mark.asyncio
