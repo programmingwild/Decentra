@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { getMeAndOrgs } from "@/lib/auth";
 import { Nav } from "@/components/nav";
 import { DecisionPill, ActionPill, Avatar, SectionLabel } from "@/components/ui/primitives";
 import { EmptyState, ErrorState, SkeletonLines, SkeletonRow } from "@/components/ui/states";
@@ -33,25 +34,30 @@ export default function Overview() {
     setLoading(true);
     setError(null);
     try {
-      const me = await api("/api/v1/auth/me").catch(() => null);
+      // Shared burst: GET /me + GET /organizations (same promise the
+      // AuthProvider fires on mount). Historically this was a serial chain
+      // me → orgs → rest; now they're one parallel round trip.
+      const [me, orgs] = await getMeAndOrgs();
       if (me) setUserName(me.full_name?.split(" ")[0] || me.email?.split("@")[0] || "");
-      const orgs = await api("/api/v1/organizations");
-      if (!orgs?.[0]) {
-        setLoading(false);
-        return;
-      }
-      const oid = orgs[0].id;
-      const [ms, ds, as, mine] = await Promise.all([
+      const oid = orgs?.[0]?.id;
+      if (!oid) { setLoading(false); return; }
+
+      // Parallel batch 2 — all the dashboard widgets load together instead of
+      // the meetings→decisions→actions serial chain.
+      const [ms, ds, as, mine, health] = await Promise.all([
         api(`/api/v1/meetings?org_id=${oid}`).catch(() => []),
         api(`/api/v1/decisions?org_id=${oid}`).catch(() => []),
         api(`/api/v1/actions?org_id=${oid}`).catch(() => []),
         api(`/api/v1/actions?org_id=${oid}&owner=me`).catch(() => []),
+        api(`/api/v1/health/score?org_id=${oid}`).catch(() => null),
       ]);
       setMeetings(ms || []);
       setDecisions(ds || []);
       setActions(as || []);
       setMyActions(mine || []);
+      setHealth(health);
       const readyMeetings = (ms || []).filter((m: any) => m.status === "ready").slice(0, 10);
+      // Parallel batch 3: per-meeting intelligence (needed for "Next steps" pop).
       const intelResults = await Promise.allSettled(readyMeetings.map((m: any) => api(`/api/v1/meetings/${m.id}/intelligence`)));
       const qs: any[] = [];
       intelResults.forEach((r, i) => {
@@ -60,7 +66,6 @@ export default function Overview() {
         }
       });
       setQuestions(qs.filter((q) => (q.status || "OPEN") !== "ANSWERED"));
-      api(`/api/v1/health/score?org_id=${oid}`).then(setHealth).catch(()=>{});
     } catch (e: any) {
       setError(friendly(e));
     }

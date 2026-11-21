@@ -34,9 +34,12 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   headers.set("x-forwarded-host", req.headers.get("host") || "");
   headers.set("x-forwarded-proto", req.nextUrl.protocol.replace(":", ""));
 
-  let body: BodyInit | undefined;
+  // Forward as a string body. Verified against a raw-bytes fetch of the
+  // upstream from inside the container — this path proxies login/me/orgs/
+  // meetings etc. with correct Content-Length.
+  let body: string | undefined;
   if (!["GET", "HEAD"].includes(req.method)) {
-    body = await req.arrayBuffer();
+    body = await req.text();
   }
 
   let upstream: Response;
@@ -55,12 +58,17 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
     );
   }
 
+  const upText = await upstream.text();
   const passthrough = new Headers();
   upstream.headers.forEach((value, key) => {
     if (!HOP_BY_HOP.has(key.toLowerCase())) passthrough.set(key, value);
   });
 
-  return new NextResponse(upstream.body, { status: upstream.status, statusText: upstream.statusText, headers: passthrough });
+  return new NextResponse(upText, {
+    status: upstream.status,
+    statusText: upstream.statusText,
+    headers: passthrough,
+  });
 }
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
