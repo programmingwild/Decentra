@@ -14,26 +14,38 @@ export function msToDuration(ms: number | null | undefined): string {
   return `${Math.floor(min / 60)}h ${min % 60}m`;
 }
 
+  /** Deterministic locale/timezone: server (UTC) and browser must render the
+   *  same text, or React throws a hydration error (#418). The API returns
+   *  naive UTC ("2026-03-18T10:00:00") — parse those as UTC, not browser-local. */
+  const LOCALE = "en-US";
+  const asDate = (d: string | Date | null | undefined): Date | null => {
+    if (!d) return null;
+    let dt: Date;
+    if (typeof d === "string") {
+      const naive = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(d) && !/(Z|[+-]\d{2}:?\d{2})$/i.test(d);
+      dt = new Date(naive ? d + "Z" : d);
+    } else dt = d;
+    return isNaN(dt.getTime()) ? null : dt;
+  };
+
 export function fmtDate(d: string | Date | null | undefined): string {
-  if (!d) return "No date";
-  const dt = typeof d === "string" ? new Date(d) : d;
-  if (isNaN(dt.getTime())) return "No date";
-  return dt.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  const dt = asDate(d);
+  if (!dt) return "No date";
+  return dt.toLocaleDateString(LOCALE, { month: "short", day: "numeric", timeZone: "UTC" });
 }
 
 export function fmtDateTime(d: string | Date | null | undefined): string {
-  if (!d) return "No date";
-  const dt = typeof d === "string" ? new Date(d) : d;
-  if (isNaN(dt.getTime())) return "No date";
-  return dt.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " · " + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  const dt = asDate(d);
+  if (!dt) return "No date";
+  return dt.toLocaleDateString(LOCALE, { month: "short", day: "numeric", timeZone: "UTC" })
+    + " · " + dt.toLocaleTimeString(LOCALE, { hour: "numeric", minute: "2-digit", timeZone: "UTC" });
 }
 
 /** Formal, locale-stable long date: "Aug 24, 2026". Never locale-numeric. */
 export function fmtDateLong(d: string | Date | null | undefined): string {
-  if (!d) return "";
-  const dt = typeof d === "string" ? new Date(d) : d;
-  if (isNaN(dt.getTime())) return "";
-  return dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const dt = asDate(d);
+  if (!dt) return "";
+  return dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 }
 
 /** Turn raw enum keys into formal labels: due_soon -> Due Soon,
@@ -58,7 +70,7 @@ export function dayGroup(d: string | Date | null | undefined): string {
   if (diffDays === 1) return "Yesterday";
   if (diffDays > 1 && diffDays < 7) return "This week";
   if (diffDays >= 7 && diffDays < 30) return "Earlier this month";
-  return dt.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  return dt.toLocaleDateString(LOCALE, { month: "long", year: "numeric", timeZone: "UTC" });
 }
 
 const WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -103,7 +115,7 @@ export function fmtDeadline(raw: string | null | undefined): { label: string; du
   const now = new Date();
   const startOf = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
   const diffDays = Math.round((startOf(due) - startOf(now)) / 86400000);
-  const label = diffDays === 0 ? "Today" : diffDays === 1 ? "Tomorrow" : diffDays === -1 ? "1 day late" : diffDays < 0 ? `${Math.abs(diffDays)} days late` : due.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  const label = diffDays === 0 ? "Today" : diffDays === 1 ? "Tomorrow" : diffDays === -1 ? "1 day late" : diffDays < 0 ? `${Math.abs(diffDays)} days late` : due.toLocaleDateString(LOCALE, { month: "short", day: "numeric" });
   return { label, due, overdue: diffDays < 0, today: diffDays === 0 };
 }
 

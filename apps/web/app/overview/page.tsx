@@ -29,6 +29,10 @@ export default function Overview() {
   const [questions, setQuestions] = useState<any[]>([]);
   const [health, setHealth] = useState<any>(null);
   const [syncedAt, setSyncedAt] = useState<Date | null>(null);
+  // greeting() depends on the viewer's local clock — rendering it during SSR
+  // gives a different string than the browser (UTC vs IST) → React #418 → the
+  // "section crashed" screen. Start empty on both sides, set it after mount.
+  const [greet, setGreet] = useState("");
 
   async function loadAll() {
     setLoading(true);
@@ -78,6 +82,7 @@ export default function Overview() {
   }
 
   useEffect(() => {
+    setGreet(greeting());
     loadAll();
   }, []);
 
@@ -173,7 +178,7 @@ export default function Overview() {
             className="relative"
           >
             <div className="flex items-center justify-between gap-4">
-              <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[var(--subtle)]">{greeting()} <span className="text-[var(--fg)]/20">—</span> workspace</p>
+              <p className="fragment text-[10.5px] uppercase tracking-[0.2em] text-[var(--subtle)]">{greet} <span className="text-[var(--fg)]/20">—</span> workspace</p>
               {!loading && syncedAt && (
                 <span className="glass-subtle inline-flex shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-[10.5px] font-[600] tabular-nums text-[var(--muted)]">
                   <span className="relative flex h-1.5 w-1.5">
