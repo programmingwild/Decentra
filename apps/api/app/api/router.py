@@ -50,7 +50,7 @@ def slugify(name: str) -> str:
     return s or "org"
 
 @router.post("/auth/register", response_model=TokenResponse)
-@limiter.limit("10/hour")
+@limiter.limit("30/hour")
 async def register(request: Request, response: Response, body: UserCreate, db: AsyncSession = Depends(get_db)):
     if not settings.open_registration:
         raise HTTPException(status_code=403, detail="Registration is disabled on this instance")
@@ -64,7 +64,7 @@ async def register(request: Request, response: Response, body: UserCreate, db: A
     return await _issue_tokens(user.id, response, db)
 
 @router.post("/auth/login", response_model=TokenResponse)
-@limiter.limit("10/minute")
+@limiter.limit("30/minute")
 async def login(request: Request, response: Response, body: UserLogin, db: AsyncSession = Depends(get_db)):
     r = await db.execute(select(User).where(User.email == body.email))
     user = r.scalar_one_or_none()
@@ -95,6 +95,7 @@ async def refresh(request: Request, response: Response, body: dict, db: AsyncSes
     return issued
 
 @router.post("/auth/logout")
+@limiter.limit("60/minute")
 async def logout(request: Request, response: Response, db: AsyncSession = Depends(get_db)):
     # Server-side revoke: a stolen refresh token must die at logout, not
     # just disappear from the browser's cookie jar.

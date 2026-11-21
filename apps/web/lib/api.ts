@@ -114,21 +114,21 @@ export async function api(path: string, opts: ApiOpts = {}): Promise<any> {
     }
     clearTimeout(timer);
 
-    // Retry idempotent reads on transient failures (429/5xx), max 2 backoffs.
-    if (retry && method === "GET" && [429, 502, 503, 504].includes(res.status) && attempt < 2) {
-      await sleep(400 * (attempt + 1));
-      return doFetch(attempt + 1);
-    }
-
-    // Silent refresh on 401 for everything except the auth endpoints
-    // themselves (bad credentials must surface, not loop). /auth/me IS
-    // included: on a fresh tab load the memory token is gone, so boot
-    // rehydrates the session from the httpOnly refresh cookie here.
+    // Retry on transient failures (429/5xx) — all methods; Render cold starts
+    // make a first POST (~login) occasionally blip, and the messaging is the
+    // same. Skip auth endpoints so bad credentials surface once instead of
+    // looping. Backoff + jitter so a 429 never re-triggers within the same
+    // second and so we play nice with both Render and the API rate limits.
     const isAuthEndpoint =
       path.includes("/auth/login") ||
       path.includes("/auth/register") ||
       path.includes("/auth/refresh") ||
       path.includes("/auth/logout");
+    if (retry && !isAuthEndpoint && attempt < 2 && [429, 502, 503, 504].includes(res.status)) {
+      const base = 400 * (attempt + 1);
+      await sleep(base + Math.random() * base);
+      return doFetch(attempt + 1);
+    }
     if (res.status === 401 && !isAuthEndpoint) {
       // Access token expired? One silent refresh, then replay the request once.
       if (await tryRefresh()) return api(path, { ...opts, retry: false });
@@ -142,8 +142,8 @@ export async function api(path: string, opts: ApiOpts = {}): Promise<any> {
       // Friendly messages for common cases; raw body preserved on .body.
       const friendly =
         res.status === 413 ? "File too large — compress it or pick a smaller file"
-        : res.status === 429 ? "Too many requests — slow down and retry"
-        : res.status >= 500 ? "Server hiccup — retry in a moment"
+        : res.status === 429 ? "Too many requests — retrying with backoff"
+        : res.status >= 500 ? "Server hiccup — retrying with backoff"
         : text;
       throw new ApiError(res.status, friendly || `Request failed ${res.status}`);
     }
