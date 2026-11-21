@@ -23,7 +23,11 @@ const HOP_BY_HOP = new Set([
 
 async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
   const { path } = await ctx.params;
-  const url = `${TARGET()}/api/v1/${path.join("/")}${req.nextUrl.search}`;
+  // /api/v1/health maps to the API's real /health (used by the background
+  // keep-warm ping); everything else keeps the /api/v1 prefix.
+  const url = path[0] === "health"
+    ? `${TARGET()}/health${req.nextUrl.search}`
+    : `${TARGET()}/api/v1/${path.join("/")}${req.nextUrl.search}`;
 
   const headers = new Headers();
   req.headers.forEach((value, key) => {

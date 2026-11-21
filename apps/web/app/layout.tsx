@@ -7,6 +7,7 @@ import { TransitionProvider } from "@/components/immersive/3d/TransitionProvider
 import { CursorGlow } from "@/components/immersive/3d/CursorGlow";
 import { ScrollProgress } from "@/components/immersive/3d/ScrollProgress";
 import { ImmersiveBackdrop } from "@/components/immersive/3d/ImmersiveBackdrop";
+import { ApiWarmup } from "@/components/api-warmup";
 import { ThemeProvider } from "@/components/theme-provider";
 import localFont from "next/font/local";
 
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <ImmersiveBackdrop />
+        <ApiWarmup />
         <ThemeProvider>
           <AuthProvider>
             <ToastProvider>
