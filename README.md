@@ -1,102 +1,190 @@
-# Decentra � AI-Assisted Decision Intelligence Platform
+# Decentra
 
-> **What happened? ? Why did it happen? ? What is likely to happen next? ? What should I investigate?**
+[![CI](https://github.com/programmingwild/Decentra/actions/workflows/ci.yml/badge.svg)](https://github.com/programmingwild/Decentra/actions/workflows/ci.yml)
+![Next.js](https://img.shields.io/badge/Next.js-15-111111?logo=nextdotjs)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-Decentra is a portfolio-grade Decision Intelligence Platform that grounds every AI answer in real analytical evidence.
+**Evidence-first meeting intelligence.** Decentra turns meeting transcripts and captions into a navigable graph of decisions, action items, questions and risks — each one linked back to the exact transcript evidence it came from.
+
+> What happened? Why did it happen? What is likely to happen next? What should I investigate?
+
+**[Live demo](https://decentra-web.onrender.com)** · [Demo walkthrough video](./demo-final.mp4) · [Architecture](./ARCHITECTURE.md) · [User guide](./docs/USER_GUIDE.md)
+
+---
+
+## Table of contents
+
+- [Why Decentra](#why-decentra)
+- [Features](#features)
+- [How it works](#how-it-works)
+- [Tech stack](#tech-stack)
+- [Repository layout](#repository-layout)
+- [Quick start](#quick-start)
+- [Configuration](#configuration)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Demo mode & security](#demo-mode--security)
+- [Documentation](#documentation)
+- [License](#license)
+
+---
+
+## Why Decentra
+
+Meeting notes capture *what was said*. They rarely capture *what was decided*, *who owns it*, or *why*. Decentra closes that gap with an evidence-first pipeline:
 
 ```
-DATA ? DATA QUALITY ? ANALYTICS ? ANOMALIES ? PREDICTIONS ? EVIDENCE ? AI INTERPRETATION ? DECISION SUPPORT
+transcript / captions → extraction → decisions · actions · questions · risks
+                      → knowledge graph → evidence-backed assistant answers
 ```
 
-## Quick Start
+Every extracted item retains pointers to the transcript segments that produced it, so an answer is always traceable to a source recording — no black-box summaries.
+
+## Features
+
+- **Meeting workspace** — capture or import a meeting, inspect transcript segments, evidence, and derived intelligence in one place.
+- **Decision memory** — detected/confirmed decisions with status, confidence, rationale and dependency links across meetings.
+- **Action tracking** — owners, deadlines, completion state, overdue/unassigned signals, and a personal action queue.
+- **Knowledge Graph** — a navigable view connecting meetings → decisions → actions → risks → topics, with links back to source records.
+- **Evidence-backed assistant** — streaming answers that cite the computed evidence used to produce them.
+- **Analytics & ROI** — org health score, decision/action metrics, meeting ROI, timelines and review queues.
+- **Browser capture** — a Chrome MV3 extension streams Google Meet captions into the same pipeline ([extension guide](./apps/extension/README.md)).
+- **Immersive UI** — a responsive, animated Next.js App Router interface with a same-origin API proxy and resilient retry behavior.
+
+## How it works
+
+```
+Browser ──▶ Next.js web app ──▶ runtime proxy (/api/v1/*) ──▶ FastAPI ──▶ Postgres / SQLite
+                │                                                │
+                └── React 19 · Tailwind · Framer Motion           └── extraction · analytics · AI
+```
+
+- The web app talks **only to its own origin**; `app/api/v1/[...path]/route.ts` forwards requests to `API_INTERNAL_URL` at request time. Cookies stay first-party and the API origin can change without rebuilding.
+- The API is a modular monolith (auth, organizations, meetings, analytics, AI, insights) with a pluggable AI provider: **Groq** (OpenAI-compatible), OpenAI, or a deterministic local fallback.
+- Provider keys stay in environment variables; the LLM never generates SQL, and answers are assembled from computed evidence before interpretation.
+
+## Tech stack
+
+| Layer | Technologies |
+| --- | --- |
+| Frontend | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Framer Motion, Three.js / React Three Fiber, Recharts, TanStack Query, Zustand |
+| Backend | FastAPI, Pydantic v2, SQLAlchemy 2 (async), Alembic, slowapi, Pandas / NumPy / scikit-learn |
+| Data | PostgreSQL 16 (production), SQLite (local fallback), Redis for shared rate limits |
+| AI | Groq (`openai/gpt-oss-120b`) via OpenAI-compatible client, with local deterministic fallback |
+| Infra | Docker Compose, Render blueprint, GitHub Actions CI |
+
+## Repository layout
+
+```
+apps/
+  api/              FastAPI service (auth, meetings, intelligence, AI, analytics)
+  web/              Next.js App Router frontend
+  extension/        Chrome MV3 Google Meet caption capture
+packages/           Shared constants and types
+docs/               Deployment, user guide, architecture notes
+samples/            Example transcript (JSON) and dataset (CSV)
+scripts/            Smoke tests, demo data generation, utilities
+render.yaml         Render deployment blueprint
+docker-compose*.yml Local and production-style stacks
+```
+
+## Quick start
+
+### Option A — local processes (fastest)
+
+Requirements: Python 3.12+, Node 24+, npm.
 
 ```bash
-# 1. Clone & env
 cp .env.example .env
 
-# 2. Backend (Python 3.12)
+# Backend — http://localhost:8000 (interactive docs at /docs)
 cd apps/api
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-test.txt
+python seed_demo.py                 # optional: demo workspace, meeting and decisions
 uvicorn app.main:app --reload --port 8000
 
-# 3. Frontend (Node 24)
+# Frontend — http://localhost:3000
 cd ../web
-npm install
+npm ci
 npm run dev
 ```
 
-Open http://localhost:3000 � API at http://localhost:8000/docs
+The web proxy uses `API_INTERNAL_URL` (default `http://localhost:8000`), so no CORS or public API URL is needed.
 
-With Docker (requires Postgres):
+### Option B — full stack with Docker
+
+Set `DATABASE_URL=postgresql+asyncpg://decentra:decentra@db:5432/decentra` and a strong `POSTGRES_PASSWORD` / `SECRET_KEY` in `.env`, then:
 
 ```bash
-docker compose up --build
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 ```
 
-## Verify & ship
+Web: `http://localhost:3000` · API: `http://localhost:8000/docs`. The production overlay adds Postgres health gating, Redis-backed rate limits, health checks and restart policies.
+
+**Demo sign-in:** the login screen is prefilled with `demo@decentra.ai` / `demo1234`. In the public demo, clicking *Enter workspace* goes straight to the dashboard — see [Demo mode & security](#demo-mode--security).
+
+## Configuration
+
+Copy [.env.example](./.env.example) to `.env`. Key variables:
+
+| Variable | Purpose |
+| --- | --- |
+| `APP_ENV` | `development` or `production` (production refuses the default secret) |
+| `DATABASE_URL` | Async SQLAlchemy URL (`sqlite+aiosqlite:///...` or `postgresql+asyncpg://...`) |
+| `SECRET_KEY` | JWT signing key — generate with `python -c "import secrets; print(secrets.token_urlsafe(48))"` |
+| `AI_PROVIDER` | `groq`, `openai`, or `local` |
+| `GROQ_API_KEY` / `GROQ_MODEL` | Groq credentials and model (default `openai/gpt-oss-120b`) |
+| `API_INTERNAL_URL` | API origin used by the Next.js runtime proxy |
+| `NEXT_PUBLIC_API_URL` | Leave empty for same-origin mode; set only to bypass the proxy |
+| `CORS_ORIGINS` | Comma-separated browser origins allowed by the API |
+| `STORAGE_PATH` | Directory for uploaded artifacts |
+| `RATE_LIMIT_STORAGE_URI` | Empty for in-memory limits; `redis://redis:6379` for shared limits |
+| `SENTRY_DSN` | Optional error tracking (disabled when unset) |
+
+Secrets are never committed. `.env` is gitignored; all CI/deploy secrets are configured in the hosting environment.
+
+## Testing
 
 ```bash
-# Typecheck + production build (web)
+# API — 54 tests (pytest)
+cd apps/api && python -m pytest tests/ -q
+
+# Web — static check and production build
 cd apps/web && npm run typecheck && npm run build
 
-# Smoke test the running stack (API :8000, web :3000)
-powershell -ExecutionPolicy Bypass -File ../scripts/smoke.ps1
+# Unit tests (Vitest)
+cd apps/web && npm test
 
-# Fresh dev server (clears .next — required after a production build,
-# since stale build output corrupts `next dev`)
-npm run dev:fresh
+# End-to-end smoke test against a running stack
+powershell -ExecutionPolicy Bypass -File scripts/smoke.ps1
 ```
 
-`docker compose up --build` serves API on `:8000` and web on `:3000`
-(set `NEXT_PUBLIC_API_URL` to point the web build at a remote API).
+GitHub Actions runs the API test suite and the web typecheck/build on every push and pull request.
 
-## Deploy to cloud
+> After a production build, use `npm run dev:fresh` to clear stale `.next` output before starting the dev server again.
 
-See [docs/DEPLOY.md](./docs/DEPLOY.md) — Railway walkthrough (~15 min, no
-custom domain needed), single demo user seed (`python seed_demo.py`),
-and the interview-day checklist.
+## Deployment
 
-## Demo Flow (2 minutes)
+The hosted demo uses the included [Render blueprint](./render.yaml): two Docker web services (API + web), a managed Postgres database, and runtime environment variables. The web service uses the same-origin proxy, so only the web URL is public.
 
-1. Register ? Create organization
-2. Upload `samples/sales_demo.csv`
-3. View Data Quality Report (score + breakdown)
-4. Explore auto-generated KPIs + trend chart
-5. Check Anomalies tab (z-score / IQR explanation)
-6. View Predictions (forecast with uncertainty)
-7. Automated Insights appear
-8. Ask: "Why did revenue decline?" ? evidence-backed answer
-9. Click View Evidence ? see underlying computation
-10. Ask: "What should I investigate first?" ? ranked recommendation
+See [docs/DEPLOY.md](./docs/DEPLOY.md) and [docs/RENDER_DEPLOY.md](./docs/RENDER_DEPLOY.md) for the full walkthrough, including secrets, seeding and checklists.
 
-## Architecture
+Both services are on Render's free tier, which **sleeps after a period of inactivity**. The web app pings `/api/v1/health` in the background on page load and every four minutes so the API is warm when you sign in; the first page load after a long idle period may still take a few seconds.
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/](./docs/)
+## Demo mode & security
 
-## Stack
+The public deployment is intentionally a **demo**: authentication is bypassed so the login screen is purely visual. Clicking *Enter workspace* navigates directly to the dashboard, and the web client sends a trusted `X-Decentra-Demo: 1` header that the API resolves to the seeded demo user. Rate limits are relaxed for presentation use.
 
-- **Frontend:** Next.js 14 (App Router) + TypeScript + Tailwind + Recharts + TanStack Query
-- **Backend:** FastAPI + Pydantic v2 + SQLAlchemy 2 (async) + Pandas/NumPy/scikit-learn
-- **DB:** PostgreSQL (SQLite for local dev without Docker)
-- **AI:** Pluggable `AIProvider` (OpenAI / Local deterministic fallback)
+**Do not use this configuration with real data.** To restore normal authentication, remove the `DEMO` flag in `apps/web/lib/api.ts`, remove the header bypass in `apps/api/app/auth/security.py`, and configure JWT access/refresh tokens plus registration as intended. The normal auth path (httpOnly rotating refresh cookies, bcrypt hashing, org-scoped RBAC, audit logging, rate limits) remains in the codebase.
 
-## Project Structure
+## Documentation
 
-```
-apps/api  ? FastAPI backend (modular: auth, analytics, ml, ai, insights)
-apps/web  ? Next.js frontend
-apps/extension ? Chrome MV3 Meet caption capture → same pipeline
-packages/shared, packages/types
-docs/     ? ARCHITECTURE.md, DATABASE.md, API.md, AI.md, SECURITY.md
-```
-
-## Security
-
-- JWT access (15m) + rotating refresh (httpOnly cookie), argon2/bcrypt hashing
-- RBAC: ADMIN / ANALYST / MANAGER / VIEWER, org-scoped isolation
-- File validation, parameterized queries, CORS, rate limiting, audit logs
-- AI: no free-form SQL from LLM, evidence computed before interpretation
+- [Architecture](./ARCHITECTURE.md) — system design, data model, AI pipeline, tradeoffs
+- [Deployment guide](./docs/DEPLOY.md) · [Render notes](./docs/RENDER_DEPLOY.md)
+- [User guide](./docs/USER_GUIDE.md) · [Extension guide](./apps/extension/README.md) · [Feature test plan](./docs/Decentra_Feature_Test_Plan.pdf)
+- Interactive API reference: `/docs` on a running API (Swagger UI)
 
 ## License
 
-MIT
+MIT.
