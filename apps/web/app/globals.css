@@ -237,12 +237,11 @@ html.light ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.28); }
 .text-stroke-gold { -webkit-text-stroke: 1.5px color-mix(in srgb, var(--gold) 35%, transparent); color: transparent; }
 .grain-fixed { position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
 
-/* Page-transition safety net: CSS animations are compositor-driven and do not
-   depend on the JS frame loop. If the framer-motion enter animation ever
-   stalls (frozen rAF), this forces the page visible after 2.5s. In normal
-   browsers the transition completes in ~0.35s so this is a silent no-op. */
-@keyframes pageSafe { to { opacity: 1; transform: none; } }
-.page-safe { animation: pageSafe 0.4s ease 2.5s forwards; }
+/* Page transitions are opacity-only (see PageTransition.tsx) — no transform,
+   ever. A CSS animation on `transform` here (even `to { transform: none }`)
+   makes this wrapper a containing block for position:fixed descendants:
+   the sidebar and overlay re-anchor to the page, scroll away and stop being
+   clickable. Opacity fade needs no safety net. */
 
 /* Touch devices: guarantee reachable tap targets without touching desktop */
 @media (pointer: coarse) {
