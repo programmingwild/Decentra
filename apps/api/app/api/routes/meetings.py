@@ -46,12 +46,27 @@ VALID_ACTION_TRANSITIONS = {
     "CANCELLED": {"NOT_STARTED", "IN_PROGRESS"},
 }
 
+def _as_datetime(value):
+    """SQLite rows written by NLP/legacy paths can hold raw strings in a
+    DateTime column. Never let one malformed deadline 500 an entire endpoint."""
+    from datetime import datetime
+    if isinstance(value, datetime):
+        return value
+    if isinstance(value, str):
+        try:
+            return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    return None
+
 def _is_overdue(a):
     if not a.deadline or a.status in ("COMPLETED", "CANCELLED"):
         return False
     from datetime import datetime, timezone
     now = datetime.now(timezone.utc).replace(tzinfo=None)
-    dl = a.deadline
+    dl = _as_datetime(a.deadline)
+    if dl is None:
+        return False
     if dl.tzinfo is None:
         dl = dl.replace(tzinfo=timezone.utc)
     return dl < now
@@ -580,10 +595,11 @@ async def update_action(action_id: str, body: dict, db: AsyncSession = Depends(g
             else:
                 # due soon check (within 2 days)
                 now = datetime.now(timezone.utc).replace(tzinfo=None)
-                dl = a.deadline
-                if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
-                if 0 <= (dl - now).days <= 2 and a.status not in ("COMPLETED","CANCELLED"):
-                    await _maybe_notify(db, user, m, a, "due_soon")
+                dl = _as_datetime(a.deadline)
+                if dl is not None:
+                    if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
+                    if 0 <= (dl - now).days <= 2 and a.status not in ("COMPLETED","CANCELLED"):
+                        await _maybe_notify(db, user, m, a, "due_soon")
         if old_status != a.status and a.status == "COMPLETED":
             await _maybe_notify(db, user, m, a, "completed")
         if not a.owner_name and a.status not in ("COMPLETED","CANCELLED"):
@@ -1088,9 +1104,10 @@ async def health_score(org_id: str, db: AsyncSession = Depends(get_db), user: Us
             if a.status in ("COMPLETED","CANCELLED"): continue
             if not a.owner_name: unassigned += 1
             if a.deadline:
-                dl = a.deadline
-                if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
-                if dl < now: overdue += 1
+                dl = _as_datetime(a.deadline)
+                if dl is not None:
+                    if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
+                    if dl < now: overdue += 1
     # health 0-100
     decision_rate = (confirmed / total_decisions * 100) if total_decisions else 100
     completion_rate = (completed / total_actions * 100) if total_actions else 100
