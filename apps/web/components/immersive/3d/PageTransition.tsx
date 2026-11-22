@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -9,41 +9,33 @@ interface PageTransitionProps {
 }
 
 /**
- * Smoothly animates page content in when the route changes (keyed on pathname).
- * Next.js <Link> performs the actual navigation; this provides a film-grade
- * cross-fade + slide. Relies on AnimatePresence so exiting pages fade out.
+ * Cross-fades page content in on route change (keyed on pathname).
  *
- * CRITICAL: this wrapper must NEVER create a containing block (no filter,
- * no transform/perspective in will-change, no backdrop-filter). A containing
- * block re-anchors every `position: fixed` element on the page (background
- * layers, nav, cursor, progress) to the page wrapper instead of the viewport,
- * stretching inset-0 layers to full page height and blowing out scroll.
+ * CRITICAL: opacity only, and NO AnimatePresence. An exiting page kept mounted
+ * by AnimatePresence leaves a duplicate tree behind when its animation stalls
+ * — including a second copy of the fixed sidebar/overlay, which then sits
+ * invisible on top and swallows clicks. No exit animation means the old tree
+ * unmounts immediately: one sidebar, one overlay, always current.
+ *
+ * No transform/filter/backdrop-filter here either: any of those creates a
+ * containing block and re-anchors position:fixed elements to this wrapper
+ * instead of the viewport.
  */
 export function PageTransition({ children, pathname, className = "" }: PageTransitionProps) {
   useEffect(() => {
-    const html = document.documentElement;
-    html.style.overflowX = "hidden";
-    return () => {};
+    document.documentElement.style.overflowX = "hidden";
   }, []);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        // Opacity only — NEVER animate x/y here. Any transform (even a
-        // "finished" one left behind by a stalled animation) creates a
-        // containing block, re-anchoring the fixed sidebar/overlay to this
-        // wrapper (full-page height, off-screen, unclickable). Cross-fade is
-        // enough for the effect; the slide is not worth breaking navigation.
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-        className={`${className} page-safe`}
-        style={{ willChange: "opacity" }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+      className={`${className} page-safe`}
+      style={{ willChange: "opacity" }}
+    >
+      {children}
+    </motion.div>
   );
 }
