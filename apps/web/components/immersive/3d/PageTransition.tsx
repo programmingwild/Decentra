@@ -30,10 +30,15 @@ export function PageTransition({ children, pathname, className = "" }: PageTrans
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -14 }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        // Opacity only — NEVER animate x/y here. Any transform (even a
+        // "finished" one left behind by a stalled animation) creates a
+        // containing block, re-anchoring the fixed sidebar/overlay to this
+        // wrapper (full-page height, off-screen, unclickable). Cross-fade is
+        // enough for the effect; the slide is not worth breaking navigation.
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
         className={`${className} page-safe`}
         style={{ willChange: "opacity" }}
       >
