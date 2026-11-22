@@ -30,11 +30,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
   useEffect(() => { fetchMeLocal(); }, []);
 
-  async function login(email: string, password: string) {
-    const r = await api("/api/v1/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-    if (r?.access_token) setAccessToken(r.access_token);
-    // Shared burst — overview mount will grab it in parallel.
-    fetchMeLocal();
+  async function login(_email: string, _password: string) {
+    // DEMO BUILD: no authentication backend work. Clicking "Enter workspace"
+    // resolves immediately — the login page navigates straight to the dashboard,
+    // and every API call carries the trusted demo header instead of a token.
+    return;
   }
   async function register(email: string, password: string, full_name?: string) {
     const r = await api("/api/v1/auth/register", { method: "POST", body: JSON.stringify({ email, password, full_name }) });
@@ -42,9 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await fetchMeLocal();
   }
   function logout() {
-    api("/api/v1/auth/logout", { method: "POST", retry: false }).catch(() => {});
     setAccessToken(null);
-    localStorage.removeItem("access_token");
     setUser(null);
     window.location.href = "/login";
   }

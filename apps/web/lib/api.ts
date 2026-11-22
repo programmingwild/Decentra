@@ -4,6 +4,13 @@
 // NEXT_PUBLIC_API_URL only to call the API directly (bypasses the proxy).
 const API = process.env.NEXT_PUBLIC_API_URL || "";
 
+// DEMO BUILD: authentication is intentionally bypassed. Every request carries
+// a trusted demo header; the API resolves demo@decentra.ai from it. No login
+// POST, no token check, no 401 refresh/redirect — the login screen is visual
+// only. Remove DEMO (and the API-side header check) for a real deployment.
+const DEMO = true;
+const DEMO_HEADERS = { "X-Decentra-Demo": "1" };
+
 /** Status-preserving error so callers can branch on 401/404/429/5xx. */
 export class ApiError extends Error {
   status: number;
@@ -98,7 +105,7 @@ type ApiOpts = RequestInit & {
 export async function api(path: string, opts: ApiOpts = {}): Promise<any> {
   const { timeoutMs = 60000, retry = true, ...init } = opts;
   const method = (init.method || "GET").toUpperCase();
-  const headers: any = { ...(init.headers || {}), ...authHeader() };
+  const headers: any = { ...DEMO_HEADERS, ...(init.headers || {}), ...authHeader() };
   if (!(init.body instanceof FormData)) headers["Content-Type"] = headers["Content-Type"] || "application/json";
   if (init.body instanceof FormData) delete headers["Content-Type"];
 
@@ -145,7 +152,7 @@ export async function api(path: string, opts: ApiOpts = {}): Promise<any> {
       await sleep(base + Math.random() * base);
       return doFetch(attempt + 1);
     }
-    if (res.status === 401 && !isAuthEndpoint) {
+    if (res.status === 401 && !isAuthEndpoint && !DEMO) {
       // Access token expired? One silent refresh, then replay the request once.
       if (await tryRefresh()) return api(path, { ...opts, retry: false });
       clearSession();
@@ -190,7 +197,7 @@ export type StreamEvents = {
  * so callers can render citations while tokens flow.
  */
 export async function apiStream(path: string, body: any, ev: StreamEvents = {}): Promise<any> {
-  const headers: any = { "Content-Type": "application/json", ...authHeader() };
+  const headers: any = { "Content-Type": "application/json", ...DEMO_HEADERS, ...authHeader() };
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ev.timeoutMs ?? 120000);
   const linked = ev.signal;
@@ -212,7 +219,7 @@ export async function apiStream(path: string, body: any, ev: StreamEvents = {}):
     if (e?.name === "AbortError") throw new ApiError(408, "Answer took too long — try a narrower question");
     throw new ApiError(0, "Network unreachable — check your connection");
   }
-  if (res.status === 401) {
+  if (res.status === 401 && !DEMO) {
     clearTimeout(timer);
     if (await tryRefresh()) return apiStream(path, body, { ...ev, signal: undefined });
     clearSession();

@@ -3,7 +3,7 @@ import uuid as uuidlib
 import jwt
 from jwt import ExpiredSignatureError, InvalidTokenError
 from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
@@ -110,7 +110,16 @@ def decode_token(token: str) -> dict:
     except InvalidTokenError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from e
 
-async def get_current_user(creds: HTTPAuthorizationCredentials | None = Depends(bearer), db: AsyncSession = Depends(get_db)) -> User:
+async def get_current_user(request: Request, creds: HTTPAuthorizationCredentials | None = Depends(bearer), db: AsyncSession = Depends(get_db)) -> User:
+    # DEMO BUILD ONLY: the web app sends X-Decentra-Demo: 1 on every request so
+    # the login screen is cosmetic — clicking it goes straight to the dashboard
+    # with no token, no login round trip and no 401 bounce. Intentionally
+    # insecure: remove this block before any non-demo deployment.
+    if request.headers.get("x-decentra-demo") == "1":
+        demo = await db.execute(select(User).where(User.email == "demo@decentra.ai"))
+        user = demo.scalar_one_or_none()
+        if user is not None:
+            return user
     if creds is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     payload = decode_token(creds.credentials)
