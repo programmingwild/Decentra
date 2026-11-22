@@ -237,14 +237,10 @@ html.light ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.28); }
 .text-stroke-gold { -webkit-text-stroke: 1.5px color-mix(in srgb, var(--gold) 35%, transparent); color: transparent; }
 .grain-fixed { position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
 
-/* Page transitions are opacity-only (see PageTransition.tsx) — no transform,
-   ever. A CSS animation on `transform` here (even `to { transform: none }`)
-   makes this wrapper a containing block for position:fixed descendants:
-   the sidebar and overlay re-anchor to the page, scroll away and stop being
-   clickable. This fallback animates OPACITY ONLY, so a stalled JS fade can
-   never leave the page invisible while keeping fixed positioning intact. */
-@keyframes pageSafe { to { opacity: 1; } }
-.page-safe { animation: pageSafe 0.3s ease 2s forwards; }
+/* The route container is plain markup now (see PageTransition.tsx). No
+   transform AND no opacity animation: an animated opacity left the page
+   invisible when the animation loop stalled, and an animated transform
+   re-anchored position:fixed elements (sidebar/overlay) to the wrapper. */
 
 /* Touch devices: guarantee reachable tap targets without touching desktop */
 @media (pointer: coarse) {

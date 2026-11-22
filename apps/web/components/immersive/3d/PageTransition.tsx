@@ -1,6 +1,4 @@
 "use client";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -9,33 +7,19 @@ interface PageTransitionProps {
 }
 
 /**
- * Cross-fades page content in on route change (keyed on pathname).
+ * Route container — deliberately plain markup, no framer-motion.
  *
- * CRITICAL: opacity only, and NO AnimatePresence. An exiting page kept mounted
- * by AnimatePresence leaves a duplicate tree behind when its animation stalls
- * — including a second copy of the fixed sidebar/overlay, which then sits
- * invisible on top and swallows clicks. No exit animation means the old tree
- * unmounts immediately: one sidebar, one overlay, always current.
- *
- * No transform/filter/backdrop-filter here either: any of those creates a
- * containing block and re-anchors position:fixed elements to this wrapper
- * instead of the viewport.
+ * A JS-driven `opacity: 0 → 1` enter animation left its inline opacity stuck
+ * at 0 after client-side navigation whenever the animation frame loop was
+ * throttled (background tab, heavy WebGL, mobile). The whole page — including
+ * the sidebar — became invisible, which users reported as "clicks don't work".
+ * No inline opacity, no transform, no animation: the page is always visible
+ * and position:fixed descendants always anchor to the viewport.
  */
 export function PageTransition({ children, pathname, className = "" }: PageTransitionProps) {
-  useEffect(() => {
-    document.documentElement.style.overflowX = "hidden";
-  }, []);
-
   return (
-    <motion.div
-      key={pathname}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-      className={`${className} page-safe`}
-      style={{ willChange: "opacity" }}
-    >
+    <div key={pathname} className={`${className} page-safe`}>
       {children}
-    </motion.div>
+    </div>
   );
 }
