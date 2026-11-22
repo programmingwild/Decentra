@@ -251,7 +251,10 @@ export function Nav() {
       {mobileOpen && <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setMobileOpen(false)} aria-hidden="true" />}
 
       <div
-        className={`fixed inset-y-0 left-0 z-50 flex w-[272px] flex-col border-r border-[var(--border)] bg-[var(--bg-2)] transition-[width,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 lg:shrink-0 ${collapsed ? "lg:w-[76px]" : "lg:w-[272px]"} ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 flex w-[272px] flex-col border-r border-[var(--border)] bg-[var(--bg-2)] lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 lg:shrink-0 lg:transition-[width] lg:duration-300 lg:ease-[cubic-bezier(0.16,1,0.3,1)] ${collapsed ? "lg:w-[76px]" : "lg:w-[272px]"} ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}
+        // Never transition the mobile slide: a stalled transform leaves the
+        // sidebar off-screen while the overlay still eats clicks. Snap open.
+        style={mobileOpen ? { transform: "translateX(0)" } : undefined}
         role="navigation"
         aria-label="Sidebar"
       >
