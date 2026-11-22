@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Video, CheckCircle2, ClipboardList, HelpCircle, Sparkles, Search, LogOut, ChevronDown, Command, Menu, X, Plus, History, TrendingDown, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NotificationCenter } from "@/components/notifications";
 
@@ -218,7 +219,9 @@ function SidebarContent({ onNavigate, collapsed, onToggleCollapse }: { onNavigat
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const path = usePathname();
+  useEffect(() => setMounted(true), []);
   useEffect(() => setMobileOpen(false), [path]);
   useEffect(() => {
     try {
@@ -236,6 +239,9 @@ export function Nav() {
   }
   return (
     <>
+      {/* Mobile top bar. On desktop a spacer reserves the rail width while the
+          real sidebar is portaled to <body>: no page wrapper can re-anchor its
+          position:fixed, leave a stale transform, or intercept its clicks. */}
       <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] px-4 backdrop-blur-xl lg:hidden">
         <div className="flex items-center gap-2.5">
           <div className="flex h-7 w-7 items-center justify-center rounded-[7px] bg-[var(--text)] text-[12px] font-[800] text-[var(--bg)]">D</div>
@@ -248,21 +254,29 @@ export function Nav() {
         </div>
       </header>
 
-      {mobileOpen && <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setMobileOpen(false)} aria-hidden="true" />}
+      <div className={`hidden shrink-0 lg:block ${collapsed ? "w-[76px]" : "w-[272px]"}`} aria-hidden="true" />
 
-      <div
-        className={`fixed inset-y-0 left-0 z-50 flex w-[272px] flex-col border-r border-[var(--border)] bg-[var(--bg-2)] lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 lg:shrink-0 lg:transition-[width] lg:duration-300 lg:ease-[cubic-bezier(0.16,1,0.3,1)] ${collapsed ? "lg:w-[76px]" : "lg:w-[272px]"} ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}
-        // Never transition the mobile slide: a stalled transform leaves the
-        // sidebar off-screen while the overlay still eats clicks. Snap open.
-        style={mobileOpen ? { transform: "translateX(0)" } : undefined}
-        role="navigation"
-        aria-label="Sidebar"
-      >
-        <button onClick={() => setMobileOpen(false)} className="absolute right-3 top-3 rounded-[8px] p-1.5 text-[var(--subtle)] transition hover:bg-[color-mix(in_srgb,var(--fg)_6%,transparent)] hover:text-[var(--fg)] lg:hidden" aria-label="Close menu">
-          <X className="h-4 w-4" />
-        </button>
-        <SidebarContent onNavigate={() => setMobileOpen(false)} collapsed={collapsed} onToggleCollapse={toggleCollapsed} />
-      </div>
+      {mounted && createPortal(
+        <>
+          {mobileOpen && (
+            <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setMobileOpen(false)} aria-hidden="true" />
+          )}
+          <div
+            className={`fixed inset-y-0 left-0 z-50 flex w-[272px] flex-col border-r border-[var(--border)] bg-[var(--bg-2)] transition-[width] duration-300 lg:translate-x-0 ${collapsed ? "lg:w-[76px]" : "lg:w-[272px]"} ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}
+            // Never transition the mobile slide: a stalled transform leaves the
+            // sidebar off-screen while the overlay still eats clicks. Snap open.
+            style={mobileOpen ? { transform: "translateX(0)" } : undefined}
+            role="navigation"
+            aria-label="Sidebar"
+          >
+            <button onClick={() => setMobileOpen(false)} className="absolute right-3 top-3 rounded-[8px] p-1.5 text-[var(--subtle)] transition hover:bg-[color-mix(in_srgb,var(--fg)_6%,transparent)] hover:text-[var(--fg)] lg:hidden" aria-label="Close menu">
+              <X className="h-4 w-4" />
+            </button>
+            <SidebarContent onNavigate={() => setMobileOpen(false)} collapsed={collapsed} onToggleCollapse={toggleCollapsed} />
+          </div>
+        </>,
+        document.body,
+      )}
 
       {/* action center lives outside the sidebar so it works in every state */}
       <NotificationCenter />

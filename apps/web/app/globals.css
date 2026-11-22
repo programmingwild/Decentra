@@ -241,7 +241,10 @@ html.light ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.28); }
    ever. A CSS animation on `transform` here (even `to { transform: none }`)
    makes this wrapper a containing block for position:fixed descendants:
    the sidebar and overlay re-anchor to the page, scroll away and stop being
-   clickable. Opacity fade needs no safety net. */
+   clickable. This fallback animates OPACITY ONLY, so a stalled JS fade can
+   never leave the page invisible while keeping fixed positioning intact. */
+@keyframes pageSafe { to { opacity: 1; } }
+.page-safe { animation: pageSafe 0.3s ease 2s forwards; }
 
 /* Touch devices: guarantee reachable tap targets without touching desktop */
 @media (pointer: coarse) {
