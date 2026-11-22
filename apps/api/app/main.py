@@ -164,7 +164,12 @@ async def integrity_handler(request: Request, exc: IntegrityError):
 @app.exception_handler(Exception)
 async def generic_handler(request: Request, exc: Exception):
     logger.exception(f"Unhandled error at {request.url.path}: {exc}")
-    return _envelope(request, "Internal server error", 500)
+    detail = "Internal server error"
+    # Diagnostic escape hatch: ?debug_errors=1 surfaces the root exception
+    # type/message so data-corruption bugs can be fixed without server logs.
+    if request.query_params.get("debug_errors") == "1":
+        detail = f"{detail}: {type(exc).__name__}: {str(exc)[:300]}"
+    return _envelope(request, detail, 500)
 
 
 app.include_router(router_v1)
