@@ -13,11 +13,15 @@ export const TONE_COLORS: Record<string, string> = {
 };
 
 export function AreaChart({ data, color }: { data: Array<{ x: number; y: number }>; color: string }) {
-  if (!data.length) return null;
-  const maxY = Math.max(...data.map((d) => d.y), 1);
-  const minY = Math.min(...data.map((d) => d.y));
-  const points = data
-    .map((d, i) => `${(i / (data.length - 1)) * 100},${60 - ((d.y - minY) / (maxY - minY || 1)) * 60}`)
+  const finite = data.filter((d) => Number.isFinite(d.y));
+  if (!finite.length) return null;
+  const maxY = Math.max(...finite.map((d) => d.y), 1);
+  const minY = Math.min(...finite.map((d) => d.y));
+  // A single point (or empty data) must not divide by zero — that used to
+  // emit NaN into <polygon>/<polyline> points and spam the console.
+  const span = Math.max(1, finite.length - 1);
+  const points = finite
+    .map((d, i) => `${(i / span) * 100},${60 - ((d.y - minY) / (maxY - minY || 1)) * 60}`)
     .join(" ");
   const areaPoints = `0,60 ${points} 100,60`;
   // Deterministic per instance. NEVER Math.random() here — server and client
