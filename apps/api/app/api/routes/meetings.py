@@ -67,8 +67,10 @@ def _is_overdue(a):
     dl = _as_datetime(a.deadline)
     if dl is None:
         return False
-    if dl.tzinfo is None:
-        dl = dl.replace(tzinfo=timezone.utc)
+    # DB values are naive UTC; normalize aware values to naive UTC too —
+    # comparing naive vs aware raises TypeError and 500s the whole endpoint.
+    if dl.tzinfo is not None:
+        dl = dl.astimezone(timezone.utc).replace(tzinfo=None)
     return dl < now
 
 async def _maybe_notify(db, user, meeting, action, notif_type):
@@ -597,7 +599,7 @@ async def update_action(action_id: str, body: dict, db: AsyncSession = Depends(g
                 now = datetime.now(timezone.utc).replace(tzinfo=None)
                 dl = _as_datetime(a.deadline)
                 if dl is not None:
-                    if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
+                    if dl.tzinfo is not None: dl = dl.astimezone(timezone.utc).replace(tzinfo=None)
                     if 0 <= (dl - now).days <= 2 and a.status not in ("COMPLETED","CANCELLED"):
                         await _maybe_notify(db, user, m, a, "due_soon")
         if old_status != a.status and a.status == "COMPLETED":
@@ -1106,7 +1108,7 @@ async def health_score(org_id: str, db: AsyncSession = Depends(get_db), user: Us
             if a.deadline:
                 dl = _as_datetime(a.deadline)
                 if dl is not None:
-                    if dl.tzinfo is None: dl = dl.replace(tzinfo=timezone.utc)
+                    if dl.tzinfo is not None: dl = dl.astimezone(timezone.utc).replace(tzinfo=None)
                     if dl < now: overdue += 1
     # health 0-100
     decision_rate = (confirmed / total_decisions * 100) if total_decisions else 100
