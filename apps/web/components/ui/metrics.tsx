@@ -26,7 +26,9 @@ export function AreaChart({ data, color }: { data: Array<{ x: number; y: number 
     y: 50 - ((v - lo) / range) * 34,
   }));
   // Quadratic midpoint smoothing — no sharp diagonals from sparse points.
-  const line = n === 1
+  const single = n === 1;
+  // Quadratic midpoint smoothing — no sharp diagonals from sparse points.
+  const line = single
     ? `M ${coords[0].x} ${coords[0].y} L ${coords[0].x + 0.01} ${coords[0].y}`
     : coords.slice(1).reduce((path, p, i) => {
         const prev = coords[i];
@@ -47,7 +49,7 @@ export function AreaChart({ data, color }: { data: Array<{ x: number; y: number 
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>
-      <path d={area} fill={`url(#${gid})`} />
+      {!single && <path d={area} fill={`url(#${gid})`} />}
       <path
         d={line}
         fill="none"
@@ -57,6 +59,7 @@ export function AreaChart({ data, color }: { data: Array<{ x: number; y: number 
         strokeLinecap="round"
         opacity="0.85"
       />
+      {single && <circle cx={coords[0].x} cy={coords[0].y} r="2.6" fill={color} opacity="0.9" />}
     </svg>
   );
 }
