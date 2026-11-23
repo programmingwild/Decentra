@@ -13,31 +13,50 @@ export const TONE_COLORS: Record<string, string> = {
 };
 
 export function AreaChart({ data, color }: { data: Array<{ x: number; y: number }>; color: string }) {
-  const finite = data.filter((d) => Number.isFinite(d.y));
-  if (!finite.length) return null;
-  const maxY = Math.max(...finite.map((d) => d.y), 1);
-  const minY = Math.min(...finite.map((d) => d.y));
-  // A single point (or empty data) must not divide by zero — that used to
-  // emit NaN into <polygon>/<polyline> points and spam the console.
-  const span = Math.max(1, finite.length - 1);
-  const points = finite
-    .map((d, i) => `${(i / span) * 100},${60 - ((d.y - minY) / (maxY - minY || 1)) * 60}`)
-    .join(" ");
-  const areaPoints = `0,60 ${points} 100,60`;
+  const values = data.filter((d) => Number.isFinite(d.y)).map((d) => d.y);
+  if (!values.length) return null;
+  const lo = Math.min(...values);
+  const hi = Math.max(...values);
+  const range = hi - lo || 1;
+  const n = values.length;
+  // Inset the whole plot so the line never touches the card edge (the hover
+  // arrow sits at top-right) and a flat series still reads as a calm line.
+  const coords = values.map((v, i) => ({
+    x: 5 + (n === 1 ? 0.5 : i / (n - 1)) * 90,
+    y: 50 - ((v - lo) / range) * 34,
+  }));
+  // Quadratic midpoint smoothing — no sharp diagonals from sparse points.
+  const line = n === 1
+    ? `M ${coords[0].x} ${coords[0].y} L ${coords[0].x + 0.01} ${coords[0].y}`
+    : coords.slice(1).reduce((path, p, i) => {
+        const prev = coords[i];
+        const mx = (prev.x + p.x) / 2;
+        const my = (prev.y + p.y) / 2;
+        return `${path} Q ${prev.x} ${prev.y} ${mx} ${my}` + (i === n - 2 ? ` L ${p.x} ${p.y}` : "");
+      }, `M ${coords[0].x} ${coords[0].y}`);
+  const area = `${line} L ${coords[n - 1].x} 58 L ${coords[0].x} 58 Z`;
   // Deterministic per instance. NEVER Math.random() here — server and client
   // must render the identical id or React throws a hydration mismatch.
   // (useId colons are stripped: they break url(#...) references.)
   const gid = `area-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
-    <svg viewBox="0 0 100 60" className="w-full h-14" aria-hidden="true">
+    <svg viewBox="0 0 100 60" preserveAspectRatio="none" className="h-14 w-full" aria-hidden="true">
       <defs>
         <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.35" />
+          <stop offset="0%" stopColor={color} stopOpacity="0.28" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>
-      <polygon points={areaPoints} fill={`url(#${gid})`} />
-      <polyline points={points} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
+      <path d={area} fill={`url(#${gid})`} />
+      <path
+        d={line}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.6"
+        vectorEffect="non-scaling-stroke"
+        strokeLinecap="round"
+        opacity="0.85"
+      />
     </svg>
   );
 }

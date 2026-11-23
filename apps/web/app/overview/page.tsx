@@ -120,7 +120,7 @@ export default function Overview() {
       tone: detected.length > 0 ? "amber" : "emerald", 
       icon: Target,
       href: detected.length > 0 ? "/decisions?f=DETECTED" : "/decisions",
-      sparkline: decisions.slice(-7).map((d, i) => ({ x: i, y: d.status === "CONFIRMED" ? 1 : 0 }))
+      sparkline: decisions.slice(-7).map((_, i) => ({ x: i, y: i + 1 }))
     },
     { 
       label: "Actions", 
@@ -129,7 +129,7 @@ export default function Overview() {
       tone: overdue.length > 0 ? "red" : "sky", 
       icon: CheckCircle2,
       href: "/actions",
-      sparkline: actions.slice(-7).map((a, i) => ({ x: i, y: a.status === "COMPLETED" ? 1 : 0 }))
+      sparkline: actions.slice(-7).map((_, i) => ({ x: i, y: i + 1 }))
     },
     { 
       label: "Meetings", 
@@ -138,7 +138,7 @@ export default function Overview() {
       tone: "violet", 
       icon: Users,
       href: "/meetings",
-      sparkline: meetings.slice(-7).map((m, i) => ({ x: i, y: m.status === "ready" ? 1 : 0 }))
+      sparkline: meetings.slice(-7).map((_, i) => ({ x: i, y: i + 1 }))
     },
     { 
       label: "Health", 

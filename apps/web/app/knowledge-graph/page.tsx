@@ -43,9 +43,9 @@ export default function KnowledgeGraphPage() {
 
   // Bold metric cards for knowledge graph
   const graphMetrics = useMemo(() => [
-    { label: "Meetings", value: meetings.length, change: "Nodes in graph", tone: "violet", icon: Network, sparkline: meetings.slice(-7).map((m, i) => ({ x: i, y: 1 })) },
-    { label: "Decisions", value: decisions.length, change: "From meetings", tone: "amber", icon: Target, sparkline: decisions.slice(-7).map((d, i) => ({ x: i, y: 1 })) },
-    { label: "Actions", value: actions.length, change: "Tracked commitments", tone: "sky", icon: Sparkles, sparkline: actions.slice(-7).map((a, i) => ({ x: i, y: 1 })) },
+    { label: "Meetings", value: meetings.length, change: "Nodes in graph", tone: "violet", icon: Network, sparkline: meetings.slice(-7).map((_, i) => ({ x: i, y: i + 1 })) },
+    { label: "Decisions", value: decisions.length, change: "From meetings", tone: "amber", icon: Target, sparkline: decisions.slice(-7).map((_, i) => ({ x: i, y: i + 1 })) },
+    { label: "Actions", value: actions.length, change: "Tracked commitments", tone: "sky", icon: Sparkles, sparkline: actions.slice(-7).map((_, i) => ({ x: i, y: i + 1 })) },
     { label: "Density", value: decisions.length > 0 ? `${Math.round((decisions.length / Math.max(1, meetings.length)) * 100)}%` : "0%", change: "Decisions per meeting", tone: "gold", icon: TrendingUp, sparkline: Array.from({ length: 7 }, (_, i) => ({ x: i, y: [24, 38, 32, 55, 47, 68, 60][i] })) },
   ], [meetings, decisions, actions]);
 
