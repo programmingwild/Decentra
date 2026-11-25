@@ -168,6 +168,8 @@ GitHub Actions runs the API test suite and the web typecheck/build on every push
 
 The hosted demo uses the included [Render blueprint](./render.yaml): two Docker web services (API + web), a managed Postgres database, and runtime environment variables. The web service uses the same-origin proxy, so only the web URL is public.
 
+**Database choice:** Neon free Postgres is recommended — it auto-suspends after ~5 min idle but resumes automatically on the next connection. Supabase free projects pause after ~7 days idle and need a manual restore from the dashboard. Swapping providers needs no code change: set `DATABASE_URL` to `postgresql+asyncpg://…?sslmode=require` in Render and run `python seed_demo.py` once in the API shell. The API creates tables on startup.
+
 See [docs/DEPLOY.md](./docs/DEPLOY.md) and [docs/RENDER_DEPLOY.md](./docs/RENDER_DEPLOY.md) for the full walkthrough, including secrets, seeding and checklists.
 
 Both services are on Render's free tier, which **sleeps after a period of inactivity**. The web app pings `/api/v1/health` in the background on page load and every four minutes so the API is warm when you sign in; the first page load after a long idle period may still take a few seconds.

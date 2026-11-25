@@ -3,12 +3,18 @@
 Two paths: **Railway** (simplest, ~$5–10/mo) or **Render free-forever**
 ($0, services sleep when idle — first load takes ~30 s to wake).
 
-## Path A — Render free tier + Supabase ($0 forever)
+## Path A — Render free tier + Neon Postgres ($0 forever)
 
-Architecture: API + web as Render free Docker services, Postgres on
-Supabase free tier (no expiry — unlike Render's own free Postgres, which
-expires after 90 days). The web talks to the API through the same-origin
-proxy, so auth cookies stay first-party with zero domain setup.
+Architecture: API + web as Render free Docker services, managed Postgres on
+**Neon** free tier (recommended). Render's own free Postgres expires after
+90 days. The web talks to the API through the same-origin proxy, so auth
+cookies stay first-party with zero domain setup.
+
+Why Neon over Supabase for this demo: Neon compute auto-suspends after ~5 min
+idle and **resumes automatically** on the next connection (typically ~1 s), so
+there is no manual "restore project" step. Supabase free projects pause after
+~7 days idle and must be restored from the dashboard. The API already sets
+`pool_pre_ping`, so stale connections after a suspend are replaced silently.
 
 Known free-tier trade-offs (accepted by design):
 - Cold starts: ~30 s after idle. Open the site a few minutes before presenting.
@@ -16,27 +22,36 @@ Known free-tier trade-offs (accepted by design):
   dataset is one command away (`python seed_demo.py` in the API shell);
   re-upload anything else after a wake.
 
-### 1. Supabase Postgres (free, no expiry)
+### 1. Neon Postgres (free, recommended)
 
-1. Sign up at supabase.com → New project (any region near you).
-2. Project Settings → Database → copy the **Connection string** (URI mode).
-3. Adapt it for the API: change the scheme to `postgresql+asyncpg://` and
-   append `?ssl=require`. Example:
-   `postgresql+asyncpg://postgres:PASSWORD@db.abcd1234.supabase.co:5432/postgres?ssl=require`
+1. Sign up at neon.tech → **New Project** (any region near you).
+2. Dashboard → **Connection string** → copy the direct (non-pooled) URI.
+3. Adapt it for the API: change the scheme to `postgresql+asyncpg://` and use
+   `?sslmode=require`. Example:
+   `postgresql+asyncpg://USER:PASSWORD@ep-xxxx-xxxx.us-east-1.aws.neon.tech/neondb?sslmode=require`
+   (A `-pooler` host also works, but at demo traffic the direct endpoint is
+   fine and avoids extra connection-pool hops.)
+
+Alternative — Supabase free Postgres: Project Settings → Database → copy the
+URI, change the scheme to `postgresql+asyncpg://` and append `?ssl=require`:
+`postgresql+asyncpg://postgres:PASSWORD@db.abcd1234.supabase.co:5432/postgres?ssl=require`
 
 ### 2. Deploy the blueprint
 
 1. Sign up at render.com → New → **Blueprint** → select this repo
    (`render.yaml` at the root wires both services).
 2. When prompted, fill the `sync: false` values:
-   - API `DATABASE_URL` ← your Supabase URL from step 1
+   - API `DATABASE_URL` ← your Neon URL from step 1 (or Supabase URL)
    - API `GROQ_API_KEY` ← your Groq key
    - Web `API_INTERNAL_URL` ←public URL of the API service (deploy order:
      let the API finish first, copy its `.onrender.com` URL, then deploy web)
 3. After web is live, go back to the API service → set `CORS_ORIGINS` to
    the web service's public URL → redeploy API.
 
-### 3. Seed the single demo user
+### 3. Seed the single demo user (after switching databases)
+
+A new Neon/Supabase database starts empty. The API builds all tables on
+startup (`Base.metadata.create_all`), so no migration step is needed. Then:
 
 API service → Shell tab → `python seed_demo.py`. Expect
 `Seeded demo@decentra.ai / org demo / dataset … (288 rows)`.

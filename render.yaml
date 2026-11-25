@@ -1,7 +1,10 @@
 # Render blueprint — free-forever hosting for the Decentra demo.
-# Database lives on Supabase free tier (Render's free Postgres expires
-# after 90 days; Supabase free does not). Storage is the container disk:
-# uploads sleep with the service — re-seed or re-upload after idle wakes.
+# Database: Neon free Postgres is recommended. Its compute auto-suspends after
+# ~5 min idle and resumes automatically on the next connection (no manual
+# restore), unlike Supabase free projects which pause after ~7 days idle and
+# need a dashboard click. Render's own free Postgres expires after 90 days.
+# Storage is the container disk: uploads sleep with the service — re-seed or
+# re-upload after idle wakes.
 #
 # Apply: Render dashboard -> New -> Blueprint -> select this repo.
 # Then set the manual secrets below (marked sync: false).
@@ -17,7 +20,7 @@ services:
       - key: APP_ENV
         value: production
       - key: DATABASE_URL
-        sync: false  # paste Supabase URL, +asyncpg scheme, ?ssl=require (see docs/DEPLOY.md)
+        sync: false  # Neon URL (or Supabase); +asyncpg scheme, ?sslmode=require — see docs/DEPLOY.md
       - key: SECRET_KEY
         generateValue: true
       - key: STORAGE_PATH
